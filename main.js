@@ -29,9 +29,23 @@ game_state.fight.prototype = {
     this.game.load.image('hud_bar_green', 'assets/ui/hud_bar_green.png'); 
     this.game.load.image('hud_bar_orange', 'assets/ui/hud_bar_orange.png'); 
 
+    this.game.load.image('world_bg_clouds', 'assets/battle_world/bg_clouds.png'); 
+    this.game.load.image('world_bg_solid', 'assets/battle_world/bg_solid.png'); 
+
   },
 
   create: function() {
+    this.createworld();
+    this.createhud();
+  },
+
+  createworld: function() {
+    this.game.add.sprite(0, 0, 'world_bg_solid');
+    this.world_bg_clouds_1 = this.game.add.sprite(0, 0, 'world_bg_clouds');
+    this.world_bg_clouds_2 = this.game.add.sprite(1181, 0, 'world_bg_clouds');
+  },
+
+  createhud: function() {
     this.game.add.sprite(10, 10, 'hud_bg');
     this.green_bar = this.game.add.sprite(10, 10, 'hud_bar_green');
     this.orange_bar = this.game.add.sprite(10, 10, 'hud_bar_orange');
@@ -49,6 +63,13 @@ game_state.fight.prototype = {
   update: function() {
     this.green_mask.angle += -1;
     this.orange_mask.angle += -1;
+
+    this.world_bg_clouds_1.x += -0.1;
+    this.world_bg_clouds_2.x += -0.1;
+    if(this.world_bg_clouds_1.x < -1181)
+      this.world_bg_clouds_1.x = 1181;
+    if(this.world_bg_clouds_2.x < -1181)
+      this.world_bg_clouds_2.x = 1181;
   },
 
   sethealth: function(val) {
