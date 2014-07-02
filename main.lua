@@ -5,26 +5,56 @@ World = require 'world'
 Player = require 'entities.player'
 Gamestate = require "hump.gamestate"
 
-globals = {
-  world=World(200,200), 
-  player=Player(),
-  TILE_W = 9,
-  TILE_H = 15,
-  air = 0,
-  stone = 1,
-  beach = 2,
-  dirt = 3,
-  town = 4,
-  char_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 13 ),
-  label_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 10 )
-}
+
+impassable = -1
+water = 0
+stone = 1
+beach = 2
+dirt = 3
+town = 4
+
+supplies = {{name = 'Wenches', min=20, max=80, minnum=10, maxnum=35},
+            {name = 'Grog', min=2, max=15, minnum=40, maxnum=90},
+            {name = 'Sapphires', min=80, max=200, minnum=2, maxnum=15}}
+
+
+world=World(200,200)
+print('world')
+player=Player()
+print('player')
+TILE_W = 9
+TILE_H = 15
+char_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 13 )
+label_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 10 )
+pirate_font = love.graphics.newFont( 'pixel_pirate.ttf', 20 )
+pirate_font_small = love.graphics.newFont( 'pixel_pirate.ttf', 15 )
 
 require 'states.worldmap'
+require 'states.townview'
 
 function love.load()
   love.keyboard.setKeyRepeat( true )
+
+  spawn = world:getSpawnPoint()
+  player.position = {x= spawn.x, y=spawn.y}
+
   Gamestate.registerEvents()
   Gamestate.switch(WorldMapState)
+end
+
+function love.draw(dt)
+  love.graphics.setFont(pirate_font);
+  love.graphics.setColor(251,184,41,255)
+  love.graphics.print('Seamen',7, 7)
+  love.graphics.setFont(pirate_font_small);
+  love.graphics.print('men of the sea!',136, 14)
+end
+
+function love.keypressed(key, u)
+   --Debug
+   if key == "lctrl" then --set to whatever key you want to use
+      debug.debug()
+   end
 end
 
 

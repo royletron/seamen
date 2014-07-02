@@ -12,12 +12,6 @@ Town = require('town')
 
 require('perlin')
 
-impassable = -1
-water = 0
-stone = 1
-beach = 2
-dirt = 3
-
 function rand(seed, n)
   if n <= 0 then return nil end
   if seed ~= mySeed or lastN < 0 or n <= lastN then

@@ -2,9 +2,6 @@ Sprite = require 'Sprite'
 BufferChar = Sprite:extends{char,size,colour}
 BufferChar.__name = 'BufferChar'
 
-local TILE_W = globals.TILE_W
-local TILE_H = globals.TILE_H
-
 function BufferChar:__init(x,y,char,colour,bgcolour,font)
   self.x,self.y,self.char,self.colour = x,y,char,colour
   self.bgcolour = bgcolour

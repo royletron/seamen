@@ -4,9 +4,6 @@ Colour = require 'Colour'
 Label = require 'world.label'
 require 'World'
 Renderer = Sprite:extends{size = 0}
-local labels = {}
-local TILE_W = globals.TILE_W
-local TILE_H = globals.TILE_H
 
 function Renderer:__init(x,y,w,h,label_font,char_font)
 
@@ -17,7 +14,7 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
   self.char_font, self.label_font = char_font, label_font
 
 	self.buffer = {}
-  self.labels = {Label(10,10,Colour(100,255,255,255), Colour(100,100,100,255), 'Hello', self.label_font)}
+  self.labels = {}
 
   self.ascii = nil
 
@@ -74,11 +71,11 @@ function Renderer:drawAscii(dt)
 end
 
 function Renderer:clearLabels()
-  labels = {}
+  self.labels = {}
 end
 
 function Renderer:addLabel(label)
-  table.insert(labels, label)
+  table.insert(self.labels, label)
 end
 
 function Renderer:update(dt)
@@ -89,7 +86,7 @@ end
 function Renderer:draw(dt)
   self.stage:draw(dt)
 
-  for k,v in ipairs(labels) do
+  for k,v in ipairs(self.labels) do
     v:draw(dt)
   end
 end

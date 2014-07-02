@@ -2,31 +2,14 @@ require('ascii.ships')
 AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('renderer')
 
-local player = globals.player
-local world = globals.world
-
-local TILE_W = globals.TILE_W
-local TILE_H = globals.TILE_H
-
-local air = globals.air
-local stone = globals.stone
-local beach = globals.beach
-local dirt = globals.dirt
-local town = globals.town
-
-local char_font = globals.char_font
-local label_font = globals.label_font
-
-local world_renderer = Renderer(267, 10, 58, 20,label_font,char_font)
-local ship_renderer = Renderer(7, 40, 28, 20,label_font,char_font)
+local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
+local ship_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
 WorldMapState = {}
 
 function WorldMapState:init()
   ship = AsciiRenderer(SHIP_FRIGGATTE)
   ship_renderer:setAscii(ship)
-  spawn = world:getSpawnPoint()
-  player.position = {x= spawn.x, y=spawn.y}
   move(player.position.x, player.position.y)
 end
 
@@ -84,15 +67,19 @@ function press(code)
   end
 end
 
+function gotoTown(t)
+  TownViewState.town = t
+  Gamestate.switch(TownViewState)
+end
+
 function move(toposx, toposy)
   tochar = world:getChar(toposx, toposy)
   if tochar.type == water then
     player.position.x, player.position.y = toposx, toposy
   end
-  print(t.type)
   if tochar.type == town then
     t = world:getTown(toposx, toposy)
-    print(t.name)
+    gotoTown(t)
   end
   towns = world:getTowns(player.position.x-(world_renderer.w/2), player.position.y-(world_renderer.h/2), player.position.x+(world_renderer.w/2), player.position.y+(world_renderer.h/2))
   world_renderer:clearLabels()
