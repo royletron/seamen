@@ -4,6 +4,7 @@ love.filesystem.setIdentity("royletron")
 World = require 'world'
 Player = require 'entities.player'
 Gamestate = require "hump.gamestate"
+InfoPanel = require "entities.info_panel"
 
 
 impassable = -1
@@ -21,12 +22,12 @@ supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
 
 
 world=World(200,200)
-print('world')
 player=Player()
-print('player')
+info = InfoPanel(400,10)
 TILE_W = 9
 TILE_H = 15
 char_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 13 )
+info_font = love.graphics.newFont( 'DejaVuSansMono-Bold.ttf', 23 )
 label_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 10 )
 pirate_font = love.graphics.newFont( 'pixel_pirate.ttf', 20 )
 pirate_font_small = love.graphics.newFont( 'pixel_pirate.ttf', 15 )
@@ -50,6 +51,7 @@ function love.draw(dt)
   love.graphics.print('Sea-Men',7, 7)
   love.graphics.setFont(pirate_font_small);
   love.graphics.print('men of the sea!',149, 14)
+  info:draw(dt)
 end
 
 function love.keypressed(key, u)

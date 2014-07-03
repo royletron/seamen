@@ -32,7 +32,7 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 end
 
 function Renderer:drawChar(x, y, char)
-  	if self.buffer[x] == nil then
+  if self.buffer[x] == nil then
 		print('x:'..x..' is out of bounds')
 	else
 		if self.buffer[x][y] == nil then

@@ -12,7 +12,7 @@ function TownViewState:enter()
   self.position = {x=0, y=0}
   self.maxposition = {x=1, y=0}
   self.invoice = {}
-  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255))
+  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255))--, TOWN_CRIER_STATIC)
 end
 
 function TownViewState:draw(dt)
@@ -28,9 +28,9 @@ function TownViewState:draw(dt)
     if self.invoice[k] == nil then self.invoice[k] = {quantity = 0} end
     love.graphics.setColor(42,143,189,255)
     love.graphics.setFont(char_font);
-    love.graphics.print(v.name, 250, 50 + (counter*30))
+    love.graphics.print(v.name, 150, 50 + (counter*30))
     love.graphics.setColor(119,204,164,255)
-    love.graphics.print('available '..v.stock.." : "..'cost '..v.cost, 390, 50 + (counter*30))
+    love.graphics.print('you have ' .. player:has(v.name) .. ' : available '..v.stock.." : "..'price '..v.cost, 290, 50 + (counter*30))
     if self.position.x == 1 and self.position.y == counter then
       love.graphics.setColor(42,143,189,255)
     else
@@ -63,6 +63,15 @@ function TownViewState:draw(dt)
     self.maxposition.y = counter
     counter = counter + 1
   end
+  self.maxposition.y = counter
+  if(self.position.y == counter) then
+    love.graphics.setColor(42,143,189,255)
+  else
+    love.graphics.setColor(102,102,102,255)
+  end
+  love.graphics.rectangle("fill", 720, 50 + (counter *30) - 3, 50, 20 )
+  love.graphics.setColor(255,255,255,255)
+  love.graphics.print('Deal', 726, 50 + (counter * 30))
 end
 
 function TownViewState:update(dt)
@@ -72,20 +81,60 @@ function TownViewState:update(dt)
   self.talker:update(dt)
 end
 
+function TownViewState:deal()
+  cost = 0
+  for k,v in ipairs(self.town.supplies) do
+    line = self.invoice[k]
+    if line ~= nil then
+      v.stock = v.stock - line.quantity
+      player:setInventory(v.name, line.quantity)
+      cost = cost - (v.cost * line.quantity)
+    end 
+    -- if v ~= nil then
+    --   if v.quantity == 0 then 
+    --     print(v.quantity)
+    --     for sk, sv in ipairs(self.town.supplies) do
+    --       if sv.name == v.name then
+    --         sv.quantity = sv.quantity - v.quantity
+    --       end
+    --     end
+    --     player:setInventory(v.name, v.quantity)
+    --     cost = cost + (v.cost * v.quantity)
+    --   end
+    -- end
+  end
+  player.money = player.money + cost
+  self.talker:setText('Deal done gobber!')
+  self.invoice = {}
+end
+
 function TownViewState:triggerButton()
-  if self.position.y <= self.maxposition.y then
+  if self.position.y <= self.maxposition.y-1 then
     if self.invoice[self.position.y+1] == nil then
-      self.invoice[self.position.y+1] = {quantity=0}
+      self.invoice[self.position.y+1] = {quantity=0, name=self.town.supplies[self.position.y+1].name, cost=self.town.supplies[self.position.y+1].cost}
     end
     if self.position.x == 0 then
       --remove item
-      self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity - 1
+      if self.invoice[self.position.y+1].quantity <= 0 and player:has(self.town.supplies[self.position.y+1].name) > (self.invoice[self.position.y+1].quantity) * -1 then
+        self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity - 1
+      else
+        if self.invoice[self.position.y+1].quantity > 0 then
+          self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity - 1
+        else
+          if player:has(self.town.supplies[self.position.y+1].name) == 0 then
+            self.talker:setText('Sorry buddy you don\'t have any '..self.town.supplies[self.position.y+1].name)
+          else
+            self.talker:setText('Sorry buddy you don\'t have enough '..self.town.supplies[self.position.y+1].name)
+          end
+        end
+      end
     else
       --add item
       self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity + 1
     end
     --must be a counter button?
   else
+    self:deal()
     --must be something else?
   end
 end
