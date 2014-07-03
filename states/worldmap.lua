@@ -1,4 +1,5 @@
 require('ascii.ships')
+AsciiSprite = require('ascii.ascii_sprite')
 AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('renderer')
 
@@ -8,7 +9,9 @@ local ship_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 WorldMapState = {}
 
 function WorldMapState:init()
-  ship = AsciiRenderer(SHIP_FRIGGATTE)
+  ship = AsciiRenderer()
+  ship:add(AsciiSprite(SHIP_FRIGGATTE))
+  ship:add(AsciiSprite(WATER_ANIMATION))
   ship_renderer:setAscii(ship)
   move(player.position.x, player.position.y)
 end

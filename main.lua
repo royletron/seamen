@@ -13,8 +13,10 @@ beach = 2
 dirt = 3
 town = 4
 
-supplies = {{name = 'Wenches', min=20, max=80, minnum=10, maxnum=35},
+supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
             {name = 'Grog', min=2, max=15, minnum=40, maxnum=90},
+            {name = 'Wenches', min=20, max=80, minnum=10, maxnum=35},
+            {name = 'Gold', min=30, max=90, minnum=20, maxnum=30},
             {name = 'Sapphires', min=80, max=200, minnum=2, maxnum=15}}
 
 
@@ -45,9 +47,9 @@ end
 function love.draw(dt)
   love.graphics.setFont(pirate_font);
   love.graphics.setColor(251,184,41,255)
-  love.graphics.print('Seamen',7, 7)
+  love.graphics.print('Sea-Men',7, 7)
   love.graphics.setFont(pirate_font_small);
-  love.graphics.print('men of the sea!',136, 14)
+  love.graphics.print('men of the sea!',149, 14)
 end
 
 function love.keypressed(key, u)

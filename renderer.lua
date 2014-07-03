@@ -33,10 +33,10 @@ end
 
 function Renderer:drawChar(x, y, char)
   	if self.buffer[x] == nil then
-		print('x:'+x+' is out of bounds')
+		print('x:'..x..' is out of bounds')
 	else
 		if self.buffer[x][y] == nil then
-			print('y:'+y+' is out of bounds')
+			print('y:'..y..' is out of bounds')
 		else
 			self.buffer[x][y]:setChar(char)
 		end
@@ -57,14 +57,15 @@ end
 function Renderer:drawAscii(dt)
   frame = self.ascii:getFrame(dt)
   if frame ~= nil then
-    for x=1, #frame, 1 do
-      if frame[x] ~= nil then
-        for y=1, #frame[x], 1 do
+    for x=0, self.w, 1 do
+      for y=0, self.h, 1 do
+        char = Char:new(x,y, ' ', Colour(100,233,233,255), Colour(164,133,81,0))
+        if frame[x] ~= nil then
           if frame[x][y] ~= nil then
             char = Char:new(x,y,frame[x][y], Colour(100,233,233,255), Colour(164,133,81,0))
-            self:drawChar(x,y,char)
           end
         end
+        self:drawChar(x,y,char)
       end
     end
   end

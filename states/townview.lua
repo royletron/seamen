@@ -1,13 +1,13 @@
 require('ascii.ships')
-AsciiRenderer = require('ascii.ascii_renderer')
+AsciiSprite = require('ascii.ascii_sprite')
 Renderer = require('renderer')
 
 TownViewState = {town = nil}
 
 local crest_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
-function TownViewState:init()
-  crest_renderer:setAscii(AsciiRenderer({self.town.crest}))
+function TownViewState:enter()
+  crest_renderer:setAscii(AsciiSprite({self.town.crest}))
   self.position = {x=0, y=0}
   self.maxposition = {x=1, y=0}
   self.invoice = {}
@@ -47,7 +47,15 @@ function TownViewState:draw(dt)
 
     if self.invoice[k].quantity == 0 then
       love.graphics.setColor(102,102,102,255)
-      love.graphics.printf('0 selected', 600, 50+(counter*30), 100, "right")
+      love.graphics.printf('no deal', 600, 50+(counter*30), 100, "right")
+    else
+      if self.invoice[k].quantity > 0 then
+        love.graphics.setColor(119,204,164,255)
+        love.graphics.printf('buying '..self.invoice[k].quantity, 600, 50+(counter*30), 100, "right")
+      else
+        love.graphics.setColor(255,153,153,255)
+        love.graphics.printf('selling '..-1*self.invoice[k].quantity, 600, 50+(counter*30), 100, "right")
+      end
     end
     self.maxposition.y = counter
     counter = counter + 1
@@ -60,11 +68,31 @@ function TownViewState:update(dt)
   end
 end
 
+function TownViewState:triggerButton()
+  if self.position.y <= self.maxposition.y then
+    if self.invoice[self.position.y+1] == nil then
+      self.invoice[self.position.y+1] = {quantity=0}
+    end
+    if self.position.x == 0 then
+      --remove item
+      self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity - 1
+    else
+      --add item
+      self.invoice[self.position.y+1].quantity = self.invoice[self.position.y+1].quantity + 1
+    end
+    --must be a counter button?
+  else
+    --must be something else?
+  end
+end
+
 function TownViewState:keypressed(key, unicode)
   if key == 'down' then self.position.y = self.position.y + 1 end
   if key == 'up' then self.position.y = self.position.y - 1 end
   if key == 'right' then self.position.x = self.position.x + 1 end
   if key == 'left' then self.position.x = self.position.x - 1 end
+  if key == 'escape' then Gamestate.switch(WorldMapState) end
+  if key == 'z' then self:triggerButton() end
 
   if self.position.x < 0 then self.position.x = 0 end
   if self.position.x > self.maxposition.x then self.position.x = self.maxposition.x end

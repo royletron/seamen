@@ -2,7 +2,7 @@ class = require '30log'
 Town = class ()
 Town.__name = 'Town'
 
-local characters = {'=', ':', "H", "I", "M"}
+local characters = {'=', ':', "H", "I", "M", "*", 'O', '+'}
 local badge = { ' -----','------ ',
 								'|     ','      |',
  							 '|   ',     '   |',
