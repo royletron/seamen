@@ -1,6 +1,7 @@
 require('ascii.ships')
 AsciiSprite = require('ascii.ascii_sprite')
 Renderer = require('renderer')
+AvatarTalker = require('display.AvatarTalker')
 
 TownViewState = {town = nil}
 
@@ -11,9 +12,11 @@ function TownViewState:enter()
   self.position = {x=0, y=0}
   self.maxposition = {x=1, y=0}
   self.invoice = {}
+  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255))
 end
 
 function TownViewState:draw(dt)
+  self.talker:draw(dt)
   love.graphics.setColor(252,251,227,255)
   love.graphics.setFont(char_font);
   love.graphics.printf('Welcome to '..self.town.name,7, 50, 130,"center")
@@ -66,6 +69,7 @@ function TownViewState:update(dt)
   if crest_renderer ~= nil then
     crest_renderer:update(dt)
   end
+  self.talker:update(dt)
 end
 
 function TownViewState:triggerButton()
