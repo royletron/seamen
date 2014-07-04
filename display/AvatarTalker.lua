@@ -26,8 +26,8 @@ end
 
 function AvatarTalker:draw(dt)
   love.graphics.setColor(self.textcolour.r, self.textcolour.g, self.textcolour.b, self.textcolour.a)
-  love.graphics.setFont(pirate_font);
-	love.graphics.printf(self.message:sub(1, self.letters), self.x+70, self.y, self.w-70)
+  love.graphics.setFont(pirate_font_small);
+	love.graphics.printf(self.message:sub(1, self.letters), self.x+120, self.y+50, self.w-70)
 	if self.renderer ~= nil then
     self.renderer:draw(dt)
   end
