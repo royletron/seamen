@@ -23,7 +23,7 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 	for _x=0, w, 1 do
 		for _y=0, h, 1 do
 			if self.buffer[_x] == nil then self.buffer[_x] = {} end
-			bufferchar = BufferChar(self.x + TILE_W*_x, self.y + TILE_H*_y, ' ', TRANSPARENT, TRANSPARENT, self.char_font)
+			bufferchar = BufferChar(self.x + TILE_W*_x, self.y + TILE_H*_y, ' ', Colour(0,0,0,0), Colour(0,0,0,0), self.char_font)
 			self.stage:add(bufferchar)
 			self.buffer[_x][_y] = bufferchar
 		end
@@ -31,7 +31,15 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 end
 
 function Renderer:drawChar(x, y, char)
-  fn.try(self.buffer, x, y):setChar(char)
+  if self.buffer[x] == nil then
+		print('x:'..x..' is out of bounds')
+	else
+		if self.buffer[x][y] == nil then
+			print('y:'..y..' is out of bounds')
+		else
+			self.buffer[x][y]:setChar(char)
+		end
+	end
 end
 
 function Renderer:setAscii(ascii)
@@ -45,18 +53,18 @@ function Renderer:setAscii(ascii)
   -- end
 end
 
-DEFAULT_COLOR = Colour(100,233,233,255)
-DEFAULT_BG = Colour(164,133,81,0)
-
 function Renderer:drawAscii(dt)
-  local frame = self.ascii:getFrame(dt)
+  frame = self.ascii:getFrame(dt)
   if frame ~= nil then
-    for x=0, self.w do
-      for y=0, self.h do
-        self:drawChar(x, y, (
-          fn.try(frame, x, y) or
-          Char:new(x, y, ' ', DEFAULT_COLOR, DEFAULT_BG)
-        ))
+    for x=0, self.w, 1 do
+      for y=0, self.h, 1 do
+        char = Char:new(x,y, ' ', Colour(100,233,233,255), Colour(164,133,81,0))
+        if frame[x] ~= nil then
+          if frame[x][y] ~= nil then
+            char = frame[x][y]
+          end
+        end
+        self:drawChar(x,y,char)
       end
     end
   end
