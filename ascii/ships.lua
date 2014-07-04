@@ -304,7 +304,7 @@ TOWN_CRIER_STATIC={{
       [[ `.......' ]],
       [[  | ˘¸˘ |  ]],
       [[  :  -  ;  ]],
-      [[   `ʬʬʬ'   ]]}, framerate=1}
+      [[   `ʬʬʬ'   ]]}, framerate=1, colour = Colour(233,105,97,255)}
 TOWN_CRIER_TALKING={{
       [[  :  -  ;  ]]},{
       [[  :  ,  ;  ]]},{
@@ -318,4 +318,4 @@ TOWN_CRIER_TALKING={{
       [[  :  -  ;  ]]},{
       [[  :  ,  ;  ]]},{
       [[  :  0  ;  ]]},{
-      [[  :  -  ;  ]]},framerate=10,y=4}
+      [[  :  -  ;  ]]},framerate=10,y=4, colour = Colour(233,105,97,255)}

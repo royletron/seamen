@@ -29,9 +29,54 @@ function WorldMapState:init()
 
   move(player.position.x, player.position.y)
 
-  for b=0, 200, 1 do
-    pos = world:getSpawnPoint()
-    table.insert(baddies, Baddie(pos.x, pos.y))
+
+  for bx=player.position.x-world_renderer.w, player.position.x+world_renderer.w, 1 do
+    numwater = 0
+    if bx > 0 and bx < #world['base'] then
+      for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
+        if by > 0 and by < #world['base'][bx] then
+          numwater = numwater + 1
+        end
+      end
+    end
+    if numwater > 0 and math.random(1,2) == 1 then
+      bpos = self:addBaddieOnLine(bx)
+      table.insert(baddies, Baddie(bpos.x, bpos.y))
+    end
+  end
+  --   numwater = 0
+  --   for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
+  --     if world['base'][bx] ~= nil then
+  --       if world['base'][bx][by] ~= nil then
+  --         if world['base'][bx][by].type == water then numwater = numwater + 1 end
+  --       end
+  --     end
+  --   end
+  --   if numwater > 0 and math.random(1,2) == 1 then
+  --     bpos = self:addBaddieOnLine(bx)
+  --     table.insert(baddies, Baddie(bpos.x, bpos.y))
+  --   end
+  -- end
+
+end
+
+function WorldMapState:addBaddieOnLine(x)
+  y = math.random(player.position.y-world_renderer.h, player.position.y+world_renderer.h)
+  if world['base'][x] ~= nil then
+    if world['base'][x][y] ~= nil then
+      if world['base'][x][y].type == water then
+        print(x .. ':' .. y)
+        return {x=x, y=y}
+      else
+        return self:addBaddieOnLine(x)
+      end
+
+    else
+      return self:addBaddieOnLine(x)
+    end
+
+  else
+    return self:addBaddieOnLine(x)
   end
 end
 
@@ -86,6 +131,10 @@ function WorldMapState:update(dt)
         end
       end
     end
+    -- for k,val in ipairs(baddies) do
+    --   b = baddies[k]
+    --   world_renderer:drawChar(b.x-player.position.x,b.y-player.position.y,Char:new(b.x,b.y,'✺', Colour(184,149,91,255), Colour(255,133,81,255)))
+    -- end
     world_renderer:update(dt)
   end
 end
