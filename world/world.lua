@@ -93,7 +93,7 @@ function World:__init(w,h)
     end
   end
   print('drawn')
-  for n = 1, 1000 do
+  for n = 1, 100 do
     self:createTreasure(unpack(fn.random(self.land)))
   end
   for t = 1, 100, 1 do
@@ -140,7 +140,7 @@ function World:getTowns(x,y,toX,toY)
 end
 
 function World:getTown(x,y)
-  fn.try(self.towndir, x, y)
+  return fn.try(self.towndir, x, y)
 end
 
 function World:createTreasure(x, y)
