@@ -1,6 +1,7 @@
 --love.filesystem.load("perlin.lua")()
 love.filesystem.setIdentity("royletron")
 
+fpsGraph = require "hump.FPSGraph"
 World = require 'world.world'
 Player = require 'entities.player'
 Gamestate = require "hump.gamestate"
@@ -43,6 +44,11 @@ function love.load()
 
   Gamestate.registerEvents()
   Gamestate.switch(WorldMapState)
+
+  	-- fps graph
+	testGraph = fpsGraph.createGraph(700, 0)
+	-- memory graph
+	testGraph2 = fpsGraph.createGraph(700, 30)
 end
 
 function love.draw(dt)
@@ -52,6 +58,13 @@ function love.draw(dt)
   love.graphics.setFont(pirate_font_small);
   love.graphics.print('men of the sea!',149, 14)
   info:draw(dt)
+
+  fpsGraph.drawGraphs({testGraph, testGraph2})
+end
+
+function love.update(dt)
+  fpsGraph.updateFPS(testGraph, dt)
+	fpsGraph.updateMem(testGraph2, dt)
 end
 
 function love.keypressed(key, u)
