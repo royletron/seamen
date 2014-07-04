@@ -6,7 +6,7 @@ AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('renderer')
 
 local renderers = {
-  ship_renderer = Renderer(7, 70, 28, 20, label_font, char_font),
+  ship_renderer = Renderer(7, 70, 28, 21, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 

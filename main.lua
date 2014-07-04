@@ -52,6 +52,7 @@ function love.draw(dt)
   love.graphics.setFont(pirate_font_small);
   love.graphics.print('men of the sea!',149, 14)
   info:draw(dt)
+  love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 500, 500)
 end
 
 function love.keypressed(key, u)

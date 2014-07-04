@@ -28,7 +28,7 @@ function AsciiSprite:__init(raw)
       local max = utf8.len(v)
       if max > self.w then self.w = max end
       for i = 1, max do
-        local c = utf8.sub(v, i,i+1)
+        local c = utf8.sub(v, i,i)
         if self.frames[fk][i] == nil then self.frames[fk][i] = {} end
 				char = Char:new(i,k,c, self.colour, self.bgcolour)
         self.frames[fk][i][k] = char

@@ -42,7 +42,7 @@ function AsciiRenderer:getFrame(dt)
               if frame[x][y] ~= nil then
                 if buffer[x + s.x] ~= nil then
                   if buffer[x + s.x][y + s.y] ~= nil then
-                    if frame[x][y] ~= ' ' then
+                    if frame[x][y].char ~= ' ' then
                       buffer[x + s.x][y + s.y] = frame[x][y]
                     end
                   end
