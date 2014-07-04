@@ -12,7 +12,7 @@ function TownViewState:enter()
   self.position = {x=0, y=0}
   self.maxposition = {x=1, y=0}
   self.invoice = {}
-  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255))--, TOWN_CRIER_STATIC)
+  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255), TOWN_CRIER_STATIC)
 end
 
 function TownViewState:draw(dt)
@@ -89,9 +89,9 @@ function TownViewState:deal()
       v.stock = v.stock - line.quantity
       player:setInventory(v.name, line.quantity)
       cost = cost - (v.cost * line.quantity)
-    end 
+    end
     -- if v ~= nil then
-    --   if v.quantity == 0 then 
+    --   if v.quantity == 0 then
     --     print(v.quantity)
     --     for sk, sv in ipairs(self.town.supplies) do
     --       if sv.name == v.name then
