@@ -62,7 +62,7 @@ function Renderer:drawAscii(dt)
         char = Char:new(x,y, ' ', Colour(100,233,233,255), Colour(164,133,81,0))
         if frame[x] ~= nil then
           if frame[x][y] ~= nil then
-            char = Char:new(x,y,frame[x][y], Colour(100,233,233,255), Colour(164,133,81,0))
+            char = frame[x][y]
           end
         end
         self:drawChar(x,y,char)

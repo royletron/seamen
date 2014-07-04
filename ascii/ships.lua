@@ -68,7 +68,7 @@ SHIP_FRIGGATTE ={{
   [['\==-,,;,,;,,;,,,,,,,-==;7 ]],
   [[  \__...____...________/   ]],
   [[                           ]],
-  [[                           ]]}, framerate = 1}
+  [[                           ]]}, framerate = 1, colour = Colour(255,255,255,255), bgcolour = Colour(100,100,100,255)}
 
 WATER_ANIMATION ={{
   [[    ~~~              ~~~~~~~        ~~~~~]],
@@ -196,7 +196,7 @@ WATER_ANIMATION ={{
 },{
   [[    ~~~              ~~~~~~~        ~~~~~]],
   [[~~~~...~~~~~~~~~~~~~~.......~~~~~~~~.....]]
-}, y=12, framerate=36}
+}, y=12, framerate=36, colour = Colour(85,195,220,255), bgcolour = Colour(43,78,114,255)}
 TOWN_CRIER_STATIC={{
       [[   ./''\   ]],
       [[ __|_☠_|__ ]],
