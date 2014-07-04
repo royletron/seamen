@@ -2,6 +2,7 @@ class = require '30log'
 AsciiSprite = class ()
 BufferChar = require 'BufferChar'
 Colour = require 'Colour'
+utf8 = require 'utf8'
 
 function AsciiSprite:__init(raw)
 	self.w = 0
@@ -22,9 +23,10 @@ function AsciiSprite:__init(raw)
     if #fv > self.h then self.h = #fv end
     self.frames[fk] = {}
     for k,v in ipairs(ascii) do
-      if string.len(v) > self.w then self.w = string.len(v) end
-      for i = 1, #v do
-        local c = v:sub(i,i)
+      local max = utf8.len(v)
+      if max > self.w then self.w = max end
+      for i = 1, max do
+        local c = utf8.sub(v, i,i+1)
         if self.frames[fk][i] == nil then self.frames[fk][i] = {} end
         self.frames[fk][i][k] = c
       end

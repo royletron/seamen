@@ -1,10 +1,16 @@
 require('ascii.ships')
+require('ascii.hud')
+
 AsciiSprite = require('ascii.ascii_sprite')
 AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('renderer')
 
+local renderers = {
+  ship_renderer=Renderer(7, 70, 28, 20,label_font,char_font),
+  hud_renderer=Renderer(7, 70 + 20 * TILE_H, 40, 20,label_font,char_font)
+}
+
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
-local ship_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
 WorldMapState = {}
 
@@ -12,19 +18,25 @@ function WorldMapState:init()
   ship = AsciiRenderer()
   ship:add(AsciiSprite(SHIP_FRIGGATTE))
   ship:add(AsciiSprite(WATER_ANIMATION))
-  ship_renderer:setAscii(ship)
+  renderers.ship_renderer:setAscii(ship)
+
+  hud = AsciiRenderer()
+  hud:add(AsciiSprite(HUD_BORDER))
+  renderers.hud_renderer:setAscii(hud)
+
   move(player.position.x, player.position.y)
 end
 
 function WorldMapState:draw(dt)
 
-  if ship_renderer ~= nil then
-    ship_renderer:draw(dt)
+  for key, renderer in pairs(renderers) do
+    renderer:draw(dt)
   end
 
   if world_renderer ~= nil then
     world_renderer:draw(dt)
   end
+
 end
 
 function WorldMapState:keypressed(key, unicode)
@@ -32,8 +44,8 @@ function WorldMapState:keypressed(key, unicode)
 end
 
 function WorldMapState:update(dt)
-  if ship_renderer ~= nil then
-    ship_renderer:update(dt)
+  for key, renderer in pairs(renderers) do
+    renderer:update(dt)
   end
   if world_renderer ~= nil then
     for x=0, world_renderer.w, 1 do
