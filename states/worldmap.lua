@@ -3,7 +3,7 @@ require('ascii.hud')
 
 AsciiSprite = require('ascii.ascii_sprite')
 AsciiRenderer = require('ascii.ascii_renderer')
-Renderer = require('renderer')
+Renderer = require('display.renderer')
 
 local renderers = {
   ship_renderer = Renderer(7, 70, 28, 21, label_font, char_font),

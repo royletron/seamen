@@ -1,7 +1,7 @@
 --love.filesystem.load("perlin.lua")()
 love.filesystem.setIdentity("royletron")
 
-World = require 'world'
+World = require 'world.world'
 Player = require 'entities.player'
 Gamestate = require "hump.gamestate"
 InfoPanel = require "entities.info_panel"
@@ -26,11 +26,11 @@ player=Player()
 info = InfoPanel(400,10)
 TILE_W = 9
 TILE_H = 15
-char_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 13 )
-info_font = love.graphics.newFont( 'DejaVuSansMono-Bold.ttf', 23 )
-label_font = love.graphics.newFont( 'DejaVuSansMono.ttf', 10 )
-pirate_font = love.graphics.newFont( 'pixel_pirate.ttf', 20 )
-pirate_font_small = love.graphics.newFont( 'pixel_pirate.ttf', 15 )
+char_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 13 )
+info_font = love.graphics.newFont( 'fonts/DejaVuSansMono-Bold.ttf', 23 )
+label_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 10 )
+pirate_font = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 20 )
+pirate_font_small = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 15 )
 
 require 'states.worldmap'
 require 'states.townview'
@@ -52,7 +52,6 @@ function love.draw(dt)
   love.graphics.setFont(pirate_font_small);
   love.graphics.print('men of the sea!',149, 14)
   info:draw(dt)
-  love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 500, 500)
 end
 
 function love.keypressed(key, u)

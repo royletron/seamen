@@ -1,8 +1,8 @@
-Sprite = require 'Sprite'
+Sprite = require 'display.Sprite'
 AvatarTalker = Sprite:extends{}
 AvatarTalker.__name = 'AvatarTalker'
 AsciiSprite = require('ascii.ascii_sprite')
-Renderer = require('renderer')
+Renderer = require('display.renderer')
 AsciiRenderer = require('ascii.ascii_renderer')
 
 function AvatarTalker:__init(x,y,w, initialmessage, textcolour, staticavatar, talkingavatar)

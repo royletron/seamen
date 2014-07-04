@@ -1,6 +1,6 @@
 class = require '30log'
 AsciiSprite = class ()
-BufferChar = require 'BufferChar'
+BufferChar = require 'display.BufferChar'
 Colour = require 'Colour'
 utf8 = require 'utf8'
 

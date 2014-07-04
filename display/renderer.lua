@@ -1,8 +1,7 @@
-Sprite = require 'Sprite'
-BufferChar = require 'BufferChar'
+Sprite = require 'display.Sprite'
+BufferChar = require 'display.BufferChar'
 Colour = require 'Colour'
 Label = require 'world.label'
-require 'World'
 Renderer = Sprite:extends{size = 0}
 
 function Renderer:__init(x,y,w,h,label_font,char_font)

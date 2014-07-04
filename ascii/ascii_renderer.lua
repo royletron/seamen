@@ -1,6 +1,6 @@
 class = require '30log'
 AsciiRenderer = class ()
-BufferChar = require 'BufferChar'
+BufferChar = require 'display.BufferChar'
 Colour = require 'Colour'
 Label = require 'world.label'
 

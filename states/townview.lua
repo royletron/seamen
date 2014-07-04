@@ -1,6 +1,6 @@
 require('ascii.ships')
 AsciiSprite = require('ascii.ascii_sprite')
-Renderer = require('renderer')
+Renderer = require('display.renderer')
 AvatarTalker = require('display.AvatarTalker')
 
 TownViewState = {town = nil}

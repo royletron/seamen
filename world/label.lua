@@ -1,4 +1,4 @@
-Sprite = require 'Sprite'
+Sprite = require 'display.Sprite'
 Label = Sprite:extends{text = ''}
 
 function Label:__init(x,y,bgcolour,colour,text,font)

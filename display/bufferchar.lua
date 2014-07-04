@@ -1,4 +1,4 @@
-Sprite = require 'Sprite'
+Sprite = require 'display.Sprite'
 BufferChar = Sprite:extends{char,size,colour}
 BufferChar.__name = 'BufferChar'
 
