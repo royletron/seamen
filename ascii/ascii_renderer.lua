@@ -12,6 +12,21 @@ function AsciiRenderer:add(sprite)
   table.insert(self.layers, sprite)
 end
 
+function AsciiRenderer:contains(sprite)
+  for k,v in ipairs(self.layers) do
+    if v == sprite then return true end
+  end
+  return false
+end
+
+function AsciiRenderer:remove(sprite)
+  for k,v in ipairs(self.layers) do
+    if v == sprite then
+      table.remove(self.layers, k)
+    end
+  end
+end
+
 function AsciiRenderer:getFrame(dt)
   buffer = {}
   if self.layers[0] ~= nil then root = self.layers[1]:getFrame(dt) end

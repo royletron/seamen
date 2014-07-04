@@ -12,7 +12,7 @@ function TownViewState:enter()
   self.position = {x=0, y=0}
   self.maxposition = {x=1, y=0}
   self.invoice = {}
-  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255), TOWN_CRIER_STATIC)
+  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255), TOWN_CRIER_STATIC, TOWN_CRIER_TALKING)
 end
 
 function TownViewState:draw(dt)

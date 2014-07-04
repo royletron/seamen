@@ -5,13 +5,17 @@ AsciiSprite = require('ascii.ascii_sprite')
 Renderer = require('renderer')
 AsciiRenderer = require('ascii.ascii_renderer')
 
-function AvatarTalker:__init(x,y,w, initialmessage, textcolour, avatar, talkingavatar)
+function AvatarTalker:__init(x,y,w, initialmessage, textcolour, staticavatar, talkingavatar)
 	self.x, self.y, self.w = x,y,w
-	if avatar ~= nil then
+	self.staticavatar, self.talkingavatar = staticavatar, talkingavatar
+	if staticavatar ~= nil then
+		self.staticavatar = AsciiSprite(staticavatar)
 		self.renderer = Renderer(x, y, 28, 20,label_font,char_font)
-		self.avatar = AsciiSprite(avatar)
+		self.avatar = AsciiRenderer()
+		self.avatar:add(self.staticavatar)
 		self.renderer:setAscii(self.avatar)
 	end
+	if self.talkingavatar ~= nil then self.talkingavatar = AsciiSprite(talkingavatar) end
 	self.message = initialmessage
 	self.textcolour = textcolour
 	self.letters = 0
@@ -23,13 +27,28 @@ end
 function AvatarTalker:draw(dt)
   love.graphics.setColor(self.textcolour.r, self.textcolour.g, self.textcolour.b, self.textcolour.a)
   love.graphics.setFont(pirate_font);
-	love.graphics.printf(self.message:sub(1, self.letters), self.x, self.y, self.w)
+	love.graphics.printf(self.message:sub(1, self.letters), self.x+70, self.y, self.w-70)
 	if self.renderer ~= nil then
     self.renderer:draw(dt)
   end
 end
 
+function AvatarTalker:talking()
+	return self.elapsed < #self.message
+end
+
 function AvatarTalker:update(dt)
+	if self.talkingavatar ~= nil then
+		if self:talking() then
+			if self.avatar:contains(self.talkingavatar) == false then
+				self.avatar:add(self.talkingavatar)
+			end
+		else
+			if self.avatar:contains(self.talkingavatar) == true then
+				self.avatar:remove(self.talkingavatar)
+			end
+		end
+	end
 	self.currenttime = self.currenttime + dt
 	if self.currenttime > (1 / self.framerate) then
 		self.elapsed = self.elapsed + 1
