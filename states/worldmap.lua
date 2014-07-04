@@ -37,12 +37,19 @@ function WorldMapState:draw(dt)
     world_renderer:draw(dt)
   end
 
+  love.graphics.setColor(255,255,255,255)
+  love.graphics.setFont(info_font)
+  for i=1, #player.crew do
+    crewmember = player.crew[i]
+    love.graphics.print('☠', 10 + TILE_W * 2 + 5, 70 + 20 * TILE_H + 30 + (24 * (i - 1)))
+  end
+
   love.graphics.setColor(42,143,189,255)
-  love.graphics.setFont(char_font);
+  love.graphics.setFont(char_font)
 
   for i=1, #player.crew do
     crewmember = player.crew[i]
-    love.graphics.print('⚔' .. ' ' .. crewmember.name, 10 + TILE_W * 2, 70 + 20 * TILE_H + 33 + (24 * (i - 1)))
+    love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 70 + 20 * TILE_H + 38 + (24 * (i - 1)))
   end
 
 end
