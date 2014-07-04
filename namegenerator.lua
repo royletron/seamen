@@ -9,7 +9,7 @@ forenames = {
   'Drongo',
   'Seth',
   'Hector',
-  {{'Mad', 'Rusty', ''}, {'Jack', 'Pete'}},
+  {{'Mad ', 'Rusty ', ''}, {'Jack', 'Pete'}},
   'Black John',
   'Billy',
   'Nico',
@@ -26,6 +26,7 @@ forenames = {
   'Ridley',
   'Russel',
   'Red',
+  'Canus',
   'Romulus',
   'William',
   'Guybrush'
@@ -38,14 +39,16 @@ surnames = {
   'Turner',
   'Law',
   'Clegg',
-  'Ironhook',
+  {{'Iron', 'Meat'}, {'hook', 'hand'}},
   'Harlock',
   'Roscoe',
   'Crook',
+  'Barbosa',
   'Crow',
   'Corsair',
   'Roberts',
   'Slag',
+  'Swabb',
   'Grog',
   'Ramsey',
   'Faber',
@@ -54,14 +57,24 @@ surnames = {
   'Drift',
   'Benett',
   'Kennit',
-  {{'de'}, {'Berry', 'Leon'}},
+  'Loveheart',
+  {{'de '}, {'Berry', 'Leon'}},
   {{'Von ', ''}, {'Carrigan', 'Avery', 'Kenway'}},
-  {{'Grey', 'Black', 'Skunk', 'Crimson'}, {'beard', 'heart', 'eye'}},
+  {{'Dark', 'Grey', 'Black', 'Skunk', 'Red', 'Crimson'}, {'beard', 'heart', 'eye'}},
+  {{'Scurvy ', 'Evil ', 'Rancid ', 'Dank-'}, {'Dog', 'Rat', 'Weavil'}}
 }
+
+function map(func, array)
+  local new_array = {}
+  for i,v in ipairs(array) do
+    new_array[i] = func(v)
+  end
+  return new_array
+end
 
 function pick(list)
   local item = list[math.random(1, #list)] or ''
-  if type(item) == 'table' then item = pick(item[1]) .. pick(item[2]) end
+  if type(item) == 'table' then item = table.concat(map(pick, item), '') end
   return item
 end
 

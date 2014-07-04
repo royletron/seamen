@@ -13,7 +13,7 @@ Player.position = {}
 Player.crew = {}
 
 function Player:__init()
-  for i=1, 4 do
+  for i=1, math.random(3,5) do
     table.insert(self.crew, {name=namegenerator.pirateName()})
   end
 end
