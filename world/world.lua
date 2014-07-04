@@ -11,6 +11,7 @@ Char = require('char')
 Town = require('town')
 
 require('perlin')
+fn = require('fn')
 
 function rand(seed, n)
   if n <= 0 then return nil end
@@ -60,6 +61,10 @@ function World:__init(w,h)
 
   self.towndir = {}
 
+  self.land = {}
+  self.beach = {}
+  self.water = {}
+
   for r = 1, #terrain.perlin do
     terrain.value[r] = {}
     dirtMargin = (200-r) * 0.01
@@ -75,13 +80,22 @@ function World:__init(w,h)
   print('valued')
   for r = 1, #terrain.value do
     for c = 1, #(terrain.value[1]) do
-      if terrain.value[r][c] == water then self:addChar(Char:new(r, c, '≋', Colour(44,151,149,255), Colour(50,169,167,255), water),'base') end
-      if terrain.value[r][c] == stone then self:addChar(Char:new(r, c, '⍙', Colour(186,188,193,255), Colour(208,211,216,255), stone),'base') end
-      if terrain.value[r][c] == beach then self:addChar(Char:new(r, c, '░', Colour(214,186,50,255), Colour(240,209,56,255), beach),'base') end
-      if terrain.value[r][c] == dirt then self:addChar(Char:new(r, c, '⍋', Colour(170,182,34,255), Colour(191,204,39,255), dirt),'base') end
+      local tile = terrain.value[r][c]
+
+      if tile == stone or tile == dirt then table.insert(self.land, {r, c}) 
+      elseif tile == beach then table.insert(self.beach, {r, c}) 
+      elseif tile == water then table.insert(self.water, {r, c}) end
+
+      if tile == water then self:addChar(Char:new(r, c, '≋', Colour(44,151,149,255), Colour(50,169,167,255), water),'base') 
+      elseif tile == stone then self:addChar(Char:new(r, c, '⍙', Colour(186,188,193,255), Colour(208,211,216,255), stone),'base') 
+      elseif tile == beach then self:addChar(Char:new(r, c, '░', Colour(214,186,50,255), Colour(240,209,56,255), beach),'base') 
+      elseif tile == dirt then self:addChar(Char:new(r, c, '⍋', Colour(170,182,34,255), Colour(191,204,39,255), dirt),'base') end
     end
   end
   print('drawn')
+  for n = 1, 1000 do
+    self:createTreasure(unpack(fn.random(self.land)))
+  end
   for t = 1, 100, 1 do
     p = self:getBeachPoint()
     d = math.random(1, 4)
@@ -126,15 +140,12 @@ function World:getTowns(x,y,toX,toY)
 end
 
 function World:getTown(x,y)
-  if self.towndir[x] ~= nil then
-    if self.towndir[x][y] ~= nil then
-      return self.towndir[x][y]
-    else
-      return nil
-    end
-  else
-    return nil
-  end
+  fn.try(self.towndir, x, y)
+end
+
+function World:createTreasure(x, y)
+  t = Char:new(x, y, 'X', Colour(255,255,255,255), Colour(255,0,0,255))
+  self:addChar(t, 'treasure')
 end
 
 function World:createTown(x, y)
@@ -144,58 +155,29 @@ function World:createTown(x, y)
   self:addChar(t, 'towns')
 end
 
+function World:getBaseChar(x, y)
+  return self['base'][x][y]
+end
+
 function World:getBeachPoint()
-  b = self:getRandomPoint()
-  while b.type ~= beach do
-    b = self:getRandomPoint()
-  end
-  return b
+  return self:getBaseChar(unpack(fn.random(self.beach)))
 end
 
 function World:getSpawnPoint()
-  spawn = self:getRandomPoint()
-  while spawn.type ~= water do
-    spawn = self:getRandomPoint()
-  end
-  return spawn
+   return self:getBaseChar(unpack(fn.random(self.water)))
 end
 
-function World:getRandomPoint(x1, x2, y1, y2)
-
-  if x1 == nil then x1 = 1 end
-  if x2 == nil then x2 = #self['base'] end
-  if y1 == nil then y1 = 1 end
-  if y2 == nil then y2 = #self['base'][x1] end
-
-  randomx = math.random(1, #self['base'])
-  randomy = math.random(1, #self['base'][randomx])
-  return self['base'][randomx][randomy]
+function World:getTreasurePoint()
+  return self:getBaseChar(unpack(fn.random(self.land)))
 end
 
 function World:getChar(x,y)
-  if self['towns'] ~= nil then
-    if self['towns'][x] ~= nil then
-      if self['towns'][x][y] ~= nil then
-        return self['towns'][x][y]
-      end
-    end
-  end
-  if self['monsters'] ~= nil then
-    if self['monsters'][x] ~= nil then
-      if self['monsters'][x][y] ~= nil then
-        return self['monsters'][x][y]
-      end
-    end
-  end
-  if self['base'][x] == nil then
-    return nil
-  else
-    if self['base'][x][y] == nil then
-      return nil
-    else
-      return self['base'][x][y]
-    end
-  end
+  return (
+    fn.try(self['towns'], x, y) or
+    fn.try(self['monsters'], x, y) or
+    fn.try(self['treasure'], x, y) or
+    fn.try(self['base'], x, y)
+  )
 end
 
 function World:addChar(char,layer)

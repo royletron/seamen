@@ -1,5 +1,7 @@
 local namegenerator = {}
 
+fn = require('fn')
+
 forenames = {
   'Morgan',
   'Isabela',
@@ -64,17 +66,9 @@ surnames = {
   {{'Scurvy ', 'Evil ', 'Rancid ', 'Dank-'}, {'Dog', 'Rat', 'Weavil'}}
 }
 
-function map(func, array)
-  local new_array = {}
-  for i,v in ipairs(array) do
-    new_array[i] = func(v)
-  end
-  return new_array
-end
-
 function pick(list)
-  local item = list[math.random(1, #list)] or ''
-  if type(item) == 'table' then item = table.concat(map(pick, item), '') end
+  local item = fn.random(list) or ''
+  if type(item) == 'table' then item = table.concat(fn.map(pick, item), '') end
   return item
 end
 
