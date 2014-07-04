@@ -35,6 +35,7 @@ function AsciiSprite:__init(raw)
 end
 
 function AsciiSprite:getFrame(dt)
+  if self.framerate == 0 then return self.frames[self.currentframe] end
   self.counter = self.counter + dt
   if self.counter > (1 / self.framerate) then
     self.counter = 0

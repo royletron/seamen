@@ -6,8 +6,8 @@ AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('renderer')
 
 local renderers = {
-  ship_renderer=Renderer(7, 70, 28, 20,label_font,char_font),
-  hud_renderer=Renderer(7, 70 + 20 * TILE_H, 40, 20,label_font,char_font)
+  ship_renderer = Renderer(7, 70, 28, 20, label_font, char_font),
+  hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
@@ -35,6 +35,14 @@ function WorldMapState:draw(dt)
 
   if world_renderer ~= nil then
     world_renderer:draw(dt)
+  end
+
+  love.graphics.setColor(42,143,189,255)
+  love.graphics.setFont(char_font);
+
+  for i=1, #player.crew do
+    crewmember = player.crew[i]
+    love.graphics.print('⚔' .. ' ' .. crewmember.name, 10 + TILE_W * 2, 70 + 20 * TILE_H + 33 + (24 * (i - 1)))
   end
 
 end
