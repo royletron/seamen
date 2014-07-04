@@ -7,7 +7,16 @@ Char.col = Colour(255,255,255,255)
 Char.type = -1
 
 function Char:__init(x,y,char,colour,bgcolour,type)
-  self.x, self.y, self.char, self.colour, self.type = x,y,char,colour,type
+  if colour == nil then
+    error()
+  end
+  if bgcolour == nil then
+    error()
+  end
+  self.x = x
+  self.y = y
+  self.char = char
+  self.colour = colour
   self.bgcolour = bgcolour
 end
 

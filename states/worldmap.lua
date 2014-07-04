@@ -81,7 +81,6 @@ function WorldMapState:addBaddieOnLine(x)
 end
 
 function WorldMapState:draw(dt)
-
   for key, renderer in pairs(renderers) do
     renderer:draw(dt)
   end
@@ -122,12 +121,12 @@ function WorldMapState:update(dt)
         --char = Char:new(x, y, '█', {1,0,0,1})
         if char ~= nil then
           if char.x==player.position.x and char.y==player.position.y then
-            world_renderer:drawChar(x,y,Char:new(x,y,'✺', Colour(184,149,91,255), Colour(164,133,81,255)))
+            world_renderer:drawChar(x,y,Char:new(x,y,'✺', SHIP_FG, SHIP_BG))
           else
             world_renderer:drawChar(x, y, char)
           end
         else
-          world_renderer:drawChar(x,y, Char:new(x,y,'░', Colour(100,233,161,255), Colour(255,233,161,0)))
+          world_renderer:drawChar(x,y, Char:new(x,y,'░', ABYSS_FG, ABYSS_BG))
         end
       end
     end

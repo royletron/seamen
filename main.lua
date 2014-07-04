@@ -36,6 +36,10 @@ pirate_font_small = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 15 )
 require 'states.worldmap'
 require 'states.townview'
 
+function love.quit()
+
+end
+
 function love.load()
   love.keyboard.setKeyRepeat( true )
 

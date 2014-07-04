@@ -79,21 +79,21 @@ function World:__init(w,h)
   end
   print('valued')
   for r = 1, #terrain.value do
-    for c = 1, #(terrain.value[1]) do
+    for c = 1, #(terrain.value[r]) do
       local tile = terrain.value[r][c]
 
-      if tile == stone or tile == dirt then table.insert(self.land, {r, c}) 
-      elseif tile == beach then table.insert(self.beach, {r, c}) 
+      if tile == stone or tile == dirt then table.insert(self.land, {r, c})
+      elseif tile == beach then table.insert(self.beach, {r, c})
       elseif tile == water then table.insert(self.water, {r, c}) end
 
-      if tile == water then self:addChar(Char:new(r, c, '≋', Colour(44,151,149,255), Colour(50,169,167,255), water),'base') 
-      elseif tile == stone then self:addChar(Char:new(r, c, '⍙', Colour(186,188,193,255), Colour(208,211,216,255), stone),'base') 
-      elseif tile == beach then self:addChar(Char:new(r, c, '░', Colour(214,186,50,255), Colour(240,209,56,255), beach),'base') 
-      elseif tile == dirt then self:addChar(Char:new(r, c, '⍋', Colour(170,182,34,255), Colour(191,204,39,255), dirt),'base') end
+      if tile == water then self:addChar(Char:new(r, c, '≋', WATER_FG, WATER_BG, water),'base')
+      elseif tile == stone then self:addChar(Char:new(r, c, '⍙', STONE_FG, STONE_BG, stone),'base')
+      elseif tile == beach then self:addChar(Char:new(r, c, '░', BEACH_FG, BEACH_BG, beach),'base')
+      elseif tile == dirt then self:addChar(Char:new(r, c, '⍋', DIRT_FG, DIRT_BG, dirt),'base') end
     end
   end
   print('drawn')
-  for n = 1, 1000 do
+  for n = 1, 100 do
     self:createTreasure(unpack(fn.random(self.land)))
   end
   for t = 1, 100, 1 do
@@ -140,16 +140,16 @@ function World:getTowns(x,y,toX,toY)
 end
 
 function World:getTown(x,y)
-  fn.try(self.towndir, x, y)
+  return fn.try(self.towndir, x, y)
 end
 
 function World:createTreasure(x, y)
-  t = Char:new(x, y, 'X', Colour(255,255,255,255), Colour(255,0,0,255))
+  t = Char:new(x, y, 'X', WHITE, RED)
   self:addChar(t, 'treasure')
 end
 
 function World:createTown(x, y)
-  t = Char:new(x, y, '%', Colour(255,255,255,255), Colour(255,0,102,255), town)
+  t = Char:new(x, y, '%', WHITE, SALMON, town)
   if self.towndir[x] == nil then self.towndir[x] = {} end
   self.towndir[x][y] = Town()
   self:addChar(t, 'towns')

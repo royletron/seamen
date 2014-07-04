@@ -28,13 +28,13 @@ function AsciiRenderer:remove(sprite)
 end
 
 function AsciiRenderer:getFrame(dt)
-  buffer = {}
+  local buffer = {}
   if self.layers[0] ~= nil then root = self.layers[1]:getFrame(dt) end
   for k, s in ipairs(self.layers) do
     if #buffer == 0 then
       buffer = table.shallow_copy_2d(s:getFrame(dt))
     else
-      frame = s:getFrame(dt)
+      local frame = s:getFrame(dt)
       if frame ~= nil then
         for x=1, #frame, 1 do
           if frame[x] ~= nil then
