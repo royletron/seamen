@@ -107,6 +107,7 @@ function World:__init(w,h)
     end
   end
   print('towned')
+
   return World
 end
 

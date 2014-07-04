@@ -4,6 +4,7 @@ require('ascii.hud')
 AsciiSprite = require('ascii.ascii_sprite')
 AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('display.renderer')
+Baddie = require('entities.baddie')
 
 local renderers = {
   ship_renderer = Renderer(7, 70, 28, 21, label_font, char_font),
@@ -13,6 +14,8 @@ local renderers = {
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 
 WorldMapState = {}
+
+baddies = {}
 
 function WorldMapState:init()
   ship = AsciiRenderer()
@@ -25,6 +28,11 @@ function WorldMapState:init()
   renderers.hud_renderer:setAscii(hud)
 
   move(player.position.x, player.position.y)
+
+  for b=0, 200, 1 do
+    pos = world:getSpawnPoint()
+    table.insert(baddies, Baddie(pos.x, pos.y))
+  end
 end
 
 function WorldMapState:draw(dt)
