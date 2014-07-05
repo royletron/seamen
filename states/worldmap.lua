@@ -87,6 +87,15 @@ function WorldMapState:draw(dt)
     world_renderer:draw(dt)
   end
 
+  local percentage_of_day = ((world.date % DAY_IN_SECONDS) / DAY_IN_SECONDS)
+  local sunlight
+  sunlight = percentage_of_day * (2 * math.pi)
+  sunlight = math.cos(sunlight)
+  sunlight = fn.clamp(0, sunlight * 2, 1)
+
+  love.graphics.setColor(0, 0, 0, 200 * sunlight)
+  love.graphics.rectangle("fill", world_renderer.x + (1 * TILE_W), world_renderer.y + (1 * TILE_H), world_renderer.w * TILE_W, world_renderer.h * TILE_H)
+
   love.graphics.setColor(255,255,255,255)
   love.graphics.setFont(info_font)
   local crewmember
@@ -103,6 +112,8 @@ function WorldMapState:draw(dt)
     love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 70 + 20 * TILE_H + 38 + (24 * (i - 1)))
   end
 
+  love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267, 50)
+
 end
 
 function WorldMapState:keypressed(key, unicode)
@@ -110,6 +121,7 @@ function WorldMapState:keypressed(key, unicode)
 end
 
 function WorldMapState:update(dt)
+  world.date = world.date + (dt * (DAY_IN_SECONDS * 0.25))
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
   end

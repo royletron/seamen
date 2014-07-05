@@ -22,4 +22,8 @@ function fn.try(list, ...)
   return list
 end
 
+function fn.clamp(min, value, max)
+  return math.max(min, math.min(max, value))
+end
+
 return fn

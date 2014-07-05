@@ -22,6 +22,8 @@ supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
             {name = 'Sapphires', min=80, max=200, minnum=2, maxnum=15}}
 
 
+DAY_IN_SECONDS = 86400
+
 world=World(200,200)
 player=Player()
 info = InfoPanel(400,10)

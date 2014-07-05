@@ -10,6 +10,9 @@ World.__name = 'World'
 Char = require('char')
 Town = require('town')
 
+World.year = nil
+World.date = nil
+
 require('perlin')
 fn = require('fn')
 
@@ -28,7 +31,6 @@ function rand(seed, n)
 end
 
 function World:__init(w,h)
-
   -- rooms = {}
   -- for a = 0, 9000, 1 do
   --   room = Room:new({x = math.random(1, 260),y = math.random(1, 262),w = math.random(3, 15),h = math.random(3, 15)})
@@ -121,6 +123,9 @@ function World:__init(w,h)
     end
   end
   print('towned')
+
+  self.date = os.time{year=2014, month=math.random(1, 12), day=math.random(1, 31), hour=math.random(1, 23)}
+  self.year = 1650
 
   return World
 end
