@@ -136,7 +136,7 @@ function WorldMapState:update(dt)
     local x, y
     for i = 1, #move_history do
       x, y = unpack(move_history[i])
-      world_renderer:drawChar(x - center_x, y - center_y, Char:new(x, y, '≋', Colour(255,255,255,255), Colour(50,169,167,255)))
+      world_renderer:drawChar(x - center_x, y - center_y, Char:new(x, y, '≋', Colour(255,255,255,255 - ((#move_history - i) * 50)), Colour(50,169,167,255)))
     end
     local b
     for k,val in ipairs(baddies) do
