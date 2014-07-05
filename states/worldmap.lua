@@ -133,6 +133,7 @@ function WorldMapState:update(dt)
     -- local x, y
     -- for i = 1, #move_history do
     --   x, y = unpack(move_history[i])
+    --   print('drawChar' .. x .. ':' .. y)
     --   world_renderer:drawChar(x, y, '!', Colour(255,0,0,255), Colour(100,233,161,255))
     -- end
     local b
@@ -196,10 +197,10 @@ function move(toposx, toposy)
     t = world:getTown(toposx, toposy)
     gotoTown(t)
   end
-  local towns = world:getTowns(player.position.x-(world_renderer.w/2), player.position.y-(world_renderer.h/2), player.position.x+(world_renderer.w/2), player.position.y+(world_renderer.h/2))
+  local towns = world:getTowns(player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2), player.camera.x+(world_renderer.w/2), player.camera.y+(world_renderer.h/2))
   world_renderer:clearLabels()
   for k,v in ipairs(towns) do
-    local label = Label(((v.x-player.position.x)*TILE_W)+(world_renderer.w*TILE_W/2)+world_renderer.x, ((v.y-player.position.y)*TILE_H)+(world_renderer.h*TILE_H/2)+world_renderer.y, Colour(0,0,0,150), Colour(255,100,100,255), v.town.name, world_renderer.label_font)
+    local label = Label(((v.x-player.camera.x)*TILE_W)+(world_renderer.w*TILE_W/2)+world_renderer.x, ((v.y-player.camera.y)*TILE_H)+(world_renderer.h*TILE_H/2)+world_renderer.y, Colour(0,0,0,150), Colour(255,100,100,255), v.town.name, world_renderer.label_font)
     world_renderer:addLabel(label)
   end
 end
