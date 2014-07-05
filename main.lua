@@ -21,7 +21,7 @@ supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
             {name = 'Gold', min=30, max=90, minnum=20, maxnum=30},
             {name = 'Sapphires', min=80, max=200, minnum=2, maxnum=15}}
 
-VISION = love.graphics.newImage('vision.png')
+VISION = {love.graphics.newImage('vision_1.png'), love.graphics.newImage('vision_2.png')}
 
 DAY_IN_SECONDS = 86400
 SECONDS_PER_DAY = 30
