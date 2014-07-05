@@ -141,8 +141,8 @@ function WorldMapState:draw(dt)
     love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 70 + 20 * TILE_H + 38 + (24 * (i - 1)))
   end
 
-  love.graphics.setColor(0,0,0,255)
-  love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267, 50)
+  love.graphics.setColor(255,255,255,255)
+  love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267 + (16 * TILE_W), 50 - TILE_H)
 
 end
 
