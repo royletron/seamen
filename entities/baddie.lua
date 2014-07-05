@@ -30,7 +30,11 @@ end
 
 function Baddie:goto(x, y)
   local tile = fn.try(world['base'], x, y)
-  if tile ~= nil and tile.type == water then self.x, self.y = x, y end
+  local collide = false
+  for k,v in ipairs(baddies) do
+    if v.x == x and v.y == y then collide = true break end
+  end
+  if collide == false and tile ~= nil and tile.type == water then self.x, self.y = x, y end
 end
 
 return Baddie
