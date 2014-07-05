@@ -86,16 +86,17 @@ function utf8.len (s)
    local bytes = string.len(s)
    local len = 0
 
-   while pos <= bytes and len ~= chars do
+   -- while pos <= bytes and len ~= chars do
+   while pos <= bytes do
       local c = string.byte(s,pos)
       len = len + 1
 
       pos = pos + utf8.charbytes(s, pos)
    end
 
-   if chars ~= nil then
-      return pos - 1
-   end
+   -- if chars ~= nil then
+   --    return pos - 1
+   -- end
 
    return len
 end

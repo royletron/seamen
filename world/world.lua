@@ -82,13 +82,13 @@ function World:__init(w,h)
     for c = 1, #(terrain.value[1]) do
       local tile = terrain.value[r][c]
 
-      if tile == stone or tile == dirt then table.insert(self.land, {r, c}) 
-      elseif tile == beach then table.insert(self.beach, {r, c}) 
+      if tile == stone or tile == dirt then table.insert(self.land, {r, c})
+      elseif tile == beach then table.insert(self.beach, {r, c})
       elseif tile == water then table.insert(self.water, {r, c}) end
 
-      if tile == water then self:addChar(Char:new(r, c, '≋', Colour(44,151,149,255), Colour(50,169,167,255), water),'base') 
-      elseif tile == stone then self:addChar(Char:new(r, c, '⍙', Colour(186,188,193,255), Colour(208,211,216,255), stone),'base') 
-      elseif tile == beach then self:addChar(Char:new(r, c, '░', Colour(214,186,50,255), Colour(240,209,56,255), beach),'base') 
+      if tile == water then self:addChar(Char:new(r, c, '≋', Colour(44,151,149,255), Colour(50,169,167,255), water),'base')
+      elseif tile == stone then self:addChar(Char:new(r, c, '⍙', Colour(186,188,193,255), Colour(208,211,216,255), stone),'base')
+      elseif tile == beach then self:addChar(Char:new(r, c, '░', Colour(214,186,50,255), Colour(240,209,56,255), beach),'base')
       elseif tile == dirt then self:addChar(Char:new(r, c, '⍋', Colour(170,182,34,255), Colour(191,204,39,255), dirt),'base') end
     end
   end
@@ -126,7 +126,7 @@ function World:__init(w,h)
 end
 
 function World:getTowns(x,y,toX,toY)
-	towns = {}
+	local towns = {}
 	for _x = x, toX, 1 do
 		if self.towndir[_x] ~= nil then
 			for _y = y, toY, 1 do

@@ -37,10 +37,13 @@ require 'states.worldmap'
 require 'states.townview'
 require 'states.fight'
 
+testGraph = nil
+testGraph2 = nil
+
 function love.load()
   love.keyboard.setKeyRepeat( true )
 
-  spawn = world:getSpawnPoint()
+  local spawn = world:getSpawnPoint()
   player.position = {x= spawn.x, y=spawn.y}
 
   Gamestate.registerEvents()

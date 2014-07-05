@@ -21,7 +21,7 @@ function Baddie:update(dt)
 end
 
 function Baddie:move()
-  direction = math.random(1,4)
+  local direction = math.random(1,4)
   if direction == 1 then self:goto(self.x + 1, self.y) end
   if direction == 2 then self:goto(self.x - 1, self.y) end
   if direction == 3 then self:goto(self.x, self.y + 1) end
@@ -29,7 +29,8 @@ function Baddie:move()
 end
 
 function Baddie:goto(x, y)
-  if world['base'][x][y].type == water then self.x, self.y = x, y end
+  local tile = fn.try(world['base'], x, y)
+  if tile.type == water then self.x, self.y = x, y end
 end
 
 return Baddie

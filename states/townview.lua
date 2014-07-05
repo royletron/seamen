@@ -23,7 +23,7 @@ function TownViewState:draw(dt)
   if crest_renderer ~= nil then
     crest_renderer:draw(dt)
   end
-  counter = 0
+  local counter = 0
   for k,v in ipairs(self.town.supplies) do
     if self.invoice[k] == nil then self.invoice[k] = {quantity = 0} end
     love.graphics.setColor(42,143,189,255)
@@ -82,7 +82,8 @@ function TownViewState:update(dt)
 end
 
 function TownViewState:deal()
-  cost = 0
+  local cost = 0
+  local line
   for k,v in ipairs(self.town.supplies) do
     line = self.invoice[k]
     if line ~= nil then

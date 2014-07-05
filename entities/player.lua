@@ -28,7 +28,7 @@ function Player:has(item)
 end
 
 function Player:setInventory(item, number)
-	found = false
+	local found = false
 	for k,v in ipairs(self.inventory) do
 		if(v.name == item) then
 			found = true

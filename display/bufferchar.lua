@@ -1,5 +1,5 @@
 Sprite = require 'display.Sprite'
-BufferChar = Sprite:extends{char,size,colour}
+BufferChar = Sprite:extends{'char','size','colour'}
 BufferChar.__name = 'BufferChar'
 
 function BufferChar:__init(x,y,char,colour,bgcolour,font)

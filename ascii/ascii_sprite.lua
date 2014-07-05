@@ -19,6 +19,8 @@ function AsciiSprite:__init(raw)
   if raw.framerate ~= nil then self.framerate = raw.framerate end
 	if raw.colour == nil then self.colour = Colour(100,233,233,255) else self.colour = raw.colour end
 	if raw.bgcolour == nil then self.bgcolour = Colour(164,133,81,0) else self.bgcolour = raw.bgcolour end
+  local ascii
+  local char
   for fk, fv in ipairs(raw) do
     self.maxframe = fk
     ascii = fv
@@ -30,7 +32,7 @@ function AsciiSprite:__init(raw)
       for i = 1, max do
         local c = utf8.sub(v, i,i)
         if self.frames[fk][i] == nil then self.frames[fk][i] = {} end
-				char = Char:new(i,k,c, self.colour, self.bgcolour)
+        char = Char:new(i,k,c, self.colour, self.bgcolour)
         self.frames[fk][i][k] = char
       end
     end

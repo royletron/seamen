@@ -20,6 +20,7 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
   --self.stage:add(Label(10,10,Colour(100,255,255,255), Colour(100,100,100,255), 'Hello', self.label_font))
 
 	-- create the buffer with dummy chars
+  local bufferchar
 	for _x=0, w, 1 do
 		for _y=0, h, 1 do
 			if self.buffer[_x] == nil then self.buffer[_x] = {} end
@@ -31,16 +32,20 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 end
 
 function Renderer:drawChar(x, y, char)
-  --fn.try(self.buffer, x, y):setChar(char)
-  if self.buffer[x] == nil then
-		--print('x:'..x..' is out of bounds')
-	else
-		if self.buffer[x][y] == nil then
-			--print('y:'..y..' is out of bounds')
-		else
-			self.buffer[x][y]:setChar(char)
-		end
-	end
+  local tile = fn.try(self.buffer, x, y)
+  if tile ~= nil then
+    tile:setChar(char)
+  end
+ --  --fn.try(self.buffer, x, y):setChar(char)
+ --  if self.buffer[x] == nil then
+	-- 	--print('x:'..x..' is out of bounds')
+	-- else
+	-- 	if self.buffer[x][y] == nil then
+	-- 		--print('y:'..y..' is out of bounds')
+	-- 	else
+	-- 		self.buffer[x][y]:setChar(char)
+	-- 	end
+	-- end
 end
 
 function Renderer:setAscii(ascii)
@@ -55,7 +60,8 @@ function Renderer:setAscii(ascii)
 end
 
 function Renderer:drawAscii(dt)
-  frame = self.ascii:getFrame(dt)
+  local frame = self.ascii:getFrame(dt)
+  local char
   if frame ~= nil then
     for x=0, self.w, 1 do
       for y=0, self.h, 1 do

@@ -18,20 +18,19 @@ WorldMapState = {}
 baddies = {}
 
 function WorldMapState:init()
-  ship = AsciiRenderer()
+  local ship = AsciiRenderer()
   ship:add(AsciiSprite(SHIP_FRIGGATTE))
   ship:add(AsciiSprite(WATER_ANIMATION))
   renderers.ship_renderer:setAscii(ship)
 
-  hud = AsciiRenderer()
+  local hud = AsciiRenderer()
   hud:add(AsciiSprite(HUD_BORDER))
   renderers.hud_renderer:setAscii(hud)
 
   move(player.position.x, player.position.y)
 
-
   for bx=player.position.x-world_renderer.w, player.position.x+world_renderer.w, 1 do
-    numwater = 0
+    -- numwater = 0
     if bx > 0 and bx < #world['base'] then
       for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
         if by > 0 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
@@ -88,6 +87,7 @@ function WorldMapState:draw(dt)
 
   love.graphics.setColor(255,255,255,255)
   love.graphics.setFont(info_font)
+  local crewmember
   for i=1, #player.crew do
     crewmember = player.crew[i]
     love.graphics.print('☠', 10 + TILE_W * 2 + 5, 70 + 20 * TILE_H + 30 + (24 * (i - 1)))
@@ -111,6 +111,7 @@ function WorldMapState:update(dt)
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
   end
+  local char
   if world_renderer ~= nil then
     for x=0, world_renderer.w, 1 do
       for y=0, world_renderer.h, 1 do
@@ -127,6 +128,7 @@ function WorldMapState:update(dt)
         end
       end
     end
+    local b
     for k,val in ipairs(baddies) do
       b = baddies[k]
       b:update(dt)
@@ -167,7 +169,10 @@ function gotoTown(t)
 end
 
 function move(toposx, toposy)
-  tochar = world:getChar(toposx, toposy)
+  local tochar = world:getChar(toposx, toposy)
+  if tochar == nil then
+    return
+  end
   if tochar.type == water then
     player.position.x, player.position.y = toposx, toposy
     checkForFight()
@@ -176,10 +181,10 @@ function move(toposx, toposy)
     t = world:getTown(toposx, toposy)
     gotoTown(t)
   end
-  towns = world:getTowns(player.position.x-(world_renderer.w/2), player.position.y-(world_renderer.h/2), player.position.x+(world_renderer.w/2), player.position.y+(world_renderer.h/2))
+  local towns = world:getTowns(player.position.x-(world_renderer.w/2), player.position.y-(world_renderer.h/2), player.position.x+(world_renderer.w/2), player.position.y+(world_renderer.h/2))
   world_renderer:clearLabels()
   for k,v in ipairs(towns) do
-    label = Label(((v.x-player.position.x)*TILE_W)+(world_renderer.w*TILE_W/2)+world_renderer.x, ((v.y-player.position.y)*TILE_H)+(world_renderer.h*TILE_H/2)+world_renderer.y, Colour(0,0,0,150), Colour(255,100,100,255), v.town.name, world_renderer.label_font)
+    local label = Label(((v.x-player.position.x)*TILE_W)+(world_renderer.w*TILE_W/2)+world_renderer.x, ((v.y-player.position.y)*TILE_H)+(world_renderer.h*TILE_H/2)+world_renderer.y, Colour(0,0,0,150), Colour(255,100,100,255), v.town.name, world_renderer.label_font)
     world_renderer:addLabel(label)
   end
 end

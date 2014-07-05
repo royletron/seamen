@@ -28,7 +28,8 @@ function AsciiRenderer:remove(sprite)
 end
 
 function AsciiRenderer:getFrame(dt)
-  buffer = {}
+  local buffer = {}
+  local frame
   if self.layers[0] ~= nil then root = self.layers[1]:getFrame(dt) end
   for k, s in ipairs(self.layers) do
     if #buffer == 0 then
