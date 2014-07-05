@@ -93,7 +93,7 @@ function WorldMapState:draw(dt)
   sunlight = math.cos(sunlight)
   sunlight = fn.clamp(0, sunlight * 2, 1)
 
-  love.graphics.setColor(0, 0, 0, 200 * sunlight)
+  love.graphics.setColor(0, 25, 0, DARKEST_NIGHT * sunlight)
   love.graphics.rectangle("fill", world_renderer.x + (1 * TILE_W), world_renderer.y + (1 * TILE_H), world_renderer.w * TILE_W, world_renderer.h * TILE_H)
 
   love.graphics.setColor(255,255,255,255)
@@ -121,7 +121,7 @@ function WorldMapState:keypressed(key, unicode)
 end
 
 function WorldMapState:update(dt)
-  world.date = world.date + (dt * (DAY_IN_SECONDS * 0.25))
+  world.date = world.date + (dt * (DAY_IN_SECONDS * (1 / SECONDS_PER_DAY)))
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
   end
