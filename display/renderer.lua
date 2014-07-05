@@ -24,7 +24,7 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 	for _x=1, w do
     self.buffer[_x] = {}
 		for _y=1, h do
-			bufferchar = BufferChar(self.x + TILE_W*_x, self.y + TILE_H*_y, ' ', Colour(0,0,0,0), Colour(0,0,0,0), self.char_font)
+			bufferchar = BufferChar(self.x + TILE_W*(_x - 1), self.y + TILE_H*(_y - 1), ' ', Colour(0,0,0,0), Colour(0,0,0,0), self.char_font)
 			self.stage:add(bufferchar)
 			self.buffer[_x][_y] = bufferchar
 		end
