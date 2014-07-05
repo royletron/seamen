@@ -6,7 +6,7 @@ Renderer = require('display.renderer')
 FightState = {baddie = nil}
 
 local renderers = {
-  ship_renderer = Renderer(7, 70, 60, 21, label_font, char_font),
+  ship_renderer = Renderer(7, 70, 99, 21, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 
