@@ -8,18 +8,23 @@ TownViewState = {town = nil}
 
 local crest_renderer = Renderer(7, 80, 28, 20,label_font,char_font)
 
-function TownViewState:enter()
-  crest_renderer:setAscii(AsciiSprite({self.town.crest}))
+function TownViewState:init()
+  self.talker = AvatarTalker(7, 300, 700, "I am just initin' init!", Colour(255,255,255,255), TOWN_CRIER_STATIC, TOWN_CRIER_TALKING)
   self.position = {x=0, y=0}
-  self.maxposition = {x=1, y=0}
-  self.invoice = {}
-  self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255), TOWN_CRIER_STATIC, TOWN_CRIER_TALKING)
-  self.buttons = {Button(720, 80 + (#self.town.supplies * 30), 50, 20, 'Deal', self.position, {x=-1, y = #self.town.supplies})}
-  for p=1, #self.town.supplies, 1 do
+  self.buttons = {Button(720, 80 + (#supplies * 30), 50, 20, 'Deal', self.position, {x=-1, y = #supplies})}
+  for p=1, #supplies, 1 do
     table.insert(self.buttons, Button(720, 50 + (p*30), 20, 20, '-', self.position, {x=0, y=p-1}))
     table.insert(self.buttons, Button(750, 50 + (p*30), 20, 20, '+', self.position, {x=1, y=p-1}))
   end
+end
 
+function TownViewState:enter()
+  crest_renderer:setAscii(AsciiSprite({self.town.crest}))
+  self.position.x=0
+  self.position.y=0
+  self.maxposition = {x=1, y=0}
+  self.invoice = {}
+  self.talker:setText("Welcome to "..self.town.name.." me 'arty!")
 end
 
 function TownViewState:draw(dt)
