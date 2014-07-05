@@ -133,7 +133,6 @@ function WorldMapState:update(dt)
     -- local x, y
     -- for i = 1, #move_history do
     --   x, y = unpack(move_history[i])
-    --   print('drawChar' .. x .. ':' .. y)
     --   world_renderer:drawChar(x, y, '!', Colour(255,0,0,255), Colour(100,233,161,255))
     -- end
     local b
@@ -160,14 +159,6 @@ function press(code)
   elseif code == 'down' then
     move(player.position.x, player.position.y + 1)
   end
-
-  local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
-  if math.abs(offset_x) > DEADZONE_X then
-    player.camera.x = player.camera.x + math.min(math.max(offset_x, -1), 1)
-  end
-  if math.abs(offset_y) > DEADZONE_Y then
-    player.camera.y = player.camera.y + math.min(math.max(offset_y, -1), 1)
-  end
 end
 
 function checkForFight()
@@ -191,6 +182,15 @@ function move(toposx, toposy)
   end
   if tochar.type == water then
     player.position.x, player.position.y = toposx, toposy
+
+    local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
+    if math.abs(offset_x) > DEADZONE_X then
+      player.camera.x = player.camera.x + math.min(math.max(offset_x, -1), 1)
+    end
+    if math.abs(offset_y) > DEADZONE_Y then
+      player.camera.y = player.camera.y + math.min(math.max(offset_y, -1), 1)
+    end
+
     checkForFight()
   end
   if tochar.type == town then
