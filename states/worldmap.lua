@@ -131,7 +131,7 @@ function WorldMapState:update(dt)
       b = baddies[k]
       b:update(dt)
       checkForFight()
-      world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(184,149,91,255), Colour(255,133,81,100)))
+      world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(math.max(20, (100 + ((b.level-player.level) * 50))),20,20,255), Colour(math.max(80, (100 + ((b.level-player.level) * 50))),80,80,255)))
     end
     world_renderer:update(dt)
   end
@@ -155,9 +155,10 @@ end
 function checkForFight()
   fn.map(function(baddie)
     if baddie.x == player.position.x and baddie.y == player.position.y then
-      print('fight')
+      FightState.baddie = baddie
+      Gamestate.switch(FightState)
     end
-    end, baddies)
+  end, baddies)
 end
 
 function gotoTown(t)
