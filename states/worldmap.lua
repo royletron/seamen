@@ -7,7 +7,7 @@ Renderer = require('display.renderer')
 Baddie = require('entities.baddie')
 
 local renderers = {
-  ship_renderer = Renderer(7, 70, 28, 21, label_font, char_font),
+  ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 
