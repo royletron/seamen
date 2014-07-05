@@ -31,16 +31,16 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 end
 
 function Renderer:drawChar(x, y, char)
-  fn.try(self.buffer, x, y):setChar(char)
- --  if self.buffer[x] == nil then
-	-- 	print('x:'..x..' is out of bounds')
-	-- else
-	-- 	if self.buffer[x][y] == nil then
-	-- 		print('y:'..y..' is out of bounds')
-	-- 	else
-	-- 		self.buffer[x][y]:setChar(char)
-	-- 	end
-	-- end
+  --fn.try(self.buffer, x, y):setChar(char)
+  if self.buffer[x] == nil then
+		print('x:'..x..' is out of bounds')
+	else
+		if self.buffer[x][y] == nil then
+			print('y:'..y..' is out of bounds')
+		else
+			self.buffer[x][y]:setChar(char)
+		end
+	end
 end
 
 function Renderer:setAscii(ascii)

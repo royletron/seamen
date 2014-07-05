@@ -34,14 +34,10 @@ function WorldMapState:init()
     numwater = 0
     if bx > 0 and bx < #world['base'] then
       for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
-        if by > 0 and by < #world['base'][bx] then
-          numwater = numwater + 1
+        if by > 0 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
+          table.insert(baddies, Baddie(bx, by))
         end
       end
-    end
-    if numwater > 0 and math.random(1,2) == 1 then
-      bpos = self:addBaddieOnLine(bx)
-      table.insert(baddies, Baddie(bpos.x, bpos.y))
     end
   end
   --   numwater = 0
@@ -131,10 +127,10 @@ function WorldMapState:update(dt)
         end
       end
     end
-    -- for k,val in ipairs(baddies) do
-    --   b = baddies[k]
-    --   world_renderer:drawChar(b.x-player.position.x,b.y-player.position.y,Char:new(b.x,b.y,'✺', Colour(184,149,91,255), Colour(255,133,81,255)))
-    -- end
+    for k,val in ipairs(baddies) do
+      b = baddies[k]
+      world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(184,149,91,255), Colour(255,133,81,100)))
+    end
     world_renderer:update(dt)
   end
 end
