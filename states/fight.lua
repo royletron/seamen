@@ -6,7 +6,7 @@ Renderer = require('display.renderer')
 FightState = {baddie = nil}
 
 local renderers = {
-  ship_renderer = Renderer(7, 70, 99, 21, label_font, char_font),
+  ship_renderer = Renderer(7, 70, 98, 21, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 
@@ -16,7 +16,13 @@ function FightState:enter()
   self.position = {x=0, y=0}
   self.maxposition = {x=0, y=0}
   local ship = AsciiRenderer()
-  ship:add(AsciiSprite(SHIP_FRIGGATTE))
+  ship:add(AsciiSprite(FIGHT_BG))
+  self.playersprite = AsciiSprite(SHIP_FRIGGATTE)
+  self.playersprite.x = 10
+  self.baddiesprite = AsciiSprite(self.baddie.ascii)
+  self.baddiesprite.x = 60
+  ship:add(self.playersprite)
+  ship:add(self.baddiesprite)
   ship:add(AsciiSprite(WATER_ANIMATION))
   renderers.ship_renderer:setAscii(ship)
 end
