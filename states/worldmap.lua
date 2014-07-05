@@ -122,11 +122,7 @@ function WorldMapState:update(dt)
         char = world:getChar(x+center_x, y+center_y)
         --char = Char:new(x, y, '█', {1,0,0,1})
         if char ~= nil then
-          if char.x==player.position.x and char.y==player.position.y then
-            world_renderer:drawChar(x,y,Char:new(x,y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
-          else
-            world_renderer:drawChar(x, y, char)
-          end
+          world_renderer:drawChar(x, y, char)
         else
           world_renderer:drawChar(x,y, Char:new(x,y,'░', Colour(100,233,161,255), nil))
         end
@@ -147,6 +143,9 @@ function WorldMapState:update(dt)
         table.remove(move_history, i)
       end
     end
+
+    world_renderer:drawChar(player.position.x - center_x, player.position.y - center_y, Char:new(player.position.x,player.position.y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
+
     local b
     for k,val in ipairs(baddies) do
       b = baddies[k]
