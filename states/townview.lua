@@ -2,10 +2,11 @@ require('ascii.ships')
 AsciiSprite = require('ascii.ascii_sprite')
 Renderer = require('display.renderer')
 AvatarTalker = require('display.AvatarTalker')
+Button = require('display.button')
 
 TownViewState = {town = nil}
 
-local crest_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
+local crest_renderer = Renderer(7, 80, 28, 20,label_font,char_font)
 
 function TownViewState:enter()
   crest_renderer:setAscii(AsciiSprite({self.town.crest}))
@@ -13,13 +14,19 @@ function TownViewState:enter()
   self.maxposition = {x=1, y=0}
   self.invoice = {}
   self.talker = AvatarTalker(7, 300, 700, "Welcome to "..self.town.name.." me 'arty!", Colour(255,255,255,255), TOWN_CRIER_STATIC, TOWN_CRIER_TALKING)
+  self.buttons = {Button(720, 80 + (#self.town.supplies * 30), 50, 20, 'Deal', self.position, {x=-1, y = #self.town.supplies})}
+  for p=1, #self.town.supplies, 1 do
+    table.insert(self.buttons, Button(720, 50 + (p*30), 20, 20, '-', self.position, {x=0, y=p-1}))
+    table.insert(self.buttons, Button(750, 50 + (p*30), 20, 20, '+', self.position, {x=1, y=p-1}))
+  end
+
 end
 
 function TownViewState:draw(dt)
   self.talker:draw(dt)
   love.graphics.setColor(252,251,227,255)
   love.graphics.setFont(char_font);
-  love.graphics.printf('Welcome to '..self.town.name,7, 50, 130,"center")
+  love.graphics.printf('Welcome to '..self.town.name,7, 50, 110,"center")
   if crest_renderer ~= nil then
     crest_renderer:draw(dt)
   end
@@ -28,50 +35,36 @@ function TownViewState:draw(dt)
     if self.invoice[k] == nil then self.invoice[k] = {quantity = 0} end
     love.graphics.setColor(42,143,189,255)
     love.graphics.setFont(char_font);
-    love.graphics.print(v.name, 150, 50 + (counter*30))
+    love.graphics.print(v.name, 150, 80 + (counter*30))
     love.graphics.setColor(119,204,164,255)
-    love.graphics.print('you have ' .. player:has(v.name) .. ' : available '..v.stock.." : "..'price '..v.cost, 290, 50 + (counter*30))
-    if self.position.x == 1 and self.position.y == counter then
-      love.graphics.setColor(42,143,189,255)
-    else
-      love.graphics.setColor(102,102,102,255)
-    end
-    love.graphics.rectangle("fill", 750, 50 + (counter *30) - 3, 20, 20 )
-    love.graphics.setColor(255,255,255,255)
-    love.graphics.print('+', 756, 50 + (counter * 30))
-    if self.position.x == 0 and self.position.y == counter then
-      love.graphics.setColor(42,143,189,255)
-    else
-      love.graphics.setColor(102,102,102,255)
-    end
-    love.graphics.rectangle("fill", 720, 50 + (counter *30) - 3, 20, 20 )
-    love.graphics.setColor(255,255,255,255)
-    love.graphics.print('-', 726, 50 + (counter * 30))
+    love.graphics.print('you have ' .. player:has(v.name) .. ' : available '..v.stock.." : "..'price '..v.cost, 290, 80 + (counter*30))
 
     if self.invoice[k].quantity == 0 then
       love.graphics.setColor(102,102,102,255)
-      love.graphics.printf('no deal', 600, 50+(counter*30), 100, "right")
+      love.graphics.printf('no deal', 600, 80+(counter*30), 100, "right")
     else
       if self.invoice[k].quantity > 0 then
         love.graphics.setColor(119,204,164,255)
-        love.graphics.printf('buying '..self.invoice[k].quantity, 600, 50+(counter*30), 100, "right")
+        love.graphics.printf('buying '..self.invoice[k].quantity, 600, 80+(counter*30), 100, "right")
       else
         love.graphics.setColor(255,153,153,255)
-        love.graphics.printf('selling '..-1*self.invoice[k].quantity, 600, 50+(counter*30), 100, "right")
+        love.graphics.printf('selling '..-1*self.invoice[k].quantity, 600, 80+(counter*30), 100, "right")
       end
     end
-    self.maxposition.y = counter
     counter = counter + 1
   end
   self.maxposition.y = counter
-  if(self.position.y == counter) then
-    love.graphics.setColor(42,143,189,255)
-  else
-    love.graphics.setColor(102,102,102,255)
+  -- if(self.position.y == counter) then
+  --   love.graphics.setColor(42,143,189,255)
+  -- else
+  --   love.graphics.setColor(102,102,102,255)
+  -- end
+  -- love.graphics.rectangle("fill", 720, 50 + (counter *30) - 3, 50, 20 )
+  -- love.graphics.setColor(255,255,255,255)
+  -- love.graphics.print('Deal', 726, 50 + (counter * 30))
+  for key, button in pairs(self.buttons) do
+    button:draw(dt)
   end
-  love.graphics.rectangle("fill", 720, 50 + (counter *30) - 3, 50, 20 )
-  love.graphics.setColor(255,255,255,255)
-  love.graphics.print('Deal', 726, 50 + (counter * 30))
 end
 
 function TownViewState:update(dt)
