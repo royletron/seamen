@@ -115,13 +115,15 @@ function WorldMapState:update(dt)
   end
   local char
   if world_renderer ~= nil then
-    for x=0, world_renderer.w, 1 do
-      for y=0, world_renderer.h, 1 do
-        char = world:getChar(x+player.camera.x-(world_renderer.w/2), y+player.camera.y-(world_renderer.h/2))
+    local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
+
+    for x=1, world_renderer.w do
+      for y=1, world_renderer.h do
+        char = world:getChar(x+center_x, y+center_y)
         --char = Char:new(x, y, '█', {1,0,0,1})
         if char ~= nil then
           if char.x==player.position.x and char.y==player.position.y then
-            world_renderer:drawChar(x,y,Char:new(x,y,'✺', Colour(184,149,91,255), Colour(164,133,81,255)))
+            world_renderer:drawChar(x,y,Char:new(x,y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
           else
             world_renderer:drawChar(x, y, char)
           end
@@ -130,11 +132,12 @@ function WorldMapState:update(dt)
         end
       end
     end
-    -- local x, y
-    -- for i = 1, #move_history do
-    --   x, y = unpack(move_history[i])
-    --   world_renderer:drawChar(x, y, '!', Colour(255,0,0,255), Colour(100,233,161,255))
-    -- end
+
+    local x, y
+    for i = 1, #move_history do
+      x, y = unpack(move_history[i])
+      world_renderer:drawChar(x - center_x, y - center_y, Char:new(x, y, '≋', Colour(255,255,255,255), Colour(50,169,167,255)))
+    end
     local b
     for k,val in ipairs(baddies) do
       b = baddies[k]
@@ -147,7 +150,7 @@ function WorldMapState:update(dt)
 end
 
 function press(code)
-  if #move_history > 2 then table.remove(move_history) end
+  if #move_history > 2 then table.remove(move_history, 1) end
   table.insert(move_history, {player.position.x, player.position.y})
 
   if code == 'right' then
