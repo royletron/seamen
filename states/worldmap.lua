@@ -130,6 +130,7 @@ function WorldMapState:update(dt)
     for k,val in ipairs(baddies) do
       b = baddies[k]
       b:update(dt)
+      checkForFight()
       world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(184,149,91,255), Colour(255,133,81,100)))
     end
     world_renderer:update(dt)
@@ -151,6 +152,14 @@ function press(code)
   end
 end
 
+function checkForFight()
+  fn.map(function(baddie)
+    if baddie.x == player.position.x and baddie.y == player.position.y then
+      print('fight')
+    end
+    end, baddies)
+end
+
 function gotoTown(t)
   TownViewState.town = t
   Gamestate.switch(TownViewState)
@@ -160,6 +169,7 @@ function move(toposx, toposy)
   tochar = world:getChar(toposx, toposy)
   if tochar.type == water then
     player.position.x, player.position.y = toposx, toposy
+    checkForFight()
   end
   if tochar.type == town then
     t = world:getTown(toposx, toposy)
