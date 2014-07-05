@@ -10,8 +10,10 @@ end
 
 function BufferChar:draw(dt)
 
-  love.graphics.setColor(self.bgcolour.r, self.bgcolour.g, self.bgcolour.b, self.bgcolour.a)
-  love.graphics.rectangle("fill", self.x, self.y, TILE_W, TILE_H )
+  if self.bgcolour ~= nil then
+    love.graphics.setColor(self.bgcolour.r, self.bgcolour.g, self.bgcolour.b, self.bgcolour.a)
+    love.graphics.rectangle("fill", self.x, self.y, TILE_W, TILE_H )
+  end
 
   love.graphics.setFont(self.font);
 

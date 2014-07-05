@@ -144,8 +144,8 @@ function World:getTown(x,y)
 end
 
 function World:createTreasure(x, y)
-  t = Char:new(x, y, 'X', Colour(255,255,255,255), Colour(255,0,0,255))
-  self:addChar(t, 'treasure')
+  local tile = fn.try(self['base'], x, y)
+  self:addChar(Char:new(x, y, 'X', Colour(255,0,0,255), tile.bgcolour), 'treasure')
 end
 
 function World:createTown(x, y)

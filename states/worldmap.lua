@@ -128,18 +128,20 @@ function WorldMapState:update(dt)
             world_renderer:drawChar(x, y, char)
           end
         else
-          world_renderer:drawChar(x,y, Char:new(x,y,'░', Colour(100,233,161,255), Colour(255,233,161,0)))
+          world_renderer:drawChar(x,y, Char:new(x,y,'░', Colour(100,233,161,255), nil))
         end
       end
     end
 
     local x, y, move
+    -- print a wake and reduce the ttl of each move
     for i = 1, #move_history do
       move = move_history[i]
       move.ttl = math.max(0, move.ttl - dt)
       x, y = move.x - center_x, move.y - center_y
-      world_renderer:drawChar(x, y, Char:new(x, y, '≋', Colour(255,255,255,move.ttl * 255), Colour(50,169,167,255)))
+      world_renderer:drawChar(x, y, Char:new(move.x, move.y, '≋', Colour(255,255,255,math.min(move.ttl * 255, 255)), Colour(50,169,167,255)))
     end
+    -- remove dead moves
     for i=#move_history,1,-1 do
       if move_history[i].ttl == 0 then
         table.remove(move_history, i)
@@ -157,9 +159,6 @@ function WorldMapState:update(dt)
 end
 
 function press(code)
-  if #move_history > 5 then table.remove(move_history, 1) end
-  table.insert(move_history, {x=player.position.x, y=player.position.y, ttl=1})
-
   if code == 'right' then
     move(player.position.x + 1, player.position.y)
   elseif code == 'left' then
@@ -191,8 +190,15 @@ function move(toposx, toposy)
     return
   end
   if tochar.type == water then
+    -- keep a record of the last 5 moves for drawing the wake
+    if toposx ~= player.position.x or toposy ~= player.position.y then
+      if #move_history > 5 then table.remove(move_history, 1) end
+      table.insert(move_history, {x=player.position.x, y=player.position.y, ttl=0.8})
+    end
+
     player.position.x, player.position.y = toposx, toposy
 
+    -- move the camera the the player attempts to move outside the deadzone
     local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
     if math.abs(offset_x) > DEADZONE_X then
       player.camera.x = player.camera.x + math.min(math.max(offset_x, -1), 1)
