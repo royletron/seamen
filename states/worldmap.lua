@@ -13,6 +13,8 @@ local renderers = {
 
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 
+local move_history = {}
+
 WorldMapState = {}
 
 baddies = {}
@@ -115,7 +117,7 @@ function WorldMapState:update(dt)
   if world_renderer ~= nil then
     for x=0, world_renderer.w, 1 do
       for y=0, world_renderer.h, 1 do
-        char = world:getChar(x+player.position.x-(world_renderer.w/2), y+player.position.y-(world_renderer.h/2))
+        char = world:getChar(x+player.camera.x-(world_renderer.w/2), y+player.camera.y-(world_renderer.h/2))
         --char = Char:new(x, y, '█', {1,0,0,1})
         if char ~= nil then
           if char.x==player.position.x and char.y==player.position.y then
@@ -128,29 +130,42 @@ function WorldMapState:update(dt)
         end
       end
     end
+    -- local x, y
+    -- for i = 1, #move_history do
+    --   x, y = unpack(move_history[i])
+    --   world_renderer:drawChar(x, y, '!', Colour(255,0,0,255), Colour(100,233,161,255))
+    -- end
     local b
     for k,val in ipairs(baddies) do
       b = baddies[k]
       b:update(dt)
       checkForFight()
-      world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(math.max(20, (100 + ((b.level-player.level) * 50))),20,20,255), Colour(math.max(80, (100 + ((b.level-player.level) * 50))),80,80,255)))
+      world_renderer:drawChar(b.x-player.camera.x+29,b.y-player.camera.y+10,Char:new(b.x-player.camera.x,b.y-player.camera.y,'✺', Colour(math.max(20, (100 + ((b.level-player.level) * 50))),20,20,255), Colour(math.max(80, (100 + ((b.level-player.level) * 50))),80,80,255)))
     end
     world_renderer:update(dt)
   end
 end
 
 function press(code)
+  if #move_history > 2 then table.remove(move_history) end
+  table.insert(move_history, {player.position.x, player.position.y})
+
   if code == 'right' then
     move(player.position.x + 1, player.position.y)
-  end
-  if code == 'left' then
+  elseif code == 'left' then
     move(player.position.x - 1, player.position.y)
-  end
-  if code == 'up' then
+  elseif code == 'up' then
     move(player.position.x, player.position.y -1)
-  end
-  if code == 'down' then
+  elseif code == 'down' then
     move(player.position.x, player.position.y + 1)
+  end
+
+  local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
+  if math.abs(offset_x) > DEADZONE_X then
+    player.camera.x = player.camera.x + math.min(math.max(offset_x, -1), 1)
+  end
+  if math.abs(offset_y) > DEADZONE_Y then
+    player.camera.y = player.camera.y + math.min(math.max(offset_y, -1), 1)
   end
 end
 

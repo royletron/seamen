@@ -30,7 +30,7 @@ end
 
 function Baddie:goto(x, y)
   local tile = fn.try(world['base'], x, y)
-  if tile.type == water then self.x, self.y = x, y end
+  if tile ~= nil and tile.type == water then self.x, self.y = x, y end
 end
 
 return Baddie

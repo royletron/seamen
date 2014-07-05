@@ -12,6 +12,7 @@ Player.exp = 0
 Player.money = 30
 Player.inventory = {{name = 'Bread', quantity = 10}}
 Player.position = {}
+Player.camera = {}
 Player.crew = {}
 
 function Player:__init()

@@ -26,7 +26,11 @@ world=World(200,200)
 player=Player()
 info = InfoPanel(400,10)
 TILE_W = 9
-TILE_H = 15
+TILE_H = 11
+
+DEADZONE_X = 20
+DEADZONE_Y = 3
+
 char_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 13 )
 info_font = love.graphics.newFont( 'fonts/DejaVuSansMono-Bold.ttf', 23 )
 label_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 10 )
@@ -45,6 +49,7 @@ function love.load()
 
   local spawn = world:getSpawnPoint()
   player.position = {x= spawn.x, y=spawn.y}
+  player.camera = {x = spawn.x, y = spawn.y}
 
   Gamestate.registerEvents()
   Gamestate.switch(WorldMapState)
