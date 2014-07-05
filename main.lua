@@ -31,7 +31,7 @@ world=World(200,200)
 player=Player()
 info = InfoPanel(400,10)
 
-DEADZONE_X = 20
+DEADZONE_X = 18
 DEADZONE_Y = 3
 
 char_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 13 )
