@@ -129,6 +129,7 @@ function WorldMapState:update(dt)
     end
     for k,val in ipairs(baddies) do
       b = baddies[k]
+      b:update(dt)
       world_renderer:drawChar(b.x-player.position.x+29,b.y-player.position.y+10,Char:new(b.x-player.position.x,b.y-player.position.y,'✺', Colour(184,149,91,255), Colour(255,133,81,100)))
     end
     world_renderer:update(dt)
