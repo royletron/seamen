@@ -25,14 +25,16 @@ supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
 world=World(200,200)
 player=Player()
 info = InfoPanel(400,10)
-TILE_W = 9
-TILE_H = 11
 
 DEADZONE_X = 20
 DEADZONE_Y = 3
 
 char_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 13 )
 info_font = love.graphics.newFont( 'fonts/DejaVuSansMono-Bold.ttf', 23 )
+
+TILE_W = char_font:getWidth(' ')
+TILE_H = char_font:getHeight()
+
 label_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 10 )
 pirate_font = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 20 )
 pirate_font_small = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 15 )
