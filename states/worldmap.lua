@@ -93,7 +93,6 @@ function WorldMapState:draw(dt)
   sunlight = math.cos(sunlight)
   sunlight = fn.clamp(0, sunlight * 2, 1)
 
-  love.graphics.setColor(0, 25, 0, DARKEST_NIGHT * sunlight)
   -- love.graphics.setColor(0, 255, 0, 255)
   local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
   center_x, center_y = ((player.position.x - center_x) * TILE_W) - TILE_W + world_renderer.x, ((player.position.y - center_y) * TILE_H) - TILE_H + world_renderer.y
@@ -101,21 +100,28 @@ function WorldMapState:draw(dt)
   scissor_x, scissor_y = center_x - (scissor_rows * TILE_W), center_y - (scissor_cols * TILE_H)
   scissor_w, scissor_h = ((scissor_rows * 2) + 1) * TILE_W, ((scissor_cols * 2) + 1) * TILE_H
   scissor_right, scissor_bottom = scissor_w + scissor_x, scissor_h + scissor_y
-  love.graphics.setScissor(
-    scissor_x,
-    scissor_y,
-    scissor_w,
-    scissor_h
-  )
+  -- love.graphics.setScissor(
+  --   scissor_x,
+  --   scissor_y,
+  --   scissor_w,
+  --   scissor_h
+  -- )
 
-  love.graphics.setLineWidth(55)
-  love.graphics.circle('line', center_x + (TILE_W / 2), center_y + (TILE_H / 2), 100, 30)
-  love.graphics.setScissor()
+  -- love.graphics.setColor(0, 25, 0, math.max((DARKEST_NIGHT * sunlight) - 60, 0))
+  -- love.graphics.setLineWidth(5)
+  -- love.graphics.circle('line', center_x + (TILE_W / 2), center_y + (TILE_H / 2), 68, 30)
+
+  love.graphics.setColor(0, 0, 0, DARKEST_NIGHT * sunlight)
+  love.graphics.draw(VISION, scissor_x, scissor_y, 0)
+  -- love.graphics.setLineWidth(55)
+  -- love.graphics.circle('line', center_x + (TILE_W / 2), center_y + (TILE_H / 2), 100, 30)
+
+  -- love.graphics.setScissor()
   love.graphics.rectangle("fill", world_renderer.x, world_renderer.y, world_renderer.w * TILE_W, scissor_y - world_renderer.y)
   love.graphics.rectangle("fill", world_renderer.x, scissor_y, scissor_x  - world_renderer.x, scissor_h)
   love.graphics.rectangle("fill", scissor_right, scissor_y, (world_renderer.x + (world_renderer.w * TILE_W)) - scissor_right, scissor_h)
   love.graphics.rectangle("fill", world_renderer.x, scissor_bottom, world_renderer.w * TILE_W, (world_renderer.y + (world_renderer.h * TILE_H)) - scissor_bottom)
-  love.graphics.setLineWidth(1)
+  -- love.graphics.setLineWidth(1)
 
   love.graphics.setColor(255,255,255,255)
   love.graphics.setFont(info_font)
@@ -133,6 +139,7 @@ function WorldMapState:draw(dt)
     love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 70 + 20 * TILE_H + 38 + (24 * (i - 1)))
   end
 
+  love.graphics.setColor(0,0,0,255)
   love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267, 50)
 
 end
