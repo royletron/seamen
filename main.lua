@@ -50,6 +50,7 @@ require 'states.fight'
 
 testGraph = nil
 testGraph2 = nil
+shaders = {}
 
 function love.load()
   love.keyboard.setKeyRepeat( true )
@@ -65,6 +66,53 @@ function love.load()
 	testGraph = fpsGraph.createGraph(700, 0)
 	-- memory graph
 	testGraph2 = fpsGraph.createGraph(700, 30)
+
+  -- prepend the noise function definition to the effect definition
+  shaders.static = love.graphics.newShader([[
+    extern float seed = 1;
+
+    float rand(vec2 co)
+    {
+        float a = 12.9898 + seed;
+        float b = 78.233;
+        float c = 43758.5453;
+        float dt = dot(co.xy ,vec2(a,b));
+        float sn = mod(dt,3.14);
+        return fract(sin(sn) * c);
+    }
+
+    vec4 effect(vec4 colour, Image image, vec2 local, vec2 screen)
+    {
+        // scale the screen coordinates to scale the noise
+        // number noise = perlin2d(screen / 128.0);
+
+        // the noise is between -1 and 1, so scale it between 0 and 1
+        // noise = noise * 0.5 + 0.5;
+        float noise = rand(screen);
+
+        return vec4(noise, noise, noise, 1.0);
+    }
+  ]])
+
+  shaders.blur = love.graphics.newShader[[
+    extern number radius;
+    extern vec2 imageSize;
+
+    vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
+    {
+      vec4 newcolor = vec4(0);
+      vec2 st;
+
+      for (float x = -radius; x <= radius; x++) {
+        for (float y = -radius; y <= radius; y++) {
+          screen_coords.xy = vec2(x, y) / imageSize;
+          newcolor += Texel(texture, texture_coords + screen_coords);
+        }
+      }
+      newcolor /= ((2.0 * radius + 1.0) * (2.0 * radius + 1.0));
+      return newcolor * color;
+    }
+  ]]
 end
 
 function love.draw(dt)

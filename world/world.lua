@@ -66,6 +66,7 @@ function World:__init(w,h)
   self.land = {}
   self.beach = {}
   self.water = {}
+  self.towncache = {}
 
   for r = 1, #terrain.perlin do
     terrain.value[r] = {}
@@ -154,6 +155,7 @@ function World:createTreasure(x, y)
 end
 
 function World:createTown(x, y)
+  table.insert(self.towncache, {x=x, y=y})
   t = Char:new(x, y, '%', Colour(255,255,255,255), Colour(255,0,102,255), town)
   if self.towndir[x] == nil then self.towndir[x] = {} end
   self.towndir[x][y] = Town()

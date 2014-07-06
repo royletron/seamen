@@ -15,6 +15,10 @@ local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 
 local move_history = {}
 
+local shadow_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
+local lighting_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
+local noise_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
+
 WorldMapState = {}
 
 baddies = {}
@@ -41,6 +45,7 @@ function WorldMapState:init()
       end
     end
   end
+
   --   numwater = 0
   --   for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
   --     if world['base'][bx] ~= nil then
@@ -92,37 +97,77 @@ function WorldMapState:draw(dt)
   sunlight = percentage_of_day * (2 * math.pi)
   sunlight = math.cos(sunlight)
   sunlight = fn.clamp(0, sunlight * 2, 1)
-
-  -- love.graphics.setColor(0, 255, 0, 255)
-  local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
-  center_x, center_y = ((player.position.x - center_x) * TILE_W) - TILE_W + world_renderer.x, ((player.position.y - center_y) * TILE_H) - TILE_H + world_renderer.y
-  scissor_rows, scissor_cols = 10, 5
-  scissor_x, scissor_y = center_x - (scissor_rows * TILE_W), center_y - (scissor_cols * TILE_H)
-  scissor_w, scissor_h = ((scissor_rows * 2) + 1) * TILE_W, ((scissor_cols * 2) + 1) * TILE_H
-  scissor_right, scissor_bottom = scissor_w + scissor_x, scissor_h + scissor_y
-  -- love.graphics.setScissor(
-  --   scissor_x,
-  --   scissor_y,
-  --   scissor_w,
-  --   scissor_h
-  -- )
-
-  -- love.graphics.setColor(0, 25, 0, math.max((DARKEST_NIGHT * sunlight) - 60, 0))
-  -- love.graphics.setLineWidth(5)
-  -- love.graphics.circle('line', center_x + (TILE_W / 2), center_y + (TILE_H / 2), 68, 30)
+  -- sunlight = 0.5
 
   if sunlight > 0 then
-    love.graphics.setColor(0, 0, 0, DARKEST_NIGHT * sunlight)
-    love.graphics.draw(VISION[math.floor((love.timer.getTime() * 10) % 2) + 1], scissor_x, scissor_y)
-    -- love.graphics.setLineWidth(55)
-    -- love.graphics.circle('line', center_x + (TILE_W / 2), center_y + (TILE_H / 2), 100, 30)
 
-    -- love.graphics.setScissor()
-    love.graphics.rectangle("fill", world_renderer.x, world_renderer.y, world_renderer.w * TILE_W, scissor_y - world_renderer.y)
-    love.graphics.rectangle("fill", world_renderer.x, scissor_y, scissor_x  - world_renderer.x, scissor_h)
-    love.graphics.rectangle("fill", scissor_right, scissor_y, (world_renderer.x + (world_renderer.w * TILE_W)) - scissor_right, scissor_h)
-    love.graphics.rectangle("fill", world_renderer.x, scissor_bottom, world_renderer.w * TILE_W, (world_renderer.y + (world_renderer.h * TILE_H)) - scissor_bottom)
-    -- love.graphics.setLineWidth(1)
+    -- local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
+    -- center_x, center_y = ((player.position.x - center_x) * TILE_W) - TILE_W, ((player.position.y - center_y) * TILE_H) - TILE_H
+
+    local x, y
+    local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
+
+    -- noise_canvas:clear()
+
+    -- love.graphics.setCanvas(noise_canvas)
+    -- love.graphics.setColor(0, 0, 0, 255)
+    -- love.graphics.setShader(static)
+    -- static:send('seed', math.random())
+    -- love.graphics.rectangle('fill', 0, 0, shadow_canvas:getWidth(), shadow_canvas:getHeight())
+    -- love.graphics.setShader()
+    -- love.graphics.setCanvas()
+
+    lighting_canvas:clear()
+
+    love.graphics.setCanvas(lighting_canvas)
+
+    love.graphics.setColor(255, 250, 205, 255)
+
+    -- town lantern
+    for k, t in ipairs(world.towncache) do
+      x = (t.x - offset_x) * TILE_W
+      y = (t.y - offset_y) * TILE_H
+
+      love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40, 30)
+    end
+
+    -- baddie lantern
+    for k, b in ipairs(baddies) do
+      x = (b.x - offset_x) * TILE_W
+      y = (b.y - offset_y) * TILE_H
+
+      love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40, 30)
+    end
+
+    -- player lantern
+    x = (player.position.x - offset_x) * TILE_W
+    y = (player.position.y - offset_y) * TILE_H
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 68, 30)
+
+    love.graphics.setCanvas()
+
+    shadow_canvas:clear()
+
+    love.graphics.setCanvas(shadow_canvas)
+    -- fill the canvas black
+    love.graphics.setColor(0, 0, 0, 255)
+    love.graphics.rectangle('fill', 0, 0, shadow_canvas:getWidth(), shadow_canvas:getHeight())
+    -- cut out the lighting
+    love.graphics.setBlendMode('subtractive')
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.draw(lighting_canvas, 0, 0)
+
+    love.graphics.setCanvas()
+
+    love.graphics.setBlendMode('alpha')
+    love.graphics.setShader(shaders.blur)
+    shaders.blur:send('imageSize', {shadow_canvas:getWidth(), shadow_canvas:getHeight()})
+    shaders.blur:send('radius', 1.2)
+    love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * sunlight)
+    love.graphics.draw(shadow_canvas, world_renderer.x, world_renderer.y)
+    love.graphics.setShader()
+
   end
 
   love.graphics.setColor(255,255,255,255)

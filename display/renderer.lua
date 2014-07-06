@@ -8,6 +8,11 @@ function Renderer:__init(x,y,w,h,label_font,char_font)
 
   self.x,self.y,self.w,self.h = x,y,w,h
 
+  self.rows = h
+  self.cols = w
+  self.width = w * TILE_W
+  self.height = h * TILE_H
+
 	self.stage = Sprite()
 
   self.char_font, self.label_font = char_font, label_font
