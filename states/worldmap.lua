@@ -12,7 +12,7 @@ local renderers = {
 }
 
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
-local baddie_renderer
+local character_renderer
 
 
 local move_history = {}
@@ -132,12 +132,12 @@ function WorldMapState:draw(dt)
     world_renderer:draw(dt)
   end
 
-  if baddie_renderer ~= nil then
+  if character_renderer ~= nil then
     love.graphics.push()
     love.graphics.translate(world_renderer.x, world_renderer.y)
     love.graphics.translate(-player.camera.x * TILE_W, -player.camera.y * TILE_H)
     world_renderer:setScissor()
-    baddie_renderer:draw(dt)
+    character_renderer:draw(dt)
     love.graphics.setScissor()
     love.graphics.pop()
   end
@@ -277,9 +277,9 @@ function WorldMapState:update(dt)
       end
     end
 
-    world_renderer:drawChar(player.position.x - center_x, player.position.y - center_y, Char:new(player.position.x,player.position.y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
+    world_renderer:drawChar(player.ship.x - center_x, player.ship.y - center_y, Char:new(player.ship.x,player.ship.y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
 
-    baddie_renderer = Sprite()
+    character_renderer = Sprite()
 
     local b
     for k,val in ipairs(baddies) do
@@ -291,7 +291,7 @@ function WorldMapState:update(dt)
           b.foreground.a = moonlight * 255
           b.background.a = moonlight * 255
         end
-        baddie_renderer:add(
+        character_renderer:add(
           BufferChar:new(
             ((b.x + 29) - 1) * TILE_W,
             ((b.y + 10) - 1) * TILE_H,
@@ -303,8 +303,23 @@ function WorldMapState:update(dt)
         )
       end
     end
+
+    if player.ship.x ~= player.position.x or player.ship.y ~= player.position.y then
+      character_renderer:add(
+        BufferChar:new(
+          ((player.position.x + 29) - 1) * TILE_W,
+          ((player.position.y + 10) - 1) * TILE_H,
+          '!',
+          Colour(0,0,0,255),
+          nil,
+          char_font
+        )
+      )
+      -- world_renderer:drawChar(player.ship.x - center_x, player.ship.y - center_y, Char:new(player.ship.x,player.ship.y,'☃', Colour(184,149,91,255), nil))
+    end
+
     world_renderer:update(dt)
-    baddie_renderer:update(dt)
+    character_renderer:update(dt)
   end
 end
 
@@ -339,14 +354,28 @@ function move(toposx, toposy)
   if tochar == nil then
     return
   end
-  if tochar.type == water then
-    -- keep a record of the last 5 moves for drawing the wake
-    if toposx ~= player.position.x or toposy ~= player.position.y then
-      if #move_history > 5 then table.remove(move_history, 1) end
-      table.insert(move_history, {x=player.position.x, y=player.position.y, ttl=0.8})
+
+  if tochar.type == town then
+    t = world:getTown(toposx, toposy)
+    gotoTown(t)
+  else
+    sailing = tochar.type == water and (player.position.x == player.ship.x and player.position.y == player.ship.y)
+
+    if sailing then
+      -- keep a record of the last 5 moves for drawing the wake
+      if toposx ~= player.position.x or toposy ~= player.position.y then
+        if #move_history > 5 then table.remove(move_history, 1) end
+        table.insert(move_history, {x=player.position.x, y=player.position.y, ttl=0.8})
+      end
     end
 
-    player.position.x, player.position.y = toposx, toposy
+    if sailing or tochar.type ~= water or (toposx == player.ship.x and toposy == player.ship.y) then
+      player.position.x, player.position.y = toposx, toposy
+    end
+
+    if sailing then
+      player.ship.x, player.ship.y = player.position.x, player.position.y
+    end
 
     -- move the camera the the player attempts to move outside the deadzone
     local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
@@ -359,10 +388,7 @@ function move(toposx, toposy)
 
     checkForFight()
   end
-  if tochar.type == town then
-    t = world:getTown(toposx, toposy)
-    gotoTown(t)
-  end
+
   local towns = world:getTowns(player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2), player.camera.x+(world_renderer.w/2), player.camera.y+(world_renderer.h/2))
   world_renderer:clearLabels()
   for k,v in ipairs(towns) do
