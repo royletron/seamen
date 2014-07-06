@@ -18,7 +18,7 @@ function Button:draw(dt)
     if self.active == true then
       love.graphics.setColor(overcolour.r, overcolour.g, overcolour.b, overcolour.a)
     else
-      love.graphics.setColor(overcolour.r, overcolour.g, overcolour.b, overcolour.a/2.5)
+      love.graphics.setColor(colour.r, colour.g, colour.b, colour.a/2.5)
     end
   else
     if self.active == true then

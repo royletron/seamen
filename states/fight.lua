@@ -37,8 +37,8 @@ function FightState:enter()
 end
 
 function FightState:keypressed(key, unicode)
-  if key == 'down' then self.position.y = self.position.y + 1 end
-  if key == 'up' then self.position.y = self.position.y - 1 end
+  if key == 'down' then self:moveCursor('y', 1) end
+  if key == 'up' then self:moveCursor('y', -1) end
   if key == 'right' then self.position.x = self.position.x + 1 end
   if key == 'left' then self.position.x = self.position.x - 1 end
   if key == 'escape' then Gamestate.switch(WorldMapState) end
@@ -46,8 +46,37 @@ function FightState:keypressed(key, unicode)
 
   if self.position.x < 0 then self.position.x = 0 end
   if self.position.x > self.maxposition.x then self.position.x = self.maxposition.x end
-  if self.position.y < 0 then self.position.y = 0 end
-  if self.position.y > self.maxposition.y then self.position.y = self.maxposition.y end
+  --if self.position.y < 0 then self.position.y = 0 end
+  --if self.position.y > self.maxposition.y then self.position.y = self.maxposition.y end
+end
+
+function FightState:moveCursor(plane, val)
+  local max = self.maxposition.y
+  if plane == 'x' then max = self.maxposition.x end
+  local loc = self.position.y
+  if plane == 'x' then loc = self.position.x end
+  local found = false
+  for i=1, max, 1 do
+    loc = loc + val
+    if loc > max then loc = 0 end
+    if loc < 0 then loc = max end
+    --if loc < 0 then loc = max - 1 end
+    local current = self.buttons[(loc*3)+1]
+    if current.active == true or found == true then
+      found = true
+      break
+    end
+  end
+  if found == false then
+    loc = -1
+  end
+  if plane == 'y' then self.position.y = loc
+  else self.position.x = loc
+  end
+end
+
+function FightState:triggerButton()
+
 end
 
 function FightState:draw(dt)
@@ -82,6 +111,7 @@ function FightState:updatePlayerData(dt)
         self.buttons[((i-1)*3)+2].active = true
         self.buttons[((i-1)*3)+3].active = true
       else
+        if self.position.y == i-1 then self:moveCursor('y', 1) end
         self.buttons[((i-1)*3)+1].active = false
         self.buttons[((i-1)*3)+2].active = false
         self.buttons[((i-1)*3)+3].active = false
