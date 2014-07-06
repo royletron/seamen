@@ -4,11 +4,12 @@ namegenerator = require 'namegenerator'
 
 Crew = class ()
 Crew.__name = 'Crew'
-Crew.level = 1
-Crew.exp = 0
 
 function Crew:__init()
+  self.speed = math.random(5,10)/100
   self.name=namegenerator.pirateName()
+  self.level = 1
+  self.exp = 0
 end
 
 return Crew
