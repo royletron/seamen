@@ -117,14 +117,25 @@ function WorldMapState:drawLights(seed, radius_modifier)
   end
 
   -- player lantern
-  x = (player.position.x - offset_x) * TILE_W
-  y = (player.position.y - offset_y) * TILE_H
+  x = (player.ship.x - offset_x) * TILE_W
+  y = (player.ship.y - offset_y) * TILE_H
 
   love.graphics.push()
   love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
   love.graphics.rotate(seed * (2 * math.pi))
   love.graphics.circle('fill', 0, 0, 68 + radius_modifier, 7 + (seed > 0.5 and 1 or 0))
   love.graphics.pop()
+
+  if not player:isSailing() then
+    x = (player.position.x - offset_x) * TILE_W
+    y = (player.position.y - offset_y) * TILE_H
+
+    love.graphics.push()
+    love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
+    love.graphics.rotate(seed * (2 * math.pi))
+    love.graphics.circle('fill', 0, 0, 30 + radius_modifier, 30)
+    love.graphics.pop()
+  end
 end
 
 function WorldMapState:draw(dt)
