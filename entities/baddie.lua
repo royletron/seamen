@@ -10,7 +10,15 @@ function Baddie:__init(x, y)
   self.speed = math.random(1,3)
   self.counter = 0
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
+  self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
+  if self.is_ghost then
+    self.foreground = Colour(255, 255, 255, 255)
+    self.background = Colour(200, 200, 200, 225)
+  else
+    self.foreground = Colour(math.max(20, (100 + ((self.level-player.level) * 50))),20,20,255)
+    self.background = Colour(math.max(80, (100 + ((self.level-player.level) * 50))),80,80,255)
+  end
 end
 
 function Baddie:update(dt)

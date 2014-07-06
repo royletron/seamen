@@ -12,6 +12,8 @@ local renderers = {
 }
 
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
+local baddie_renderer
+
 
 local move_history = {}
 
@@ -22,6 +24,7 @@ local noise_canvas = love.graphics.newCanvas(world_renderer.width, world_rendere
 LANTERN_TTL = 0.5
 
 local lantern_flicker = {seed=0, ttl=LANTERN_TTL}
+local moonlight = 0
 
 WorldMapState = {}
 
@@ -90,7 +93,7 @@ function WorldMapState:drawLights(seed, radius_modifier)
   local x, y
   local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
 
-  love.graphics.setColor(255, 250, 205, 255)
+  love.graphics.setColor(255, 255, 255, 255)
 
     -- town lantern
   for k, t in ipairs(world.towncache) do
@@ -111,7 +114,7 @@ function WorldMapState:drawLights(seed, radius_modifier)
   -- player lantern
   x = (player.position.x - offset_x) * TILE_W
   y = (player.position.y - offset_y) * TILE_H
-  love.graphics.setColor(255, 255, 255, 255)
+
   love.graphics.push()
   love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
   love.graphics.rotate(seed * (2 * math.pi))
@@ -129,14 +132,17 @@ function WorldMapState:draw(dt)
     world_renderer:draw(dt)
   end
 
-  local percentage_of_day = ((world.date % DAY_IN_SECONDS) / DAY_IN_SECONDS)
-  local sunlight
-  sunlight = percentage_of_day * (2 * math.pi)
-  sunlight = math.cos(sunlight)
-  sunlight = fn.clamp(0, sunlight * 2, 1)
-  -- sunlight = 1
+  if baddie_renderer ~= nil then
+    love.graphics.push()
+    love.graphics.translate(world_renderer.x, world_renderer.y)
+    love.graphics.translate(-player.camera.x * TILE_W, -player.camera.y * TILE_H)
+    love.graphics.setScissor(world_renderer.x, world_renderer.y, world_renderer.width, world_renderer.height)
+    baddie_renderer:draw(dt)
+    love.graphics.setScissor()
+    love.graphics.pop()
+  end
 
-  if sunlight > 0 then
+  if moonlight > 0 then
 
     -- local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
     -- center_x, center_y = ((player.position.x - center_x) * TILE_W) - TILE_W, ((player.position.y - center_y) * TILE_H) - TILE_H
@@ -186,7 +192,7 @@ function WorldMapState:draw(dt)
     -- love.graphics.setShader(shaders.blur)
     -- shaders.blur:send('imageSize', {shadow_canvas:getWidth(), shadow_canvas:getHeight()})
     -- shaders.blur:send('radius', 0.5)
-    love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * sunlight)
+    love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * moonlight)
     love.graphics.draw(shadow_canvas, world_renderer.x, world_renderer.y)
 
     love.graphics.setShader()
@@ -226,6 +232,13 @@ function WorldMapState:update(dt)
   end
 
   world.date = world.date + (dt * (DAY_IN_SECONDS * (1 / SECONDS_PER_DAY)))
+
+  local percentage_of_day = ((world.date % DAY_IN_SECONDS) / DAY_IN_SECONDS)
+  moonlight = percentage_of_day * (2 * math.pi)
+  moonlight = math.cos(moonlight)
+  moonlight = fn.clamp(0, moonlight * 2, 1)
+  -- moonlight = 1
+
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
   end
@@ -262,14 +275,32 @@ function WorldMapState:update(dt)
 
     world_renderer:drawChar(player.position.x - center_x, player.position.y - center_y, Char:new(player.position.x,player.position.y,'%', Colour(184,149,91,255), Colour(164,133,81,255)))
 
+    baddie_renderer = Sprite()
+
     local b
     for k,val in ipairs(baddies) do
       b = baddies[k]
       b:update(dt)
-      checkForFight()
-      world_renderer:drawChar(b.x-player.camera.x+29,b.y-player.camera.y+10,Char:new(b.x-player.camera.x,b.y-player.camera.y,'✺', Colour(math.max(20, (100 + ((b.level-player.level) * 50))),20,20,255), Colour(math.max(80, (100 + ((b.level-player.level) * 50))),80,80,255)))
+      if not b.is_ghost or moonlight ~= 0 then
+        checkForFight()
+        if b.is_ghost then
+          b.foreground.a = moonlight * 255
+          b.background.a = moonlight * 255
+        end
+        baddie_renderer:add(
+          BufferChar:new(
+            ((b.x + 29) - 1) * TILE_W,
+            ((b.y + 10) - 1) * TILE_H,
+            '✺',
+            b.foreground,
+            b.background,
+            char_font
+          )
+        )
+      end
     end
     world_renderer:update(dt)
+    baddie_renderer:update(dt)
   end
 end
 
