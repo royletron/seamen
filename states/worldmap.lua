@@ -318,7 +318,7 @@ end
 
 function checkForFight()
   fn.map(function(baddie)
-    if baddie.x == player.position.x and baddie.y == player.position.y then
+    if baddie.x == player.position.x and baddie.y == player.position.y and (not baddie.is_ghost or moonlight > 0) then
       FightState.baddie = baddie
       Gamestate.switch(FightState)
     end
