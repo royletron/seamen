@@ -161,12 +161,12 @@ function WorldMapState:draw(dt)
     love.graphics.setCanvas()
 
     love.graphics.setBlendMode('alpha')
-    love.graphics.setShader(shaders.blur)
-    shaders.blur:send('imageSize', {shadow_canvas:getWidth(), shadow_canvas:getHeight()})
-    shaders.blur:send('radius', 1.2)
+    -- love.graphics.setShader(shaders.blur)
+    -- shaders.blur:send('imageSize', {shadow_canvas:getWidth(), shadow_canvas:getHeight()})
+    -- shaders.blur:send('radius', 1.2)
     love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * sunlight)
     love.graphics.draw(shadow_canvas, world_renderer.x, world_renderer.y)
-    love.graphics.setShader()
+    -- love.graphics.setShader()
 
   end
 
