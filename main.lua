@@ -90,7 +90,7 @@ function love.load()
         // noise = noise * 0.5 + 0.5;
         float noise = rand(screen);
 
-        return vec4(noise, noise, noise, 1.0);
+        return vec4(colour.rgb, noise * 2); //vec4(1.0, 1.0, 1.0, 1.0);
     }
   ]])
 

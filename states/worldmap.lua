@@ -82,6 +82,35 @@ function WorldMapState:addBaddieOnLine(x)
   end
 end
 
+function WorldMapState:drawLights(dt, radius_modifier)
+  local x, y
+  local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
+
+  love.graphics.setColor(255, 250, 205, 255)
+
+    -- town lantern
+  for k, t in ipairs(world.towncache) do
+    x = (t.x - offset_x) * TILE_W
+    y = (t.y - offset_y) * TILE_H
+
+    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier, 8)
+  end
+
+  -- baddie lantern
+  for k, b in ipairs(baddies) do
+    x = (b.x - offset_x) * TILE_W
+    y = (b.y - offset_y) * TILE_H
+
+    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier, 8)
+  end
+
+  -- player lantern
+  x = (player.position.x - offset_x) * TILE_W
+  y = (player.position.y - offset_y) * TILE_H
+  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 68 + radius_modifier, 8)
+end
+
 function WorldMapState:draw(dt)
 
   for key, renderer in pairs(renderers) do
@@ -97,22 +126,21 @@ function WorldMapState:draw(dt)
   sunlight = percentage_of_day * (2 * math.pi)
   sunlight = math.cos(sunlight)
   sunlight = fn.clamp(0, sunlight * 2, 1)
-  -- sunlight = 0.5
+  -- sunlight = 0.3
 
   if sunlight > 0 then
 
     -- local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
     -- center_x, center_y = ((player.position.x - center_x) * TILE_W) - TILE_W, ((player.position.y - center_y) * TILE_H) - TILE_H
 
-    local x, y
-    local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
-
     -- noise_canvas:clear()
 
+    local time = love.timer.getTime()
+
     -- love.graphics.setCanvas(noise_canvas)
-    -- love.graphics.setColor(0, 0, 0, 255)
-    -- love.graphics.setShader(static)
-    -- static:send('seed', math.random())
+    -- love.graphics.setColor(255, 255, 255, 255)
+    -- love.graphics.setShader(shaders.static)
+    -- shaders.static:send('seed', time)
     -- love.graphics.rectangle('fill', 0, 0, shadow_canvas:getWidth(), shadow_canvas:getHeight())
     -- love.graphics.setShader()
     -- love.graphics.setCanvas()
@@ -120,30 +148,14 @@ function WorldMapState:draw(dt)
     lighting_canvas:clear()
 
     love.graphics.setCanvas(lighting_canvas)
+    love.graphics.setShader(shaders.static)
+    shaders.static:send('seed', time)
 
-    love.graphics.setColor(255, 250, 205, 255)
+    WorldMapState:drawLights(dt, 0)
 
-    -- town lantern
-    for k, t in ipairs(world.towncache) do
-      x = (t.x - offset_x) * TILE_W
-      y = (t.y - offset_y) * TILE_H
+    love.graphics.setShader()
 
-      love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40, 30)
-    end
-
-    -- baddie lantern
-    for k, b in ipairs(baddies) do
-      x = (b.x - offset_x) * TILE_W
-      y = (b.y - offset_y) * TILE_H
-
-      love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40, 30)
-    end
-
-    -- player lantern
-    x = (player.position.x - offset_x) * TILE_W
-    y = (player.position.y - offset_y) * TILE_H
-    love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 68, 30)
+    WorldMapState:drawLights(dt, -3)
 
     love.graphics.setCanvas()
 
@@ -155,8 +167,9 @@ function WorldMapState:draw(dt)
     love.graphics.rectangle('fill', 0, 0, shadow_canvas:getWidth(), shadow_canvas:getHeight())
     -- cut out the lighting
     love.graphics.setBlendMode('subtractive')
+    -- love.graphics.setBlendMode('premultiplied')
     love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.draw(lighting_canvas, 0, 0)
+    love.graphics.draw(lighting_canvas)
 
     love.graphics.setCanvas()
 
@@ -166,6 +179,9 @@ function WorldMapState:draw(dt)
     -- shaders.blur:send('radius', 1.2)
     love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * sunlight)
     love.graphics.draw(shadow_canvas, world_renderer.x, world_renderer.y)
+
+    -- love.graphics.setColor(255, 255, 255, 255)
+    -- love.graphics.draw(noise_canvas, world_renderer.x, world_renderer.y)
     -- love.graphics.setShader()
 
   end
