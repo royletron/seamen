@@ -28,7 +28,8 @@ function FightState:enter()
   renderers.ship_renderer:setAscii(ship)
   self.crew_progress = {}
   for i=1, #player.crew do
-    table.insert(self.crew_progress, ProgressBar(100, 340 + (28 * (i - 1)), 10), 0, 10)
+    table.insert(self.crew_progress, ProgressBar(100, 340 + (28 * (i - 1)), 10, 0, 10))
+    self.crew_progress[i]:setValue(math.random(0,10))
   end
 end
 
@@ -50,8 +51,10 @@ function FightState:draw(dt)
   for key, renderer in pairs(renderers) do
     renderer:draw(dt)
   end
-
   self:drawPlayerData(dt)
+  for i=1, #self.crew_progress, 1 do
+    self.crew_progress[i]:draw(dt)
+  end
 end
 
 function FightState:drawPlayerData(dt)
@@ -64,5 +67,8 @@ end
 function FightState:update(dt)
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
+  end
+  for i=1, #self.crew_progress, 1 do
+    self.crew_progress[i]:update(dt)
   end
 end

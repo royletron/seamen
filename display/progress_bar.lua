@@ -13,10 +13,12 @@ function ProgressBar:setValue(val)
 end
 
 function ProgressBar:update(dt)
-  local step = (max-min)/w
-  for s=1, w, 1 do
+  local step = (self.max-self.min)/self.w
+  for s=1, self.w, 1 do
     if (step * s) < self.value then
-      
+      self.renderer:drawChar(s, 1, Char:new(s, 1, '≋', Colour(255,100,100,255), Colour(50,169,167,255)))
+    else
+      self.renderer:drawChar(s, 1, Char:new(s, 1, '≋', Colour(255,100,100,0), Colour(50,169,167,0)))
     end
   end
 end
