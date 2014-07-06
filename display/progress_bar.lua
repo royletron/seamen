@@ -22,7 +22,6 @@ function ProgressBar:setValue(val)
 end
 
 function ProgressBar:update(dt)
-  print(self.value)
   local step = (self.max-self.min)/self.w
   for s=1, self.w, 1 do
     if (step * s) <= self.value then
