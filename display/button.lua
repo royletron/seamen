@@ -10,16 +10,29 @@ function Button:__init(x,y,w,h,text,cursor,position)
   self.x, self.y, self.w, self.h = x,y,w,h
   self.text = text
   self.cursor, self.position = cursor,position
+  self.active = true
 end
 
 function Button:draw(dt)
   if (self.cursor.x == self.position.x or self.position.x == -1) and self.cursor.y == self.position.y then
-    love.graphics.setColor(overcolour.r, overcolour.g, overcolour.b, overcolour.a)
+    if self.active == true then
+      love.graphics.setColor(overcolour.r, overcolour.g, overcolour.b, overcolour.a)
+    else
+      love.graphics.setColor(overcolour.r, overcolour.g, overcolour.b, overcolour.a/2.5)
+    end
   else
-    love.graphics.setColor(colour.r, colour.g, colour.b, colour.a)
+    if self.active == true then
+      love.graphics.setColor(colour.r, colour.g, colour.b, colour.a)
+    else
+      love.graphics.setColor(colour.r, colour.g, colour.b, colour.a/2.5)
+    end
   end
   love.graphics.rectangle("fill", self.x, self.y, self.w, self.h )
-  love.graphics.setColor(textcolour.r, textcolour.g, textcolour.b, textcolour.a)
+  if self.active == true then
+    love.graphics.setColor(textcolour.r, textcolour.g, textcolour.b, textcolour.a)
+  else
+    love.graphics.setColor(textcolour.r, textcolour.g, textcolour.b, textcolour.a/2.5)
+  end
   love.graphics.print(self.text, self.x + 6, self.y + 3)
 end
 
