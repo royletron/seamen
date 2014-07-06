@@ -14,7 +14,7 @@ local renderers = {
 --local crest_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
 function FightState:enter()
-  self.position = {x=0, y=0}
+  self.position = {x=0, y=-1}
   self.maxposition = {x=2, y=#player.crew-1}
   self.buttons = {}
   local ship = AsciiRenderer()
@@ -87,9 +87,19 @@ function FightState:draw(dt)
   for key, button in pairs(self.buttons) do
     button:draw(dt)
   end
+  if self.position.y ~= -1 then self:drawSelectedData(dt) end
   for i=1, #self.crew_progress, 1 do
     self.crew_progress[i]:draw(dt)
   end
+end
+
+function FightState:drawSelectedData(dt)
+  local crewmember = player.crew[self.position.y + 1]
+  love.graphics.print('EXP = '..crewmember.exp, 640, 340)
+  love.graphics.print('DEF = '..crewmember.def, 640, 368)
+  love.graphics.print('ATK = '..crewmember.atk, 640, 392)
+  love.graphics.print('EVA = '..crewmember.eva, 640, 421)
+  love.graphics.print('ACC = '..crewmember.acc, 640, 449)
 end
 
 function FightState:drawPlayerData(dt)
