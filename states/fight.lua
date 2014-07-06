@@ -76,8 +76,16 @@ function FightState:updatePlayerData(dt)
     if progress.value == progress.max then
 
     else
-
       progress:setValue(progress.value + player.crew[i].speed)
+      if progress.value == progress.max then
+        self.buttons[((i-1)*3)+1].active = true
+        self.buttons[((i-1)*3)+2].active = true
+        self.buttons[((i-1)*3)+3].active = true
+      else
+        self.buttons[((i-1)*3)+1].active = false
+        self.buttons[((i-1)*3)+2].active = false
+        self.buttons[((i-1)*3)+3].active = false
+      end
     end
   end
 end
