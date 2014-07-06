@@ -126,7 +126,7 @@ function WorldMapState:draw(dt)
   sunlight = percentage_of_day * (2 * math.pi)
   sunlight = math.cos(sunlight)
   sunlight = fn.clamp(0, sunlight * 2, 1)
-  -- sunlight = 0.3
+  -- sunlight = 1
 
   if sunlight > 0 then
 
@@ -148,8 +148,8 @@ function WorldMapState:draw(dt)
     lighting_canvas:clear()
 
     love.graphics.setCanvas(lighting_canvas)
-    love.graphics.setShader(shaders.static)
-    shaders.static:send('seed', time)
+    love.graphics.setShader(shaders.perlin)
+    shaders.perlin:send('seed', time % 1)
 
     WorldMapState:drawLights(dt, 0)
 
@@ -176,13 +176,11 @@ function WorldMapState:draw(dt)
     love.graphics.setBlendMode('alpha')
     -- love.graphics.setShader(shaders.blur)
     -- shaders.blur:send('imageSize', {shadow_canvas:getWidth(), shadow_canvas:getHeight()})
-    -- shaders.blur:send('radius', 1.2)
+    -- shaders.blur:send('radius', 0.5)
     love.graphics.setColor(255, 255, 255, DARKEST_NIGHT * sunlight)
     love.graphics.draw(shadow_canvas, world_renderer.x, world_renderer.y)
 
-    -- love.graphics.setColor(255, 255, 255, 255)
-    -- love.graphics.draw(noise_canvas, world_renderer.x, world_renderer.y)
-    -- love.graphics.setShader()
+    love.graphics.setShader()
 
   end
 

@@ -68,6 +68,19 @@ function love.load()
 	testGraph2 = fpsGraph.createGraph(700, 30)
 
   -- prepend the noise function definition to the effect definition
+  shaders.perlin = love.graphics.newShader(love.filesystem.read('shaders/perlin2d.glsl') .. [[
+    extern float seed = 1;
+
+    vec4 effect(vec4 colour, Image image, vec2 local, vec2 screen)
+    {
+        number noise = perlin2d(screen / seed);
+
+        noise += 0.75;
+
+        return vec4(colour.rgb, noise);
+    }
+  ]])
+
   shaders.static = love.graphics.newShader([[
     extern float seed = 1;
 
@@ -83,14 +96,9 @@ function love.load()
 
     vec4 effect(vec4 colour, Image image, vec2 local, vec2 screen)
     {
-        // scale the screen coordinates to scale the noise
-        // number noise = perlin2d(screen / 128.0);
-
-        // the noise is between -1 and 1, so scale it between 0 and 1
-        // noise = noise * 0.5 + 0.5;
         float noise = rand(screen);
 
-        return vec4(colour.rgb, noise * 2); //vec4(1.0, 1.0, 1.0, 1.0);
+        return vec4(colour.rgb, noise * 2);
     }
   ]])
 
