@@ -6,6 +6,7 @@ Crew = require 'entities.crew'
 
 Player = class ()
 Player.__name = 'Player'
+Player.maxhealth = 100
 Player.health = 100
 Player.level = 1
 Player.exp = 0

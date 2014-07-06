@@ -30,9 +30,9 @@ function FightState:enter()
   self.crew_progress = {}
   for i=1, #player.crew do
     table.insert(self.crew_progress, ProgressBar(250, 340 + (28 * (i - 1)), 10, 0, 10))
-    table.insert(self.buttons, Button(340, 338 + (28 * (i - 1)), 54, 20, 'shoot', self.position, {x=0, y=i-1}))
-    table.insert(self.buttons, Button(404, 338 + (28 * (i - 1)), 60, 20, 'defend', self.position, {x=1, y=i-1}))
-    table.insert(self.buttons, Button(474, 338 + (28 * (i - 1)), 54, 20, 'steer', self.position, {x=2, y=i-1}))
+    table.insert(self.buttons, Button(340, 340 + (28 * (i - 1)), 54, TILE_H, 'shoot', self.position, {x=0, y=i-1}))
+    table.insert(self.buttons, Button(404, 340 + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
+    table.insert(self.buttons, Button(474, 340 + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
   end
 end
 
@@ -101,6 +101,8 @@ function FightState:drawSelectedData(dt)
   love.graphics.print('ATK = '..crewmember.atk, 640, 392)
   love.graphics.print('EVA = '..crewmember.eva, 640, 421)
   love.graphics.print('ACC = '..crewmember.acc, 640, 449)
+  local pos = 340 + (28 * (self.position.y)) - 4
+  love.graphics.line(50,pos, 630,pos, 630,335, 720,335, 720,470, 630,470, 630,pos+24, 50,pos+24, 50,pos)
 end
 
 function FightState:drawPlayerData(dt)

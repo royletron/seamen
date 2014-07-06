@@ -33,7 +33,7 @@ function Button:draw(dt)
   else
     love.graphics.setColor(textcolour.r, textcolour.g, textcolour.b, textcolour.a/2.5)
   end
-  love.graphics.print(self.text, self.x + 6, self.y + 3)
+  love.graphics.print(self.text, self.x + 5, self.y)
 end
 
 return Button
