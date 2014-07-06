@@ -95,6 +95,7 @@ end
 
 function FightState:drawSelectedData(dt)
   local crewmember = player.crew[self.position.y + 1]
+  love.graphics.setColor(255,255,255,255)
   love.graphics.print('EXP = '..crewmember.exp, 640, 340)
   love.graphics.print('DEF = '..crewmember.def, 640, 368)
   love.graphics.print('ATK = '..crewmember.atk, 640, 392)
