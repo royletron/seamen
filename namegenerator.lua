@@ -2,7 +2,7 @@ local namegenerator = {}
 
 fn = require('fn')
 
-forenames = {
+PIRATE_NAMES = {{
   'Morgan',
   'Isabela',
   'Killian',
@@ -32,8 +32,7 @@ forenames = {
   'Romulus',
   'William',
   'Guybrush'
-}
-surnames = {
+}, {
   'Threepwood',
   'Bones',
   'Silver',
@@ -64,16 +63,27 @@ surnames = {
   {{'Von ', ''}, {'Carrigan', 'Avery', 'Kenway'}},
   {{'Dark', 'Grey', 'Black', 'Skunk', 'Red', 'Crimson'}, {'beard', 'heart', 'eye'}},
   {{'Scurvy ', 'Evil ', 'Rancid ', 'Dank-'}, {'Dog', 'Rat', 'Weavil'}}
+}}
+
+PIRATE_SHIP_NAMES = {
+  {{'Jolly'}, {' Roger', ' Princess', ' Sailor'}},
+  {{'Black', 'The'}, {' Pearl', ' Hawk', ' Swan'}},
+  'The Siren',
+  'The Trident'
 }
 
 function pick(list)
-  local item = fn.random(list) or ''
+  local item = fn.weighted_random(list) or ''
   if type(item) == 'table' then item = table.concat(fn.map(pick, item), '') end
   return item
 end
 
 function namegenerator.pirateName()
-  return pick(forenames) .. ' ' .. pick(surnames)
+  return table.concat(fn.map(pick, PIRATE_NAMES), ' ')
+end
+
+function namegenerator.pirateShipName()
+  return pick(PIRATE_SHIP_NAMES)
 end
 
 return namegenerator

@@ -18,6 +18,7 @@ Player.camera = {}
 Player.crew = {}
 
 function Player:__init()
+	self.ship.name = namegenerator.pirateShipName()
   for i=1, math.random(3,5) do
     table.insert(self.crew, Crew())
   end

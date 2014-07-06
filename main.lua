@@ -60,7 +60,7 @@ function love.load()
 
   local spawn = world:getSpawnPoint()
   player.position = {x= spawn.x, y=spawn.y}
-  player.ship = {x= spawn.x, y=spawn.y}
+  player.ship.x, player.ship.y = spawn.x, spawn.y
   player.camera = {x = spawn.x, y = spawn.y}
 
   Gamestate.registerEvents()

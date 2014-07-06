@@ -141,8 +141,15 @@ end
 function WorldMapState:draw(dt)
 
   hud_renderer:draw(dt)
+  -- love.graphics.setColor(255, 255, 255, 255)
+  -- love.graphics.rectangle('line', hud_renderer.x, hud_renderer.y, hud_renderer.width, hud_renderer.height)
   if player:isSailing() then
     ship_renderer:draw(dt)
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setFont(char_font)
+    local shipTitle = ' - ' .. player.ship.name .. ' - '
+    local shipTitleWidth = char_font:getWidth(shipTitle)
+    love.graphics.print(shipTitle, ship_renderer.x + ((ship_renderer.width - shipTitleWidth) / 2), ship_renderer.y - TILE_H)
   else
     landlubber_renderer:draw(dt)
   end
@@ -235,7 +242,7 @@ function WorldMapState:draw(dt)
   end
 
   love.graphics.setColor(255,255,255,255)
-  love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267 + (16 * TILE_W), 50 - TILE_H)
+  love.graphics.print(' - ' .. os.date('%A, %d %B ', world.date) .. world.year .. ' - ' , 267 + (14 * TILE_W), 50 - TILE_H)
 
   world_renderer:setScissor()
   world_renderer:drawLabels()
