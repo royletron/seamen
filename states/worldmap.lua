@@ -19,6 +19,10 @@ local shadow_canvas = love.graphics.newCanvas(world_renderer.width, world_render
 local lighting_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
 local noise_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
 
+LANTERN_TTL = 0.5
+
+local lantern_flicker = {seed=0, ttl=LANTERN_TTL}
+
 WorldMapState = {}
 
 baddies = {}
@@ -82,7 +86,7 @@ function WorldMapState:addBaddieOnLine(x)
   end
 end
 
-function WorldMapState:drawLights(dt, radius_modifier)
+function WorldMapState:drawLights(seed, radius_modifier)
   local x, y
   local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
 
@@ -108,7 +112,11 @@ function WorldMapState:drawLights(dt, radius_modifier)
   x = (player.position.x - offset_x) * TILE_W
   y = (player.position.y - offset_y) * TILE_H
   love.graphics.setColor(255, 255, 255, 255)
-  love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 68 + radius_modifier, 8)
+  love.graphics.push()
+  love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
+  love.graphics.rotate(seed * (2 * math.pi))
+  love.graphics.circle('fill', 0, 0, 68 + radius_modifier, 7 + (seed > 0.5 and 1 or 0))
+  love.graphics.pop()
 end
 
 function WorldMapState:draw(dt)
@@ -135,7 +143,8 @@ function WorldMapState:draw(dt)
 
     -- noise_canvas:clear()
 
-    local time = love.timer.getTime()
+    -- local time = love.timer.getTime()
+    -- local seed = world.date % (math.pi * 2)
 
     -- love.graphics.setCanvas(noise_canvas)
     -- love.graphics.setColor(255, 255, 255, 255)
@@ -149,13 +158,13 @@ function WorldMapState:draw(dt)
 
     love.graphics.setCanvas(lighting_canvas)
     love.graphics.setShader(shaders.perlin)
-    shaders.perlin:send('seed', time % 1)
+    shaders.perlin:send('seed', love.math.random())
 
-    WorldMapState:drawLights(dt, 0)
+    WorldMapState:drawLights(lantern_flicker.seed, 0)
 
     love.graphics.setShader()
 
-    WorldMapState:drawLights(dt, -3)
+    WorldMapState:drawLights(lantern_flicker.seed, -3)
 
     love.graphics.setCanvas()
 
@@ -210,6 +219,12 @@ function WorldMapState:keypressed(key, unicode)
 end
 
 function WorldMapState:update(dt)
+  lantern_flicker.ttl = lantern_flicker.ttl - dt
+  if lantern_flicker.ttl <= 0 then
+    lantern_flicker.seed = love.math.random()
+    lantern_flicker.ttl = LANTERN_TTL
+  end
+
   world.date = world.date + (dt * (DAY_IN_SECONDS * (1 / SECONDS_PER_DAY)))
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
