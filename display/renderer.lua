@@ -100,7 +100,13 @@ end
 
 function Renderer:draw(dt)
   self.stage:draw(dt)
+end
 
+function Renderer:setScissor()
+  love.graphics.setScissor(self.x, self.y, self.width, self.height)
+end
+
+function Renderer:drawLabels(dt)
   for k,v in ipairs(self.labels) do
     v:draw(dt)
   end

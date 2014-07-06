@@ -136,7 +136,7 @@ function WorldMapState:draw(dt)
     love.graphics.push()
     love.graphics.translate(world_renderer.x, world_renderer.y)
     love.graphics.translate(-player.camera.x * TILE_W, -player.camera.y * TILE_H)
-    love.graphics.setScissor(world_renderer.x, world_renderer.y, world_renderer.width, world_renderer.height)
+    world_renderer:setScissor()
     baddie_renderer:draw(dt)
     love.graphics.setScissor()
     love.graphics.pop()
@@ -217,6 +217,10 @@ function WorldMapState:draw(dt)
 
   love.graphics.setColor(255,255,255,255)
   love.graphics.print(os.date('%A, %d %B ', world.date) .. world.year, 267 + (16 * TILE_W), 50 - TILE_H)
+
+  world_renderer:setScissor()
+  world_renderer:drawLabels()
+  love.graphics.setScissor()
 
 end
 
