@@ -1,6 +1,7 @@
 require('ascii.ships')
 AsciiSprite = require('ascii.ascii_sprite')
 Renderer = require('display.renderer')
+ProgressBar = require('display.progress_bar')
 --AvatarTalker = require('display.AvatarTalker')
 
 FightState = {baddie = nil}
@@ -25,6 +26,10 @@ function FightState:enter()
   ship:add(self.baddiesprite)
   ship:add(AsciiSprite(WATER_ANIMATION))
   renderers.ship_renderer:setAscii(ship)
+  self.crew_progress = {}
+  for i=1, #player.crew do
+    table.insert(self.crew_progress, ProgressBar(100, 340 + (28 * (i - 1)), 10), 0, 10)
+  end
 end
 
 function FightState:keypressed(key, unicode)
@@ -42,11 +47,18 @@ function FightState:keypressed(key, unicode)
 end
 
 function FightState:draw(dt)
-
   for key, renderer in pairs(renderers) do
     renderer:draw(dt)
   end
 
+  self:drawPlayerData(dt)
+end
+
+function FightState:drawPlayerData(dt)
+  for i=1, #player.crew do
+    crewmember = player.crew[i]
+    love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 340 + (28 * (i - 1)))
+  end
 end
 
 function FightState:update(dt)

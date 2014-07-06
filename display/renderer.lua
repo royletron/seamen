@@ -4,7 +4,7 @@ Colour = require 'Colour'
 Label = require 'world.label'
 Renderer = Sprite:extends{size = 0}
 
-function Renderer:__init(x,y,w,h,label_font,char_font)
+function Renderer:__init(x,y,w,h)
 
   self.x,self.y,self.w,self.h = x,y,w,h
 
