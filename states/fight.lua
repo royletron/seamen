@@ -4,6 +4,10 @@ Renderer = require('display.renderer')
 ProgressBar = require('display.progress_bar')
 --AvatarTalker = require('display.AvatarTalker')
 
+shoot = 1
+defend = 2
+steer = 3
+
 FightState = {baddie = nil}
 
 local renderers = {
@@ -29,10 +33,12 @@ function FightState:enter()
   renderers.ship_renderer:setAscii(ship)
   self.crew_progress = {}
   for i=1, #player.crew do
-    table.insert(self.crew_progress, ProgressBar(250, 340 + (28 * (i - 1)), 10, 0, 10))
-    table.insert(self.buttons, Button(340, 340 + (28 * (i - 1)), 54, TILE_H, 'shoot', self.position, {x=0, y=i-1}))
-    table.insert(self.buttons, Button(404, 340 + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
-    table.insert(self.buttons, Button(474, 340 + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
+    local crewmember = player.crew[i]
+    crewmember.currentaction = 0
+    table.insert(self.crew_progress, ProgressBar(320, 340 + (28 * (i - 1)), 10, 0, 10))
+    table.insert(self.buttons, Button(410, 340 + (28 * (i - 1)), 54, TILE_H, 'shoot', self.position, {x=0, y=i-1}))
+    table.insert(self.buttons, Button(474, 340 + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
+    table.insert(self.buttons, Button(544, 340 + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
   end
 end
 
@@ -76,7 +82,14 @@ function FightState:moveCursor(plane, val)
 end
 
 function FightState:triggerButton()
-
+  if self.position.y > -1 then
+    local crewmember = player.crew[self.position.y + 1]
+    local action = self.position.x + 1
+    crewmember.currentaction = action
+    local progress = self.crew_progress[self.position.y + 1]
+    progress:setValue(0)
+    self:moveCursor('y', 1)
+  end
 end
 
 function FightState:draw(dt)
@@ -108,23 +121,32 @@ end
 function FightState:drawPlayerData(dt)
   for i=1, #player.crew do
     crewmember = player.crew[i]
-    love.graphics.print(crewmember.name, 10 + TILE_W * 2 + 29, 340 + (28 * (i - 1)))
+    local action = ''
+    if crewmember.currentaction > 0 then
+      if crewmember.currentaction == shoot then action = ' is shooting' end
+      if crewmember.currentaction == defend then action = ' is defending' end
+      if crewmember.currentaction == steer then action = ' is steering' end
+    end
+    love.graphics.print(crewmember.name..action, 10 + TILE_W * 2 + 29, 340 + (28 * (i - 1)))
   end
 end
 
 function FightState:updatePlayerData(dt)
   for i=1, #player.crew do
     local progress = self.crew_progress[i]
+    local crewmember = player.crew[i]
     if progress.value == progress.max then
 
     else
       progress:setValue(progress.value + player.crew[i].speed)
       if progress.value == progress.max then
+        crewmember.currentaction = 0
         self.buttons[((i-1)*3)+1].active = true
         self.buttons[((i-1)*3)+2].active = true
         self.buttons[((i-1)*3)+3].active = true
       else
         if self.position.y == i-1 then self:moveCursor('y', 1) end
+
         self.buttons[((i-1)*3)+1].active = false
         self.buttons[((i-1)*3)+2].active = false
         self.buttons[((i-1)*3)+3].active = false

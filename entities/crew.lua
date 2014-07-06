@@ -6,10 +6,11 @@ Crew = class ()
 Crew.__name = 'Crew'
 
 function Crew:__init()
-  self.speed = math.random(5,100)/100
+  self.speed = math.random(50,80)/1000
   self.name=namegenerator.pirateName()
   self.level = 1
   self.exp = 0
+  self.currentaction = 0
   local tally = 60
   local randomvars = {}
   for i=1, 4, 1 do
