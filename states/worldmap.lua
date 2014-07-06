@@ -1,15 +1,16 @@
 require('ascii.ships')
 require('ascii.hud')
+require('ascii.landlubber')
 
 AsciiSprite = require('ascii.ascii_sprite')
 AsciiRenderer = require('ascii.ascii_renderer')
 Renderer = require('display.renderer')
 Baddie = require('entities.baddie')
 
-local renderers = {
-  ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font),
-  hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
-}
+local ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
+local landlubber_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
+
+local hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 local character_renderer
@@ -34,11 +35,15 @@ function WorldMapState:init()
   local ship = AsciiRenderer()
   ship:add(AsciiSprite(SHIP_FRIGGATTE))
   ship:add(AsciiSprite(WATER_ANIMATION))
-  renderers.ship_renderer:setAscii(ship)
+  ship_renderer:setAscii(ship)
 
   local hud = AsciiRenderer()
   hud:add(AsciiSprite(HUD_BORDER))
-  renderers.hud_renderer:setAscii(hud)
+  hud_renderer:setAscii(hud)
+
+  local landlubber = AsciiRenderer()
+  landlubber:add(AsciiSprite(LANDLUBBER_ANIMATION))
+  landlubber_renderer:setAscii(landlubber)
 
   move(player.position.x, player.position.y)
 
@@ -124,8 +129,11 @@ end
 
 function WorldMapState:draw(dt)
 
-  for key, renderer in pairs(renderers) do
-    renderer:draw(dt)
+  hud_renderer:draw(dt)
+  if player:isSailing() then
+    ship_renderer:draw(dt)
+  else
+    landlubber_renderer:draw(dt)
   end
 
   if world_renderer ~= nil then
@@ -243,9 +251,14 @@ function WorldMapState:update(dt)
   moonlight = fn.clamp(0, moonlight * 2, 1)
   -- moonlight = 1
 
-  for key, renderer in pairs(renderers) do
-    renderer:update(dt)
+  hud_renderer:update(dt)
+
+  if player:isSailing() then
+    ship_renderer:update(dt)
+  else
+    landlubber_renderer:update(dt)
   end
+
   local char
   if world_renderer ~= nil then
     local center_x, center_y = player.camera.x-(world_renderer.w/2), player.camera.y-(world_renderer.h/2)
@@ -304,7 +317,7 @@ function WorldMapState:update(dt)
       end
     end
 
-    if player.ship.x ~= player.position.x or player.ship.y ~= player.position.y then
+    if not player:isSailing() then
       character_renderer:add(
         BufferChar:new(
           ((player.position.x + 29) - 1) * TILE_W,
@@ -359,7 +372,7 @@ function move(toposx, toposy)
     t = world:getTown(toposx, toposy)
     gotoTown(t)
   else
-    sailing = tochar.type == water and (player.position.x == player.ship.x and player.position.y == player.ship.y)
+    sailing = tochar.type == water and player:isSailing()
 
     if sailing then
       -- keep a record of the last 5 moves for drawing the wake

@@ -23,6 +23,10 @@ function Player:__init()
   end
 end
 
+function Player:isSailing()
+	return player.position.x == player.ship.x and player.position.y == player.ship.y
+end
+
 function Player:has(item)
 	for k,v in ipairs(player.inventory) do
 		if(v.name == item) then return v.quantity end

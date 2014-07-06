@@ -1,6 +1,8 @@
 --love.filesystem.load("perlin.lua")()
 love.filesystem.setIdentity("royletron")
 
+-- require('strict')
+
 fpsGraph = require "hump.FPSGraph"
 World = require 'world.world'
 Player = require 'entities.player'
