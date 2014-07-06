@@ -14,6 +14,7 @@ stone = 1
 beach = 2
 dirt = 3
 town = 4
+treasure = 5
 
 supplies = {{name = 'Bread', min=2, max=10, minnum=30, maxnum=90},
             {name = 'Grog', min=2, max=15, minnum=40, maxnum=90},

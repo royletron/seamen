@@ -377,6 +377,12 @@ function move(toposx, toposy)
       player.ship.x, player.ship.y = player.position.x, player.position.y
     end
 
+    if tochar.type == treasure then
+      player.money = player.money + love.math.random(50, 1000)
+      tochar.type = dirt
+      tochar.colour = Colour(0, 0, 0, 255)
+    end
+
     -- move the camera the the player attempts to move outside the deadzone
     local offset_x, offset_y = player.position.x - player.camera.x, player.position.y - player.camera.y
     if math.abs(offset_x) > DEADZONE_X then
