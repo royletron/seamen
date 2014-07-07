@@ -47,9 +47,10 @@ function FightState:enter()
     table.insert(self.buttons, Button(474, fightcontrols.y + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
     table.insert(self.buttons, Button(544, fightcontrols.y + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
   end
-  self.playerhealth = ProgressBar(100, 320, 20, 0, player.maxhealth)
-  self.baddiehealth = ProgressBar(510, 320, 20, 0, self.baddie.maxhealth)
+  self.playerhealth = ProgressBar(120, 320, 20, 0, player.maxhealth)
+  self.baddiehealth = ProgressBar(520, 320, 20, 0, self.baddie.maxhealth)
   self.playerhealth:setValue(player.health)
+  self.baddiehealth:setValue(self.baddie.health)
   self.playerhealth:update(0.1)
   self.baddiehealth:update(0.1)
 end
@@ -124,8 +125,13 @@ end
 
 function FightState:drawShipStatuses(dt)
   love.graphics.setColor(255,255,255,255)
-  love.graphics.printf(player.ship.name, 80, 300, 200, "center")
-  love.graphics.printf(self.baddie.ship.name, 490, 300, 200, "center")
+  love.graphics.printf(player.ship.name, 100, 300, 200, "center")
+  love.graphics.printf(self.baddie.ship.name, 500, 300, 200, "center")
+  love.graphics.print(player.health .. '/' .. player.maxhealth, 285, 320)
+  love.graphics.print(self.baddie.health .. '/' .. self.baddie.maxhealth, 685, 320)
+  love.graphics.setColor(254,67,101,255)
+  love.graphics.print('♥', 105, 320)
+  love.graphics.print('♥', 505, 320)
   self.playerhealth:draw(dt)
   self.baddiehealth:draw(dt)
 end

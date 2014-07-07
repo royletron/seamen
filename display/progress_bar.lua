@@ -7,6 +7,10 @@ function ProgressBar:__init(x, y, w, min, max)
   self.renderer = Renderer(x,y,w,1)
   self.min, self.max = min, max
   self.value = 0
+  self.fullcolour = Colour(134,177,183,255)
+  self.fullbgcolour = Colour(192,237,252,255)
+  self.emptycolour = Colour(255,255,255,255)
+  self.emptybgcolour = Colour(117,154,159,255)
 end
 
 function ProgressBar:setValue(val)
@@ -25,9 +29,9 @@ function ProgressBar:update(dt)
   local step = (self.max-self.min)/self.w
   for s=1, self.w, 1 do
     if (step * s) <= self.value then
-      self.renderer:drawChar(s, 1, Char:new(s, 1, '∷', Colour(134,177,183,255), Colour(192,237,252,255)))
+      self.renderer:drawChar(s, 1, Char:new(s, 1, '∷', self.fullcolour, self.fullbgcolour))
     else
-      self.renderer:drawChar(s, 1, Char:new(s, 1, '-', Colour(255,255,255,255), Colour(117,154,159,255)))
+      self.renderer:drawChar(s, 1, Char:new(s, 1, '-', self.emptycolour, self.emptybgcolour))
     end
   end
 end
