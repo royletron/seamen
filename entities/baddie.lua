@@ -13,7 +13,7 @@ function Baddie:__init(x, y)
   self.counter = 0
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
 
-  local statscrew = Crew()
+  local statscrew = Crew(55)
 
   self.def = statscrew.def
   self.atk = statscrew.atk

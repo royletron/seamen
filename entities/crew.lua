@@ -5,13 +5,14 @@ namegenerator = require 'namegenerator'
 Crew = class ()
 Crew.__name = 'Crew'
 
-function Crew:__init()
+function Crew:__init(_tally)
   self.speed = math.random(50,80)/1000
   self.name=namegenerator.pirateName()
   self.level = 1
   self.exp = 0
   self.currentaction = 0
   local tally = 60
+  if _tally ~= nil then tally = _tally end
   local randomvars = {}
   for i=1, 4, 1 do
     local v = math.random(1, math.min(20, tally))

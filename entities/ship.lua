@@ -16,15 +16,15 @@ Ship.ship = {name = ""}
 Ship.crew = {}
 
 local function randomFactor(ship)
-  return ship.level * (math.random(0,2)/10)
+  return ship.level * (math.random(100,130)/100)
 end
 
 function Ship:shoot(crew, target)
   local def = 0
   local eva = 0
   if rawget(getmetatable(target),'__name') == 'Baddie' then
-    def = target.def
-    eva = target.eva
+    def = target.def/3
+    eva = target.eva/3
   else
     local numdef = 0
     local numeva = 0
@@ -41,11 +41,13 @@ function Ship:shoot(crew, target)
     def = def/numdef
     eva = eva/numeva
   end
-  local atk = crew.atk + (crew.atk * self.level * 0.5)
-  def = def + (def * target.level * 0.5)
-  local acc = crew.acc + (crew.acc * self.level * 0.5)
-  eva = eva + (eva * target.level * 0.5)
-  print("atk ="..atk)
+  local atk = (crew.atk + (crew.atk * self.level * 0.4))
+  def = (def + (def * target.level * 0.2))
+  local acc = (crew.acc + (crew.acc * self.level * 0.4))
+  eva = (eva + (eva * target.level * 0.2))
+  print("hit = ")
+  print(acc*randomFactor(self) > eva*randomFactor(target))
+  print("atk ="..atk*randomFactor(self))
   print("def ="..def*randomFactor(target))
   print("acc ="..acc*randomFactor(self))
   print("eva ="..eva*randomFactor(target))
