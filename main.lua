@@ -75,13 +75,28 @@ function love.load()
   shaders.perlin = love.graphics.newShader(love.filesystem.read('shaders/perlin2d.glsl') .. [[
     extern float seed = 1;
 
-    vec4 effect(vec4 colour, Image image, vec2 local, vec2 screen)
+    vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     {
-        number noise = perlin2d(screen / seed);
+        number noise = perlin2d(screen_coords / seed);
 
         noise += 0.75;
 
-        return vec4(colour.rgb, noise);
+        return vec4(color.rgb, noise);
+    }
+  ]])
+
+  shaders.uniform_static = love.graphics.newShader([[
+    extern float seed = 1;
+
+    vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
+    {
+        float offset = mod(seed, 2);
+
+        float alpha = 0;
+
+        alpha = mod(int(screen_coords.x + offset), 2) == 1 ? mod(int(screen_coords.y + offset), 2) == 0 ? 1 : 0 : 0;
+
+        return vec4(color.rgb, alpha);
     }
   ]])
 
@@ -98,11 +113,11 @@ function love.load()
         return fract(sin(sn) * c);
     }
 
-    vec4 effect(vec4 colour, Image image, vec2 local, vec2 screen)
+    vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     {
-        float noise = rand(screen);
+        float noise = rand(screen_coords);
 
-        return vec4(colour.rgb, noise * 2);
+        return vec4(color.rgb, noise * 2);
     }
   ]])
 

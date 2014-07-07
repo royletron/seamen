@@ -94,7 +94,7 @@ function WorldMapState:addBaddieOnLine(x)
   end
 end
 
-function WorldMapState:drawLights(seed, radius_modifier)
+function WorldMapState:drawLights(dt, radius_modifier)
   local x, y
   local offset_x, offset_y = player.camera.x - (world_renderer.cols / 2) + 1, player.camera.y - (world_renderer.rows / 2) + 1
 
@@ -105,7 +105,7 @@ function WorldMapState:drawLights(seed, radius_modifier)
     x = (t.x - offset_x) * TILE_W
     y = (t.y - offset_y) * TILE_H
 
-    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier, 8)
+    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier + math.random(0, 1), 8)
   end
 
   -- baddie lantern
@@ -113,7 +113,7 @@ function WorldMapState:drawLights(seed, radius_modifier)
     x = (b.x - offset_x) * TILE_W
     y = (b.y - offset_y) * TILE_H
 
-    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier, 8)
+    love.graphics.circle('fill', x + (TILE_W / 2), y + (TILE_H / 2), 40 + radius_modifier + math.random(0, 1), 8)
   end
 
   -- player lantern
@@ -122,8 +122,9 @@ function WorldMapState:drawLights(seed, radius_modifier)
 
   love.graphics.push()
   love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
-  love.graphics.rotate(seed * (2 * math.pi))
-  love.graphics.circle('fill', 0, 0, 68 + radius_modifier, 7 + (seed > 0.5 and 1 or 0))
+  -- love.graphics.rotate(seed * (2 * math.pi))
+  -- love.graphics.circle('fill', 0, 0, 68 + radius_modifier, 7 + (seed > 0.5 and 1 or 0))
+  love.graphics.circle('fill', 0, 0, 68 + radius_modifier + math.random(0, 1), 8)
   love.graphics.pop()
 
   if not player:isSailing() then
@@ -133,7 +134,7 @@ function WorldMapState:drawLights(seed, radius_modifier)
     love.graphics.push()
     love.graphics.translate(x + (TILE_W / 2), y + (TILE_H / 2))
     love.graphics.rotate(seed * (2 * math.pi))
-    love.graphics.circle('fill', 0, 0, 30 + radius_modifier, 30)
+    love.graphics.circle('fill', 0, 0, 30 + radius_modifier + math.random(0, 1), 30)
     love.graphics.pop()
   end
 end
@@ -189,14 +190,17 @@ function WorldMapState:draw(dt)
     lighting_canvas:clear()
 
     love.graphics.setCanvas(lighting_canvas)
-    love.graphics.setShader(shaders.perlin)
-    shaders.perlin:send('seed', love.math.random())
+    -- love.graphics.setShader(shaders.perlin)
+    shaders.uniform_static:send('seed', love.math.random())
+    love.graphics.setShader(shaders.uniform_static)
 
-    WorldMapState:drawLights(lantern_flicker.seed, 0)
+    math.randomseed(lantern_flicker.seed)
+
+    WorldMapState:drawLights(dt, 0)
 
     love.graphics.setShader()
 
-    WorldMapState:drawLights(lantern_flicker.seed, -3)
+    WorldMapState:drawLights(dt, -3)
 
     love.graphics.setCanvas()
 
@@ -257,7 +261,8 @@ end
 function WorldMapState:update(dt)
   lantern_flicker.ttl = lantern_flicker.ttl - dt
   if lantern_flicker.ttl <= 0 then
-    lantern_flicker.seed = love.math.random()
+    -- lantern_flicker.seed = love.math.random()
+    lantern_flicker.seed = love.timer.getTime()
     lantern_flicker.ttl = LANTERN_TTL
   end
 
