@@ -12,6 +12,14 @@ function Baddie:__init(x, y)
   self.speed = math.random(1,3)
   self.counter = 0
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
+
+  local statscrew = Crew()
+
+  self.def = statscrew.def
+  self.atk = statscrew.atk
+  self.acc = statscrew.acc
+  self.eva = statscrew.eva
+
   self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
   self.health = 40
