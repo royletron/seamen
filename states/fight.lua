@@ -1,7 +1,8 @@
 require('ascii.ships')
-AsciiSprite = require('ascii.ascii_sprite')
-Renderer = require('display.renderer')
-ProgressBar = require('display.progress_bar')
+local AsciiSprite = require('ascii.ascii_sprite')
+local AsciiShip = require('ascii.ascii_ship')
+local Renderer = require('display.renderer')
+local ProgressBar = require('display.progress_bar')
 --AvatarTalker = require('display.AvatarTalker')
 
 shoot = 1
@@ -23,9 +24,13 @@ function FightState:enter()
   self.buttons = {}
   local ship = AsciiRenderer()
   ship:add(AsciiSprite(FIGHT_BG))
-  self.playersprite = AsciiSprite(SHIP_FRIGGATTE)
+  local water_bg = AsciiSprite(WATER_ANIMATION, Colour(96,120,144,255))
+  water_bg.framerate = 10
+  water_bg.y = 10
+  ship:add(water_bg)
+  self.playersprite = AsciiShip(SHIP_FRIGGATTE)
   self.playersprite.x = 10
-  self.baddiesprite = AsciiSprite(self.baddie.ascii)
+  self.baddiesprite = AsciiShip(self.baddie.ascii)
   self.baddiesprite.x = 60
   ship:add(self.playersprite)
   ship:add(self.baddiesprite)

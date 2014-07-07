@@ -4,7 +4,7 @@ BufferChar = require 'display.BufferChar'
 Colour = require 'Colour'
 utf8 = require 'utf8'
 
-function AsciiSprite:__init(raw)
+function AsciiSprite:__init(raw, bgcolour)
 	self.w = 0
   self.h = 0
   self.x = raw.x
@@ -18,7 +18,11 @@ function AsciiSprite:__init(raw)
   self.maxframe = 1
   if raw.framerate ~= nil then self.framerate = raw.framerate end
 	if raw.colour == nil then self.colour = Colour(100,233,233,255) else self.colour = raw.colour end
-	if raw.bgcolour == nil then self.bgcolour = Colour(164,133,81,0) else self.bgcolour = raw.bgcolour end
+	if bgcolour == nil then
+		if raw.bgcolour == nil then self.bgcolour = Colour(164,133,81,0) else self.bgcolour = raw.bgcolour end
+	else
+		self.bgcolour = bgcolour
+	end
   local ascii
   local char
   for fk, fv in ipairs(raw) do
