@@ -139,13 +139,17 @@ end
 function FightState:drawSelectedData(dt)
   local crewmember = player.crew[self.position.y + 1]
   love.graphics.setColor(255,255,255,255)
-  love.graphics.print('EXP = '..crewmember.exp, 640, 340)
-  love.graphics.print('DEF = '..crewmember.def, 640, 368)
-  love.graphics.print('ATK = '..crewmember.atk, 640, 392)
-  love.graphics.print('EVA = '..crewmember.eva, 640, 421)
-  love.graphics.print('ACC = '..crewmember.acc, 640, 449)
+  love.graphics.print('EXP = '..crewmember.exp, 640, fightcontrols.y)
+  love.graphics.print('DEF = '..crewmember.def, 640, fightcontrols.y+28)
+  love.graphics.print('ATK = '..crewmember.atk, 640, fightcontrols.y+52)
+  love.graphics.print('EVA = '..crewmember.eva, 640, fightcontrols.y+79)
+  love.graphics.print('ACC = '..crewmember.acc, 640, fightcontrols.y+109)
   local pos = fightcontrols.y + (28 * (self.position.y)) - 4
-  love.graphics.line(50,pos, 630,pos, 630,fightcontrols.y-5, 720,fightcontrols.y-5, 720,fightcontrols.y+130, 630,fightcontrols.y+130, 630,pos+24, 50,pos+24, 50,pos)
+  if self.position.y == 0 then
+    love.graphics.line(50,pos, 630,pos, 720,fightcontrols.y-4, 720,fightcontrols.y+130, 630,fightcontrols.y+130, 630,pos+24, 50,pos+24, 50,pos)
+  else
+    love.graphics.line(50,pos, 630,pos, 630,fightcontrols.y-4, 720,fightcontrols.y-4, 720,fightcontrols.y+130, 630,fightcontrols.y+130, 630,pos+24, 50,pos+24, 50,pos)
+  end
 end
 
 function FightState:drawPlayerData(dt)
