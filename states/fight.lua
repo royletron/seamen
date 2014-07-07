@@ -9,6 +9,8 @@ shoot = 1
 defend = 2
 steer = 3
 
+local fightcontrols = {x=0, y=380}
+
 FightState = {baddie = nil}
 
 local renderers = {
@@ -40,10 +42,10 @@ function FightState:enter()
   for i=1, #player.crew do
     local crewmember = player.crew[i]
     crewmember.currentaction = 0
-    table.insert(self.crew_progress, ProgressBar(320, 340 + (28 * (i - 1)), 10, 0, 10))
-    table.insert(self.buttons, Button(410, 340 + (28 * (i - 1)), 54, TILE_H, 'shoot', self.position, {x=0, y=i-1}))
-    table.insert(self.buttons, Button(474, 340 + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
-    table.insert(self.buttons, Button(544, 340 + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
+    table.insert(self.crew_progress, ProgressBar(320, fightcontrols.y + (28 * (i - 1)), 10, 0, 10))
+    table.insert(self.buttons, Button(410, fightcontrols.y + (28 * (i - 1)), 54, TILE_H, 'shoot', self.position, {x=0, y=i-1}))
+    table.insert(self.buttons, Button(474, fightcontrols.y + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
+    table.insert(self.buttons, Button(544, fightcontrols.y + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
   end
 end
 
@@ -91,6 +93,9 @@ function FightState:triggerButton()
     local crewmember = player.crew[self.position.y + 1]
     local action = self.position.x + 1
     crewmember.currentaction = action
+    if action == shoot then
+      player:shoot(crewmember, self.baddie)
+    end
     local progress = self.crew_progress[self.position.y + 1]
     progress:setValue(0)
     self:moveCursor('y', 1)
@@ -111,6 +116,7 @@ function FightState:draw(dt)
   end
 end
 
+
 function FightState:drawSelectedData(dt)
   local crewmember = player.crew[self.position.y + 1]
   love.graphics.setColor(255,255,255,255)
@@ -119,8 +125,8 @@ function FightState:drawSelectedData(dt)
   love.graphics.print('ATK = '..crewmember.atk, 640, 392)
   love.graphics.print('EVA = '..crewmember.eva, 640, 421)
   love.graphics.print('ACC = '..crewmember.acc, 640, 449)
-  local pos = 340 + (28 * (self.position.y)) - 4
-  love.graphics.line(50,pos, 630,pos, 630,335, 720,335, 720,470, 630,470, 630,pos+24, 50,pos+24, 50,pos)
+  local pos = fightcontrols.y + (28 * (self.position.y)) - 4
+  love.graphics.line(50,pos, 630,pos, 630,fightcontrols.y-5, 720,fightcontrols.y-5, 720,fightcontrols.y+130, 630,fightcontrols.y+130, 630,pos+24, 50,pos+24, 50,pos)
 end
 
 function FightState:drawPlayerData(dt)
@@ -132,7 +138,7 @@ function FightState:drawPlayerData(dt)
       if crewmember.currentaction == defend then action = ' is defending' end
       if crewmember.currentaction == steer then action = ' is steering' end
     end
-    love.graphics.print(crewmember.name..action, 10 + TILE_W * 2 + 29, 340 + (28 * (i - 1)))
+    love.graphics.print(crewmember.name..action, 10 + TILE_W * 2 + 29, fightcontrols.y + (28 * (i - 1)))
   end
 end
 
