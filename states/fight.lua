@@ -107,6 +107,7 @@ function FightState:draw(dt)
     renderer:draw(dt)
   end
   self:drawPlayerData(dt)
+  self:drawShipStatuses(dt)
   for key, button in pairs(self.buttons) do
     button:draw(dt)
   end
@@ -116,6 +117,10 @@ function FightState:draw(dt)
   end
 end
 
+function FightState:drawShipStatuses(dt)
+  love.graphics.setColor(255,255,255,255)
+  love.graphics.printf(player.ship.name, 40, 320, 200, "center")
+end
 
 function FightState:drawSelectedData(dt)
   local crewmember = player.crew[self.position.y + 1]
