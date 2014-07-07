@@ -1,8 +1,9 @@
 class = require '30log'
+Ship = require 'entities.ship'
 
 namegenerator = require 'namegenerator'
 
-Baddie = class ()
+Baddie = Ship:extends{}
 Baddie.__name = 'Baddie'
 
 function Baddie:__init(x, y)

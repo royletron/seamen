@@ -1,21 +1,21 @@
 class = require '30log'
+Ship = require 'entities.ship'
 
 namegenerator = require 'namegenerator'
 
 Crew = require 'entities.crew'
 
-Player = class ()
+Player = Ship:extends{maxhealth = 100,
+											health = 100,
+											level = 1,
+											exp = 0,
+											money = 30,
+											inventory = {{name = 'Bread', quantity = 10}},
+											position = {},
+											camera = {},
+											ship = {},
+											crew = {}}
 Player.__name = 'Player'
-Player.maxhealth = 100
-Player.health = 100
-Player.level = 1
-Player.exp = 0
-Player.money = 30
-Player.inventory = {{name = 'Bread', quantity = 10}}
-Player.position = {}
-Player.ship = {}
-Player.camera = {}
-Player.crew = {}
 
 function Player:__init()
 	self.ship.name = namegenerator.pirateShipName()
