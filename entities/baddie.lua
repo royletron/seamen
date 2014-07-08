@@ -22,8 +22,8 @@ function Baddie:__init(x, y)
 
   self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
-  self.health = 40
-  self.maxhealth = 40
+  self.health = (40 * self.level) + ((math.random(1,2) * math.ceil(self.level/10)) * 10)
+  self.maxhealth = self.health
   if self.is_ghost then
     self.foreground = Colour(255, 255, 255, 255)
     self.background = Colour(200, 200, 200, 225)

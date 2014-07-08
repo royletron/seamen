@@ -126,7 +126,7 @@ end
 function FightState:drawShipStatuses(dt)
   love.graphics.setColor(255,255,255,255)
   love.graphics.printf(player.ship.name, 100, 300, 200, "center")
-  love.graphics.printf(self.baddie.ship.name, 500, 300, 200, "center")
+  love.graphics.printf(self.baddie.ship.name.." (lvl "..self.baddie.level..")", 500, 300, 200, "center")
   love.graphics.print(player.health .. '/' .. player.maxhealth, 285, 320)
   love.graphics.print(self.baddie.health .. '/' .. self.baddie.maxhealth, 685, 320)
   love.graphics.setColor(254,67,101,255)
