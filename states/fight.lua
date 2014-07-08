@@ -49,10 +49,6 @@ function FightState:enter()
   end
   self.playerhealth = ProgressBar(120, 320, 20, 0, player.maxhealth)
   self.baddiehealth = ProgressBar(520, 320, 20, 0, self.baddie.maxhealth)
-  self.playerhealth:setValue(player.health)
-  self.baddiehealth:setValue(self.baddie.health)
-  self.playerhealth:update(0.1)
-  self.baddiehealth:update(0.1)
 end
 
 function FightState:keypressed(key, unicode)
@@ -100,7 +96,8 @@ function FightState:triggerButton()
     local action = self.position.x + 1
     crewmember.currentaction = action
     if action == shoot then
-      player:shoot(crewmember, self.baddie)
+      local shotresult = player:shoot(crewmember, self.baddie)
+      if shotresult.hit == true then self.baddie.health = self.baddie.health - math.floor(shotresult.value) end
     end
     local progress = self.crew_progress[self.position.y + 1]
     progress:setValue(0)
@@ -166,6 +163,12 @@ function FightState:drawPlayerData(dt)
 end
 
 function FightState:updatePlayerData(dt)
+
+  self.playerhealth:setValue(player.health)
+  self.baddiehealth:setValue(self.baddie.health)
+  self.playerhealth:update(dt)
+  self.baddiehealth:update(dt)
+
   for i=1, #player.crew do
     local progress = self.crew_progress[i]
     local crewmember = player.crew[i]

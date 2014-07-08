@@ -57,7 +57,15 @@ function Ship:shoot(crew, target)
       result.hit = math.random(1,10) > 7
     end
   end
-  
+
+  local attack = atk*randomFactor(self) - def*randomFactor(target)
+  if attack < (atk/2) then
+    result.value = atk/2
+  else
+    result.value = atk
+  end
+
+  return result
   --print("atk ="..atk*randomFactor(self))
   --print("def ="..def*randomFactor(target))
   --print("acc ="..acc*randomFactor(self))
