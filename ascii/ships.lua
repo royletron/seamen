@@ -42,6 +42,9 @@ SHIP_BG = {{
   [[                           ]]}, bgcolour = Colour(100,100,100,255)
   }
 
+CANNONBALL = {{[[ _ ]],
+               [[(_)]], bgcolour = Colour(100,100,100,255), colour=Colour(255,255,255,255)}}
+
 FIGHT_BG = {{
   [[                                                                                                    ]],
   [[                                                                                                    ]],

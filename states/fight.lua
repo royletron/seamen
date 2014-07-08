@@ -13,6 +13,8 @@ local fightcontrols = {x=0, y=380}
 
 FightState = {baddie = nil}
 
+local projectiles = {}
+
 local renderers = {
   ship_renderer = Renderer(7, 70, 98, 21, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
@@ -97,6 +99,11 @@ function FightState:triggerButton()
     crewmember.currentaction = action
     if action == shoot then
       local shotresult = player:shoot(crewmember, self.baddie)
+      local endx = 70
+      if shotresult.hit == true then
+        if math.random(1,10) > 5 then endx = 50 else endx = 90 end
+      end
+      table.insert(projectiles, {result = shotresult, counter = 0, startx = 20, starty = 20, endx })
       if shotresult.hit == true then self.baddie.health = self.baddie.health - math.floor(shotresult.value) end
     end
     local progress = self.crew_progress[self.position.y + 1]
