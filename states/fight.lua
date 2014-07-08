@@ -103,7 +103,7 @@ function FightState:triggerButton()
       if shotresult.hit == true then
         if math.random(1,10) > 5 then endx = 50 else endx = 90 end
       end
-      table.insert(projectiles, {result = shotresult, counter = 0, startx = 20, starty = 20, endx })
+      table.insert(projectiles, {result = shotresult, counter = 0, startx = 20, starty = 20, endx = endx, endy = 20, bezierx = (endx-20) + math.floor(math.random(0,5)), beziery = 5 + math.floor(math.random(0,5)), framerate = 10, position = 0, sprite = AsciiSprite(CANNONBALL)})
       if shotresult.hit == true then self.baddie.health = self.baddie.health - math.floor(shotresult.value) end
     end
     local progress = self.crew_progress[self.position.y + 1]
@@ -202,6 +202,9 @@ end
 function FightState:update(dt)
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
+  end
+  for key, projectile in pairs(projectiles) do
+
   end
   self:updatePlayerData(dt)
   for i=1, #self.crew_progress, 1 do
