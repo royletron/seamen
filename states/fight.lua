@@ -100,10 +100,10 @@ function FightState:triggerButton()
     if action == shoot then
       local shotresult = player:shoot(crewmember, self.baddie)
       local endx = 70
-      if shotresult.hit == true then
+      if shotresult.hit == false then
         if math.random(1,10) > 5 then endx = 50 else endx = 90 end
       end
-      local projectile = {result = shotresult, counter = 0, startx = 20, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = 1 + math.floor(math.random(0,3)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30}
+      local projectile = {result = shotresult, counter = 0, startx = 20, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30}
       projectile.sprite.x = projectile.startx
       projectile.sprite.y = projectile.starty
       renderers.ship_renderer.ascii:add(projectile.sprite)
@@ -210,11 +210,21 @@ function FightState:update(dt)
     if projectile.counter > (1 / projectile.framerate) then
       projectile.counter = 0
       projectile.position = projectile.position + 1
-      if projectile.position > projectile.speed then projectile.position = projectile.speed end
-      local t = projectile.position/projectile.speed
-      projectile.sprite.x = math.floor((((1-t)*(1-t))*projectile.startx) + (2*(1-t)*t*projectile.bezierx) + ((t*t)*projectile.endx))
-      projectile.sprite.y = math.floor((((1-t)*(1-t))*projectile.starty) + (2*(1-t)*t*projectile.beziery) + ((t*t) *projectile.endy))
-      print(projectile.sprite.x .. ":" .. projectile.sprite.y)
+      if projectile.position > projectile.speed then
+        if projectile.result.hit == true then
+          self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
+        end
+
+        table.remove(projectiles, key)
+        renderers.ship_renderer.ascii:remove(projectile.sprite)
+        projectile.sprite = nil
+        projectile = nil
+      else
+        local t = projectile.position/projectile.speed
+        projectile.sprite.x = math.floor((((1-t)*(1-t))*projectile.startx) + (2*(1-t)*t*projectile.bezierx) + ((t*t)*projectile.endx))
+        projectile.sprite.y = math.floor((((1-t)*(1-t))*projectile.starty) + (2*(1-t)*t*projectile.beziery) + ((t*t) *projectile.endy))
+        --print(projectile.sprite.x .. ":" .. projectile.sprite.y)
+      end
     end
   end
 
