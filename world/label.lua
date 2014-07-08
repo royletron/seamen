@@ -10,7 +10,7 @@ end
 function Label:draw(dt)
   love.graphics.setFont(self.font);
   love.graphics.setColor(self.bgcolour.r, self.bgcolour.g, self.bgcolour.b, self.bgcolour.a)
-  love.graphics.rectangle("fill", self.x-3, self.y-3, (string.len(self.text)*self.font:getWidth(' '))+4, self.font:getHeight() )
+  love.graphics.rectangle("fill", self.x-2, self.y-2, (string.len(self.text)*self.font:getWidth(' '))+4, self.font:getHeight()+4)
 
   love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b, self.colour.a)
   love.graphics.print( self.text, self.x, self.y )
