@@ -3,6 +3,8 @@ local AsciiSprite = require('ascii.ascii_sprite')
 local AsciiShip = require('ascii.ascii_ship')
 local Renderer = require('display.renderer')
 local ProgressBar = require('display.progress_bar')
+local tween = require('hump.tween')
+local Label = require('world.label')
 --AvatarTalker = require('display.AvatarTalker')
 
 shoot = 1
@@ -14,6 +16,7 @@ local fightcontrols = {x=0, y=380}
 FightState = {baddie = nil}
 
 local projectiles = {}
+local hitlabels = {}
 
 local renderers = {
   ship_renderer = Renderer(7, 70, 98, 21, label_font, char_font),
@@ -129,6 +132,9 @@ function FightState:draw(dt)
   for i=1, #self.crew_progress, 1 do
     self.crew_progress[i]:draw(dt)
   end
+  for key, hitlabel in pairs(hitlabels) do
+    hitlabel.label:draw(dt)
+  end
 end
 
 function FightState:drawShipStatuses(dt)
@@ -204,7 +210,6 @@ function FightState:updatePlayerData(dt)
 end
 
 function FightState:update(dt)
-
   for key, projectile in pairs(projectiles) do
     projectile.counter = projectile.counter + dt
     if projectile.counter > (1 / projectile.framerate) then
@@ -213,6 +218,9 @@ function FightState:update(dt)
       if projectile.position > projectile.speed then
         if projectile.result.hit == true then
           self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
+          local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
+          local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
+          table.insert(hitlabels, hitlabel)
         end
 
         table.remove(projectiles, key)
@@ -227,7 +235,13 @@ function FightState:update(dt)
       end
     end
   end
-
+  for key, hitlabel in pairs(hitlabels) do
+    if hitlabel.tween:update(dt) == true then
+      hitlabel.tween = nil
+      hitlabel.label = nil
+      table.remove(hitlabels, key)
+    end
+  end
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
   end

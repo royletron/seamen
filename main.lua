@@ -44,6 +44,7 @@ TILE_W = char_font:getWidth(' ')
 TILE_H = char_font:getHeight()
 
 label_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 10 )
+animated_label_font = love.graphics.newFont( 'fonts/DejaVuSansMono.ttf', 18)
 pirate_font = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 20 )
 pirate_font_small = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 15 )
 
