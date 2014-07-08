@@ -26,6 +26,25 @@ function Crew:__init(_tally)
   self.acc = randomvars[4]
 end
 
+-- Attempting get and set methods wish me luck
+
+function Crew:__newindex(index, value)
+  local f = false
+  if index == "def" then self._def = value f = true end
+  if index == "eva" then self._eva = value f = true end
+  if index == "atk" then self._atk = value f = true end
+  if index == "acc" then self._acc = value f = true end
+  if f == false then rawset(self, index, value) end
+end
+
+function Crew:__index(index)
+  if index == "def" then return self._def * self.level end
+  if index == "eva" then return self._eva * self.level end
+  if index == "atk" then return self._atk * self.level end
+  if index == "acc" then return self._acc * self.level end
+  return rawget(self, index)
+end
+
 function shuffled(tab)
   local n, order, res = #tab, {}, {}
 
