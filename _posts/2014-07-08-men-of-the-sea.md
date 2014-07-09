@@ -15,3 +15,11 @@ tags : [intro, development]
 * **~** A world like no other for you to claim as 'yer own.
 * **~** Highly accurate sea physics engine and cannon-tec system.
 * **~** Sophisticated AI including NPC's that you'll want to drink grog with.
+* **~** A perfect recreation of the day night cycle found in the real world <span class="text-success">warning may not actually reflect real time</span>
+* **~** Epic battles between other vessels, including a crew battles
+* **~** Spooky ghost ships that attack at night
+* **~** Explore the land, for treasure obvs, using the super advanced disembarkation tool
+
+**And so many more that it just felt like we were showing off to put here**
+
+
