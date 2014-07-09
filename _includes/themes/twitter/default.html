@@ -30,11 +30,11 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            {% assign pages_list = site.pages %}
+            {% assign pages_list = (site.pages | sort: 'weight')  %}
             {% assign group = 'navigation' %}
             {% include JB/pages_list %}
         </ul>
-        <h3>Sea-Men</h3>
+        <a href="{{ site.baseurl }}"><h3>Sea-Men</h3></a>
       </div>
 
       <hr>

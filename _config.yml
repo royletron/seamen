@@ -56,7 +56,7 @@ JB :
   #   - Only the following values are falsy: ["", null, false]
   #   - When setting BASE_PATH it must be a valid url.
   #     This means always setting the protocol (http|https) or prefixing with "/"
-  BASE_PATH : false
+  BASE_PATH : http://royletron.github.io/seamen
 
   # By default, the asset_path is automatically defined relative to BASE_PATH plus the enabled theme.
   # ex: [BASE_PATH]/assets/themes/[THEME-NAME]
@@ -84,16 +84,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : jekyllbootstrap
-    livefyre :
-      site_id : 123
-    intensedebate :
-      account : 123abc
-    facebook :
-      appid : 123
-      num_posts: 5
-      width: 580
-      colorscheme: light
+      short_name : seamen
 
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
@@ -125,8 +116,8 @@ JB :
   # Settings for all other include helpers can be defined by creating
   # a hash with key named for the given helper. ex:
   #
-  #   pages_list :
-  #     provider : "custom"
+  pages_list : ['blog', 'archive']
+
   #
   # Setting any helper's provider to 'custom' will bypass the helper code
   # and include your custom code. Your custom file must be defined at:

@@ -1,0 +1,22 @@
+---
+layout: page
+title: Blog
+header: Blog
+link: Blog
+group: navigation
+tagline: From the dev's brain to your terminal
+weight: 3
+---
+{% include JB/setup %}
+
+<ul >
+
+      {% for post in site.posts limit 4 %}
+      <li>
+        <div class="page-header">
+          <h1><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date_to_string }}</small></h1>
+        </div></li>
+          {{ post.content | truncatewords:50}}<br>
+          <a href="{{ post.url }}">Read more...</a><br><br>
+      {% endfor %}
+</ul>
