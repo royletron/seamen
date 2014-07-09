@@ -30,9 +30,16 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-            {% assign pages_list = (site.pages | sort: 'weight')  %}
-            {% assign group = 'navigation' %}
-            {% include JB/pages_list %}
+          {% assign pages_list = (site.pages | sort: 'weight')  %}
+          {% for node in pages_list %}
+            {% if node.link != null %}
+              {% if page.url == node.url %}
+              <li class="active"><a href="{{ BASE_PATH }}{{node.url}}" class="active">{{node.link}}</a></li>
+              {% else %}
+              <li><a href="{{ BASE_PATH }}{{node.url}}">{{node.link}}</a></li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
         </ul>
         <a href="{{ site.baseurl }}"><h3>Sea-Men</h3></a>
       </div>
