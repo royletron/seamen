@@ -30,16 +30,19 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li><a href="#test">Test</a>
-          {% for node in site.pages %}
-            {% if node.link != null %}
-              {% if page.url == node.url %}
-              <li class="active"><a href="{{ BASE_PATH }}{{node.url}}" class="active">{{node.link}}</a></li>
-              {% else %}
-              <li><a href="{{ BASE_PATH }}{{node.url}}">{{node.link}}</a></li>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
+          {% for weight in (1..10) %}
+  {% for p in site.pages %}
+    {% if p.weight == weight %}
+      <li>
+                      {% if page.url == p.url %}
+                      <li class="active"><a href="{{ BASE_PATH }}{{p.url}}" class="active">{{p.link}}</a></li>
+                      {% else %}
+                      <li><a href="{{ BASE_PATH }}{{p.url}}">{{p.link}}</a></li>
+                      {% endif %}
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endfor %}
         </ul>
         <a href="{{ site.baseurl }}"><h3>Sea-Men</h3></a>
       </div>
