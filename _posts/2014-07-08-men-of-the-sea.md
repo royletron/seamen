@@ -11,7 +11,7 @@ tags : [intro, development]
 
 ####Features
 
-* Ultra hi-rez graphix featuring full text sea animations <span class="text-success">warning may induce realistic nausia.</span>
-* A world like no other for you to claim as 'yer own.
-* Highly accurate sea physics engine and cannon-tec system.
-* Sophisticated AI including NPC's that you'll want to drink grog with.
+* **~** Ultra hi-rez graphix featuring full text sea animations <span class="text-success">warning may induce realistic nausia.</span>
+* **~** A world like no other for you to claim as 'yer own.
+* **~** Highly accurate sea physics engine and cannon-tec system.
+* **~** Sophisticated AI including NPC's that you'll want to drink grog with.
