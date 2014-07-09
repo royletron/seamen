@@ -5,10 +5,13 @@ tagline: "Welcome to the Sea-Men blog!"
 tags : [intro, development]
 ---
 
-Cras mattis consectetur purus sit amet fermentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed odio dui. Curabitur blandit tempus porttitor.
+##It's the salty seas captain!##
 
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+'Arggg 'me arties and come in to the development blog for this 'ere pirate sim a couple'o salty dogs are putting together. The idea of Sea-men <strong>'men of the sea'</strong> is quite simple, to make the finest pirate sim in all the land!
 
-Donec id elit non mi porta gravida at eget metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed odio dui. Vestibulum id ligula porta felis euismod semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+####Features
 
-Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam id dolor id nibh ultricies vehicula ut id elit.
+* Ultra hi-rez graphix featuring full text sea animations <span class="text-success">warning may induce realistic nausia.</span>
+* A world like no other for you to claim as 'yer own.
+* Highly accurate sea physics engine and cannon-tec system.
+* Sophisticated AI including NPC's that you'll want to drink grog with.
