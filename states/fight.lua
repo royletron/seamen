@@ -19,7 +19,7 @@ local projectiles = {}
 local hitlabels = {}
 
 local renderers = {
-  ship_renderer = Renderer(7, 70, 98, 21, label_font, char_font),
+  ship_renderer = Renderer(7, 70, 98, 14, label_font, char_font),
   hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
 }
 
@@ -29,6 +29,7 @@ function FightState:enter()
   self.position = {x=0, y=-1}
   self.maxposition = {x=2, y=#player.crew-1}
   self.buttons = {}
+  self.deathanim = nil
   local ship = AsciiRenderer()
   ship:add(AsciiSprite(FIGHT_BG))
   local water_bg = AsciiSprite(WATER_ANIMATION, Colour(96,120,144,255))
@@ -57,7 +58,7 @@ function FightState:enter()
 end
 
 function FightState:baddieKilled()
-  print('ug you got me')
+  self.deathanim = tween.new(3, self.baddiesprite, {y = 13})
 end
 
 function FightState:keypressed(key, unicode)
@@ -214,6 +215,12 @@ function FightState:updatePlayerData(dt)
 end
 
 function FightState:update(dt)
+
+  if self.deathanim ~= nil then
+    if self.deathanim:update(dt) == true then
+    end
+  end
+
   for key, projectile in pairs(projectiles) do
     projectile.counter = projectile.counter + dt
     if projectile.counter > (1 / projectile.framerate) then
@@ -225,7 +232,10 @@ function FightState:update(dt)
           local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
           local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
           table.insert(hitlabels, hitlabel)
-          if self.baddie.alive == false then self:baddieKilled() end
+          if self.baddie.alive == false then
+            self.baddie.health = 0
+            self:baddieKilled()
+          end
         end
 
         table.remove(projectiles, key)

@@ -38,14 +38,14 @@ function AsciiRenderer:getFrame(dt)
       frame = s:getFrame(dt)
       if frame ~= nil then
         for x=1, #frame, 1 do
-          if frame[x] ~= nil then
-            for y=1, #frame[x], 1 do
-              if frame[x][y] ~= nil then
-                if buffer[x + s.x] == nil then
-                  buffer[x + s.x] = {}
+          if frame[math.floor(x)] ~= nil then
+            for y=1, #frame[math.floor(x)], 1 do
+              if frame[math.floor(x)][math.floor(y)] ~= nil then
+                if buffer[math.floor(x + s.x)] == nil then
+                  buffer[math.floor(x + s.x)] = {}
                 end
-                if frame[x][y].char ~= ' ' then
-                  buffer[x + s.x][y + s.y] = frame[x][y]
+                if frame[math.floor(x)][math.floor(y)].char ~= ' ' then
+                  buffer[math.floor(x + s.x)][math.floor(y + s.y)] = frame[math.floor(x)][math.floor(y)]
                 end
               end
             end
