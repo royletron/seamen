@@ -56,6 +56,10 @@ function FightState:enter()
   self.baddiehealth = ProgressBar(520, 320, 20, 0, self.baddie.maxhealth)
 end
 
+function FightState:baddieKilled()
+  print('ug you got me')
+end
+
 function FightState:keypressed(key, unicode)
   if key == 'down' then self:moveCursor('y', 1) end
   if key == 'up' then self:moveCursor('y', -1) end
@@ -221,6 +225,7 @@ function FightState:update(dt)
           local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
           local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
           table.insert(hitlabels, hitlabel)
+          if self.baddie.alive == false then self:baddieKilled() end
         end
 
         table.remove(projectiles, key)

@@ -33,6 +33,12 @@ function Baddie:__init(x, y)
   end
 end
 
+
+function Baddie:__index(index)
+  if index == "alive" then print(self.health) return self.health > 0 end
+  return rawget(self, index)
+end
+
 function Baddie:update(dt)
   self.counter = self.counter + dt
   if self.counter > self.speed then
