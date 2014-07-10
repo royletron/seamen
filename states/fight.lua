@@ -26,6 +26,7 @@ local renderers = {
 --local crest_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
 function FightState:enter()
+  self.fightexp = 0
   self.position = {x=0, y=-1}
   self.maxposition = {x=2, y=#player.crew-1}
   self.buttons = {}
@@ -59,6 +60,10 @@ end
 
 function FightState:baddieKilled()
   self.deathanim = tween.new(3, self.baddiesprite, {y = 13})
+end
+
+function FightState:increseExp(val)
+
 end
 
 function FightState:keypressed(key, unicode)
@@ -218,6 +223,9 @@ function FightState:update(dt)
 
   if self.deathanim ~= nil then
     if self.deathanim:update(dt) == true then
+      --end
+      removeBaddie(self.baddie)
+      Gamestate.switch(WorldMapState)
     end
   end
 

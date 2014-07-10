@@ -32,6 +32,12 @@ WorldMapState = {}
 
 baddies = {}
 
+function removeBaddie(baddie)
+  for k,v in pairs(baddies) do
+      if baddie == v then table.remove(baddies, k) break end
+  end
+end
+
 function WorldMapState:init()
   local ship = AsciiRenderer()
   ship:add(AsciiSprite(SHIP_BG))
