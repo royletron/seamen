@@ -54,8 +54,9 @@ function FightState:enter()
     table.insert(self.buttons, Button(474, fightcontrols.y + (28 * (i - 1)), 60, TILE_H, 'defend', self.position, {x=1, y=i-1}))
     table.insert(self.buttons, Button(544, fightcontrols.y + (28 * (i - 1)), 54, TILE_H, 'steer', self.position, {x=2, y=i-1}))
   end
-  self.playerhealth = ProgressBar(120, 320, 20, 0, player.maxhealth)
-  self.baddiehealth = ProgressBar(520, 320, 20, 0, self.baddie.maxhealth)
+  self.playerhealth = ProgressBar(120, 310, 20, 0, player.maxhealth)
+  self.baddiehealth = ProgressBar(520, 310, 20, 0, self.baddie.maxhealth)
+  self.baddieturn = ProgressBar(520, 340, 20, 0, 10)
 end
 
 function FightState:baddieKilled()
@@ -149,15 +150,16 @@ end
 
 function FightState:drawShipStatuses(dt)
   love.graphics.setColor(255,255,255,255)
-  love.graphics.printf(player.ship.name, 100, 300, 200, "center")
-  love.graphics.printf(self.baddie.ship.name.." (lvl "..self.baddie.level..")", 500, 300, 200, "center")
-  love.graphics.print(player.health .. '/' .. player.maxhealth, 285, 320)
-  love.graphics.print(self.baddie.health .. '/' .. self.baddie.maxhealth, 685, 320)
+  love.graphics.printf(player.ship.name, 100, 290, 200, "center")
+  love.graphics.printf(self.baddie.ship.name.." (lvl "..self.baddie.level..")", 500, 290, 200, "center")
+  love.graphics.print(player.health .. '/' .. player.maxhealth, 285, 310)
+  love.graphics.print(self.baddie.health .. '/' .. self.baddie.maxhealth, 685, 310)
   love.graphics.setColor(254,67,101,255)
-  love.graphics.print('♥', 105, 320)
-  love.graphics.print('♥', 505, 320)
+  love.graphics.print('♥', 105, 310)
+  love.graphics.print('♥', 505, 310)
   self.playerhealth:draw(dt)
   self.baddiehealth:draw(dt)
+  self.baddieturn:draw(dt)
 end
 
 function FightState:drawSelectedData(dt)
@@ -193,8 +195,10 @@ function FightState:updatePlayerData(dt)
 
   self.playerhealth:setValue(player.health)
   self.baddiehealth:setValue(self.baddie.health)
+  self.baddieturn:setValue(self.baddieturn.value + self.baddie.speed)
   self.playerhealth:update(dt)
   self.baddiehealth:update(dt)
+  self.baddieturn:update(dt)
 
   for i=1, #player.crew do
     local progress = self.crew_progress[i]
