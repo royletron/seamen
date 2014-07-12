@@ -117,7 +117,7 @@ function FightState:triggerButton()
       if shotresult.hit == false then
         if math.random(1,10) > 5 then endx = 50 else endx = 90 end
       end
-      local projectile = {result = shotresult, counter = 0, startx = 20, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30}
+      local projectile = {result = shotresult, counter = 0, startx = 20, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30, baddie = false}
       projectile.sprite.x = projectile.startx
       projectile.sprite.y = projectile.starty
       renderers.ship_renderer.ascii:add(projectile.sprite)
@@ -191,11 +191,29 @@ function FightState:drawPlayerData(dt)
   end
 end
 
+function FightState:triggerBaddieMove()
+  local shotresult = self.baddie:shoot(self.baddie.statscrew, player)
+  local endx = 20
+  if shotresult.hit == false then
+    if math.random(1,10) > 5 then endx = 0 else endx = 40 end
+  end
+  local projectile = {result = shotresult, counter = 0, startx = 70, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30, baddie = true}
+  projectile.sprite.x = projectile.startx
+  projectile.sprite.y = projectile.starty
+  renderers.ship_renderer.ascii:add(projectile.sprite)
+  table.insert(projectiles, projectile)
+end
+
 function FightState:updatePlayerData(dt)
 
   self.playerhealth:setValue(player.health)
   self.baddiehealth:setValue(self.baddie.health)
   self.baddieturn:setValue(self.baddieturn.value + self.baddie.speed)
+
+  if self.baddieturn.value == self.baddieturn.max then
+    self:triggerBaddieMove()
+  end
+
   self.playerhealth:update(dt)
   self.baddiehealth:update(dt)
   self.baddieturn:update(dt)
@@ -240,13 +258,20 @@ function FightState:update(dt)
       projectile.position = projectile.position + 1
       if projectile.position > projectile.speed then
         if projectile.result.hit == true then
-          self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
-          local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
-          local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
-          table.insert(hitlabels, hitlabel)
-          if self.baddie.alive == false then
-            self.baddie.health = 0
-            self:baddieKilled()
+          if projectile.baddie == false then
+            self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
+            local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
+            local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
+            table.insert(hitlabels, hitlabel)
+            if self.baddie.alive == false then
+              self.baddie.health = 0
+              self:baddieKilled()
+            end
+          else
+            player.health = player.health - math.floor(projectile.result.value)
+            local label = Label(150, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
+            local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
+            table.insert(hitlabels, hitlabel)
           end
         end
 

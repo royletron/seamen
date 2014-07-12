@@ -13,14 +13,14 @@ function Baddie:__init(x, y)
   self.mapspeed = math.random(1,3)
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
 
-  local statscrew = Crew(55)
+  self.statscrew = Crew(55)
 
-  self.def = statscrew.def
-  self.atk = statscrew.atk
-  self.acc = statscrew.acc
-  self.eva = statscrew.eva
+  self.def = self.statscrew.def
+  self.atk = self.statscrew.atk
+  self.acc = self.statscrew.acc
+  self.eva = self.statscrew.eva
 
-  self.speed = statscrew.speed
+  self.speed = self.statscrew.speed
 
   self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
