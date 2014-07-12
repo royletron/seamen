@@ -12,6 +12,16 @@ function Baddie:__init(x, y)
   self.counter = 0
   self.mapspeed = math.random(1,3)
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
+  self.is_ghost = love.math.random() > 0.9
+  if self.is_ghost then
+    self.destination = nil
+  else
+    self.destination = fn.random(world.towncache)
+  end
+
+  if self.destination ~= nil then
+    self.path = world.pathfinder:getPath(self.x, self.y, self.destination.x, self.destination.y)
+  end
 
   local statscrew = Crew(55)
 
@@ -19,10 +29,8 @@ function Baddie:__init(x, y)
   self.atk = statscrew.atk
   self.acc = statscrew.acc
   self.eva = statscrew.eva
-
   self.speed = statscrew.speed
 
-  self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
   self.health = (40 * self.level) + ((math.random(1,2) * math.ceil(self.level/10)) * 10)
   self.maxhealth = self.health
@@ -50,11 +58,32 @@ function Baddie:update(dt)
 end
 
 function Baddie:move()
-  local direction = math.random(1,4)
-  if direction == 1 then self:goto(self.x + 1, self.y) end
-  if direction == 2 then self:goto(self.x - 1, self.y) end
-  if direction == 3 then self:goto(self.x, self.y + 1) end
-  if direction == 4 then self:goto(self.x, self.y - 1) end
+  local x, y = 0, 0
+
+  if self.path ~= nil then
+    -- if self.x < self.destination.x then x = 1 end
+    -- if self.x > self.destination.x then x = -1 end
+    -- if self.y > self.destination.y then y = -1 end
+    -- if self.y < self.destination.y then y = 1 end
+  else
+    local direction = math.random(1,4)
+    if direction == 1 then x = 1 end
+    if direction == 2 then x = -1 end
+    if direction == 3 then y = 1 end
+    if direction == 4 then y = -1 end
+  end
+
+  x = self.x + x
+  y = self.y + y
+
+  local tile = fn.try(world['base'], x, y)
+
+  self:goto(x, y)
+  -- local direction = math.random(1,4)
+  -- if direction == 1 then self:goto(self.x + 1, self.y) end
+  -- if direction == 2 then self:goto(self.x - 1, self.y) end
+  -- if direction == 3 then self:goto(self.x, self.y + 1) end
+  -- if direction == 4 then self:goto(self.x, self.y - 1) end
 end
 
 function Baddie:goto(x, y)

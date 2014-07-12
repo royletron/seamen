@@ -61,9 +61,9 @@ function WorldMapState:init()
 
   for bx=player.position.x-world_renderer.w, player.position.x+world_renderer.w, 1 do
     -- numwater = 0
-    if bx > 0 and bx < #world['base'] then
+    if bx > 1 and bx < #world['base'] then
       for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
-        if by > 0 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
+        if by > 1 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
           table.insert(baddies, Baddie(bx, by))
         end
       end
@@ -249,8 +249,27 @@ function WorldMapState:draw(dt)
     love.graphics.print('☠', 10 + TILE_W * 2 + 5, 70 + 20 * TILE_H + 30 + (24 * (i - 1)))
   end
 
+  love.graphics.push()
+  love.graphics.translate(world_renderer.x, world_renderer.y)
+  love.graphics.translate(-player.camera.x * TILE_W, -player.camera.y * TILE_H)
+
+  for i=1, #baddies do
+    local baddie = baddies[i]
+    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.rectangle('line', (baddie.x - 1) * TILE_W, (baddie.y - 1) * TILE_H, TILE_W, TILE_H)
+    if baddie.path then
+      for node, count in baddie.path:nodes() do
+        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.rectangle('line', (node:getX() - 1) * TILE_W, (node:getY() - 1) * TILE_H, TILE_W, TILE_H)
+      end
+    end
+  end
+
+  love.graphics.pop()
+
   love.graphics.setColor(42,143,189,255)
   love.graphics.setFont(char_font)
+
 
   for i=1, #player.crew do
     crewmember = player.crew[i]

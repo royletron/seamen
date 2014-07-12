@@ -13,6 +13,9 @@ Town = require('town')
 World.year = nil
 World.date = nil
 
+local Grid = require ("jumper.grid") -- The grid class
+local Pathfinder = require ("jumper.pathfinder") -- The pathfinder lass
+
 require('perlin')
 fn = require('fn')
 
@@ -127,6 +130,15 @@ function World:__init(w,h)
 
   self.date = os.time{year=2014, month=math.random(1, 12), day=math.random(1, 31), hour=math.random(1, 23)}
   self.year = 1650
+
+  local map = fn.map(function(col)
+    return fn.map(function(row)
+      return row.type
+    end, col)
+  end, self['base'])
+
+  self.basegrid = Grid(map)
+  self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', water)
 
   return World
 end
