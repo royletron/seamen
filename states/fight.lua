@@ -197,7 +197,7 @@ function FightState:triggerBaddieMove()
   if shotresult.hit == false then
     if math.random(1,10) > 5 then endx = 0 else endx = 40 end
   end
-  local projectile = {result = shotresult, counter = 0, startx = 70, starty = 10, endx = endx, endy = 10, bezierx = (endx-20)/2, beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30, baddie = true}
+  local projectile = {result = shotresult, counter = 0, startx = 70, starty = 10, endx = endx, endy = 10, bezierx = endx + ((70-endx)/2), beziery = -10 + math.floor(math.random(0,7)), framerate = 20, position = 0, sprite = AsciiSprite(CANNONBALL), speed = 30, baddie = true}
   projectile.sprite.x = projectile.startx
   projectile.sprite.y = projectile.starty
   renderers.ship_renderer.ascii:add(projectile.sprite)
@@ -212,6 +212,7 @@ function FightState:updatePlayerData(dt)
 
   if self.baddieturn.value == self.baddieturn.max then
     self:triggerBaddieMove()
+    self.baddieturn:setValue(0)
   end
 
   self.playerhealth:update(dt)
