@@ -6,7 +6,7 @@ Crew = class ()
 Crew.__name = 'Crew'
 
 function Crew:__init(_tally)
-  self.speed = math.random(50,80)/1000
+  self.speed = math.random(50,150)/3000
   self.name=namegenerator.pirateName()
   self.level = 1
   self.exp = 0

@@ -20,7 +20,7 @@ function Baddie:__init(x, y)
   self.acc = self.statscrew.acc
   self.eva = self.statscrew.eva
 
-  self.speed = self.statscrew.speed
+  self.speed = math.random(50,110)/3000
 
   self.is_ghost = love.math.random() > 0.9
   self.ascii = SHIP_CLIPPER
