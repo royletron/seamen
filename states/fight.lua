@@ -26,6 +26,7 @@ local renderers = {
 --local crest_renderer = Renderer(7, 70, 28, 20,label_font,char_font)
 
 function FightState:enter()
+  self.paused = false
   self.fightexp = 0
   self.position = {x=0, y=-1}
   self.maxposition = {x=2, y=#player.crew-1}
@@ -60,6 +61,7 @@ function FightState:enter()
 end
 
 function FightState:baddieKilled()
+  self.paused = true
   self.deathanim = tween.new(3, self.baddiesprite, {y = 13})
 end
 
@@ -205,7 +207,6 @@ function FightState:triggerBaddieMove()
 end
 
 function FightState:updatePlayerData(dt)
-
   self.playerhealth:setValue(player.health)
   self.baddiehealth:setValue(self.baddie.health)
   self.baddieturn:setValue(self.baddieturn.value + self.baddie.speed)
@@ -252,42 +253,49 @@ function FightState:update(dt)
     end
   end
 
-  for key, projectile in pairs(projectiles) do
-    projectile.counter = projectile.counter + dt
-    if projectile.counter > (1 / projectile.framerate) then
-      projectile.counter = 0
-      projectile.position = projectile.position + 1
-      if projectile.position > projectile.speed then
-        if projectile.result.hit == true then
-          if projectile.baddie == false then
-            self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
-            local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
-            local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
-            table.insert(hitlabels, hitlabel)
-            if self.baddie.alive == false then
-              self.baddie.health = 0
-              self:baddieKilled()
+  if self.paused == false then
+    for key, projectile in pairs(projectiles) do
+      projectile.counter = projectile.counter + dt
+      if projectile.counter > (1 / projectile.framerate) then
+        projectile.counter = 0
+        projectile.position = projectile.position + 1
+        if projectile.position > projectile.speed then
+          if projectile.result.hit == true then
+            if projectile.baddie == false then
+              self.baddie.health = self.baddie.health - math.floor(projectile.result.value)
+              local label = Label(550, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
+              local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
+              table.insert(hitlabels, hitlabel)
+              if self.baddie.alive == false then
+                self.baddie.health = 0
+                self:baddieKilled()
+              end
+            else
+              player.health = player.health - math.floor(projectile.result.value)
+              local label = Label(150, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
+              local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
+              table.insert(hitlabels, hitlabel)
             end
-          else
-            player.health = player.health - math.floor(projectile.result.value)
-            local label = Label(150, 150,Colour(0,0,0,50), Colour(255, 255, 255, 255), '-'..math.floor(projectile.result.value)..'hp', animated_label_font)
-            local hitlabel = {label = label, tween = tween.new(2, label, {y = 50})}
-            table.insert(hitlabels, hitlabel)
           end
-        end
 
-        table.remove(projectiles, key)
-        renderers.ship_renderer.ascii:remove(projectile.sprite)
-        projectile.sprite = nil
-        projectile = nil
-      else
-        local t = projectile.position/projectile.speed
-        projectile.sprite.x = math.floor((((1-t)*(1-t))*projectile.startx) + (2*(1-t)*t*projectile.bezierx) + ((t*t)*projectile.endx))
-        projectile.sprite.y = math.floor((((1-t)*(1-t))*projectile.starty) + (2*(1-t)*t*projectile.beziery) + ((t*t) *projectile.endy))
-        --print(projectile.sprite.x .. ":" .. projectile.sprite.y)
+          table.remove(projectiles, key)
+          renderers.ship_renderer.ascii:remove(projectile.sprite)
+          projectile.sprite = nil
+          projectile = nil
+        else
+          local t = projectile.position/projectile.speed
+          projectile.sprite.x = math.floor((((1-t)*(1-t))*projectile.startx) + (2*(1-t)*t*projectile.bezierx) + ((t*t)*projectile.endx))
+          projectile.sprite.y = math.floor((((1-t)*(1-t))*projectile.starty) + (2*(1-t)*t*projectile.beziery) + ((t*t) *projectile.endy))
+          --print(projectile.sprite.x .. ":" .. projectile.sprite.y)
+        end
       end
     end
+    self:updatePlayerData(dt)
+    for i=1, #self.crew_progress, 1 do
+      self.crew_progress[i]:update(dt)
+    end
   end
+
   for key, hitlabel in pairs(hitlabels) do
     if hitlabel.tween:update(dt) == true then
       hitlabel.tween = nil
@@ -297,9 +305,5 @@ function FightState:update(dt)
   end
   for key, renderer in pairs(renderers) do
     renderer:update(dt)
-  end
-  self:updatePlayerData(dt)
-  for i=1, #self.crew_progress, 1 do
-    self.crew_progress[i]:update(dt)
   end
 end
