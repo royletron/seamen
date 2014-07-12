@@ -256,11 +256,11 @@ function WorldMapState:draw(dt)
   for i=1, #baddies do
     local baddie = baddies[i]
     love.graphics.setColor(255, 0, 0, 255)
-    love.graphics.rectangle('line', ((baddie.x - 1) * TILE_W) + world_renderer.x, ((baddie.y - 1) * TILE_H) + world_renderer.y, TILE_W, TILE_H)
+    love.graphics.rectangle('line', (baddie.x + 29 - 1) * TILE_W, (baddie.y + 10 - 1) * TILE_H, TILE_W, TILE_H)
     if baddie.path then
       for node, count in baddie.path:nodes() do
         love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.rectangle('line', (node:getX() - 1) * TILE_W, (node:getY() - 1) * TILE_H, TILE_W, TILE_H)
+        love.graphics.rectangle('line', (node:getX() + 29 - 1) * TILE_W, (node:getY() + 10 - 1) * TILE_H, TILE_W, TILE_H)
       end
     end
   end
