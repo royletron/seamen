@@ -18,9 +18,11 @@ function Baddie:__init(x, y)
   else
     self.destination = fn.random(world.towncache)
   end
-
   if self.destination ~= nil then
+    print(self.x .. ":" .. self.y)
+    print(self.destination.x .. ":" .. self.destination.y)
     self.path = world.pathfinder:getPath(self.x, self.y, self.destination.x, self.destination.y)
+    print(self.path)
   end
 
   local statscrew = Crew(55)

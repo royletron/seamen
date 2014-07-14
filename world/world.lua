@@ -99,10 +99,10 @@ function World:__init(w,h)
     end
   end
   print('drawn')
-  for n = 1, 100 do
+  for n = 1, 10 do
     self:createTreasure(unpack(fn.random(self.land)))
   end
-  for t = 1, 100, 1 do
+  for t = 1, 10, 1 do
     p = self:getBeachPoint()
     d = math.random(1, 4)
     skip = false
@@ -131,15 +131,51 @@ function World:__init(w,h)
   self.date = os.time{year=2014, month=math.random(1, 12), day=math.random(1, 31), hour=math.random(1, 23)}
   self.year = 1650
 
-  local map = fn.map(function(col)
-    return fn.map(function(row)
-      return row.type
-    end, col)
-  end, self['base'])
+  -- local map = fn.map(function(col)
+  --   return fn.map(function(row)
+  --     return row.type
+  --   end, col)
+  -- end, self['base'])
+
+  local map = {}
+  local str = ''
+  local counter = 1
+  for ix=1, #self['base'][1] do
+    -- str = str .. 'r'
+    local row = {}
+    for iy= 1, #self['base'] do
+      if self['base'][iy][counter].type == water then
+        table.insert(row, 0)
+      else
+        table.insert(row, 1)
+      end
+      -- str = str .. self['base'][iy][counter].type
+    end
+    counter = counter + 1
+    table.insert(map, row)
+    -- str = str .. '\n'
+  end
+
+  --print(str)
 
   self.one_and_zero_grid = map
+  -- local str = fn.map(function(col)
+  --   return fn.map(function(row)
+  --     return row.type
+  --   end, col)
+  -- end, self['base'])
+  -- local str = ''
+  str = ''
+  for ix=1, #map do
+    str = str .. 'r'
+    for iy=1, #map[ix] do
+      str = str .. map[ix][iy]
+    end
+    str = str .. '\n'
+  end
+  print(str)
   self.basegrid = Grid(map)
-  self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', water)
+  self.pathfinder = Pathfinder(self.basegrid, 'JPS', water)
 
   return World
 end
