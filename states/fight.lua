@@ -248,6 +248,8 @@ function FightState:update(dt)
   if self.deathanim ~= nil then
     if self.deathanim:update(dt) == true then
       --end
+      --local
+      --FightEndState.exp = 
       removeBaddie(self.baddie)
       Gamestate.switch(WorldMapState)
     end
