@@ -137,6 +137,7 @@ function World:__init(w,h)
     end, col)
   end, self['base'])
 
+  self.one_and_zero_grid = map
   self.basegrid = Grid(map)
   self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', water)
 

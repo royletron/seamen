@@ -259,7 +259,11 @@ function WorldMapState:draw(dt)
     love.graphics.rectangle('line', (baddie.x + 29 - 1) * TILE_W, (baddie.y + 10 - 1) * TILE_H, TILE_W, TILE_H)
     if baddie.path then
       for node, count in baddie.path:nodes() do
-        love.graphics.setColor(255, 255, 255, 255)
+        if world.one_and_zero_grid[node:getX()][node:getY()] == water then
+          love.graphics.setColor(255, 255, 255, 255)
+        else
+          love.graphics.setColor(255, 255, 0, 255)
+        end
         love.graphics.rectangle('line', (node:getX() + 29 - 1) * TILE_W, (node:getY() + 10 - 1) * TILE_H, TILE_W, TILE_H)
       end
     end
