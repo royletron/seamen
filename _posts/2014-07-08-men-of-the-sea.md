@@ -2,7 +2,7 @@
 layout: post
 category : announcement
 tagline: "Welcome to the Sea-Men blog!"
-tags : [intro, development]
+tags : [intro, development, gameplay]
 ---
 
 ##It's the salty seas captain!##
@@ -21,5 +21,3 @@ tags : [intro, development]
 * **~** Explore the land, for treasure obvs, using the super advanced disembarkation tool
 
 **And so many more that it just felt like we were showing off to put here**
-
-
