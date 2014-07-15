@@ -34,6 +34,8 @@ function rand(seed, n)
 end
 
 function World:__init(w,h)
+  self.cols = w
+  self.rows = h
   -- rooms = {}
   -- for a = 0, 9000, 1 do
   --   room = Room:new({x = math.random(1, 260),y = math.random(1, 262),w = math.random(3, 15),h = math.random(3, 15)})
@@ -144,7 +146,7 @@ function World:__init(w,h)
     -- str = str .. 'r'
     local row = {}
     for iy= 1, #self['base'] do
-      if self['base'][iy][counter].type == water then
+      if self['base'][iy][counter].type == water or fn.try(self['towns'], iy, counter) ~= nil then
         table.insert(row, 0)
       else
         table.insert(row, 1)
@@ -158,7 +160,7 @@ function World:__init(w,h)
 
   --print(str)
 
-  self.one_and_zero_grid = map
+  self.map = map
   -- local str = fn.map(function(col)
   --   return fn.map(function(row)
   --     return row.type
@@ -175,7 +177,7 @@ function World:__init(w,h)
   end
   print(str)
   self.basegrid = Grid(map)
-  self.pathfinder = Pathfinder(self.basegrid, 'JPS', water)
+  self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', 0)
 
   return World
 end

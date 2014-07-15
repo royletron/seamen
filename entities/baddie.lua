@@ -19,10 +19,25 @@ function Baddie:__init(x, y)
     self.destination = fn.random(world.towncache)
   end
   if self.destination ~= nil then
-    print(self.x .. ":" .. self.y)
-    print(self.destination.x .. ":" .. self.destination.y)
+    str = ''
+    for ix=1, #world.map do
+      str = str .. 'r'
+      for iy=1, #world.map[ix] do
+        if (ix == self.x and iy == self.y) or (ix == self.destination.x and iy == self.destination.y) then
+          str = str .. '\27[31mX\27[0m'
+        else
+          str = str .. world.map[ix][iy]
+        end
+      end
+      str = str .. '\n'
+    end
+    print(str)
+
+    print(self.x .. ":" .. self.y .. ' --> ' .. self.destination.x .. ":" .. self.destination.y)
     self.path = world.pathfinder:getPath(self.x, self.y, self.destination.x, self.destination.y)
-    print(self.path)
+    if self.path == nil then
+      print('NO PATH')
+    end
   end
 
   local statscrew = Crew(55)
