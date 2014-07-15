@@ -155,7 +155,7 @@ function WorldMapState:draw(dt)
 
   hud_renderer:draw(dt)
   -- love.graphics.setColor(255, 255, 255, 255)
-  -- love.graphics.rectangle('line', hud_renderer.x, hud_renderer.y, hud_renderer.width, hud_renderer.height)
+  -- love.graphics.rectangle('line', ship_renderer.x, ship_renderer.y, ship_renderer.width, ship_renderer.height)
   if player:isSailing() then
     ship_renderer:draw(dt)
     love.graphics.setColor(255, 255, 255, 255)
@@ -203,7 +203,7 @@ function WorldMapState:draw(dt)
 
     love.graphics.setCanvas(lighting_canvas)
     -- love.graphics.setShader(shaders.perlin)
-    shaders.uniform_static:send('seed', love.math.random())
+    shaders.uniform_static:send('seed', (love.timer.getTime() % 10) % 2)
     love.graphics.setShader(shaders.uniform_static)
 
     math.randomseed(lantern_flicker.seed)
