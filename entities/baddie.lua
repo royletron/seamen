@@ -14,11 +14,11 @@ function Baddie:__init(x, y)
   self.level = math.random(math.max(player.level-2, 1), player.level+2)
   self.is_ghost = love.math.random() > 0.9
   if self.is_ghost then
-    self.destination = nil
+    self.setDestination(nil)
   else
-    self.destination = fn.random(world.towncache)
+    self:setDestination(fn.random(world.towncache))
   end
-  if self.destination ~= nil then
+
     -- str = ''
     -- for ix=1, #world.map do
     --   str = str .. 'r'
@@ -32,13 +32,6 @@ function Baddie:__init(x, y)
     --   str = str .. '\n'
     -- end
     -- print(str)
-
-    print(self.x .. ":" .. self.y .. ' --> ' .. self.destination.x .. ":" .. self.destination.y)
-    self.path = world.pathfinder:getPath(self.x, self.y, self.destination.x, self.destination.y)
-    if self.path == nil then
-      print('NO PATH')
-    end
-  end
 
   local statscrew = Crew(55)
 
@@ -60,6 +53,24 @@ function Baddie:__init(x, y)
   end
 end
 
+function Baddie:__print()
+  return 'Baddie(@' .. self.x .. ':' .. self.y .. ')'
+end
+
+function Baddie:setDestination(point)
+  if point ~= nil then
+    print('New heading for ' .. self:__print() .. ': ' .. self.x .. ":" .. self.y .. ' --> ' .. point.x .. ":" .. point.y)
+    local path = world.pathfinder:getPath(self.x, self.y, point.x, point.y)
+    if path ~= nil then
+      self.destination = point
+      self.path = {}
+      for node, count in path:nodes() do
+        table.insert(self.path, {x = node:getX(), y = node:getY()})
+      end
+    end
+  end
+end
+
 
 function Baddie:__index(index)
   if index == "alive" then print(self.health) return self.health > 0 end
@@ -75,9 +86,16 @@ function Baddie:update(dt)
 end
 
 function Baddie:move()
-  local x, y = 0, 0
+  local x, y = self.x, self.y
 
   if self.path ~= nil then
+    local head = table.remove(self.path, 1)
+    if head ~= nil then
+      x = head.x
+      y = head.y
+    else
+      self:setDestination(fn.random(world.towncache))
+    end
     -- if self.x < self.destination.x then x = 1 end
     -- if self.x > self.destination.x then x = -1 end
     -- if self.y > self.destination.y then y = -1 end
@@ -89,9 +107,6 @@ function Baddie:move()
     if direction == 3 then y = 1 end
     if direction == 4 then y = -1 end
   end
-
-  x = self.x + x
-  y = self.y + y
 
   local tile = fn.try(world['base'], x, y)
 

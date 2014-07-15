@@ -255,28 +255,26 @@ function WorldMapState:draw(dt)
   love.graphics.translate(-player.camera.x, -player.camera.y)
   love.graphics.translate(29, 10)
   love.graphics.setLineWidth(1.0 / 29.0, 1.0 / 10.0)
+  world_renderer:setScissor()
 
   for i=1, #baddies do
     local baddie = baddies[i]
-    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.setColor(255, 0, 0, 100)
     if baddie.destination ~= nil then
       love.graphics.line(baddie.x - 0.5, baddie.y - 0.5, baddie.destination.x - 0.5, baddie.destination.y - 0.5)
     end
 
-    love.graphics.setColor(255, 0, 0, 255)
+    love.graphics.setColor(255, 255, 255, 100)
     love.graphics.rectangle('line', baddie.x - 1, baddie.y - 1, 1, 1)
     if baddie.path then
-      for node, count in baddie.path:nodes() do
-        if world.map[node:getX()][node:getY()] == 1 then
-          love.graphics.setColor(255, 255, 255, 255)
-        else
-          love.graphics.setColor(255, 255, 0, 255)
-        end
-        love.graphics.rectangle('line', node:getX() - 1, node:getY() - 1, 1, 1)
+      for i = 1, #baddie.path do
+        node = baddie.path[i]
+        love.graphics.rectangle('line', node.x - 1, node.y - 1, 1, 1)
       end
     end
   end
 
+  love.graphics.setScissor()
   love.graphics.pop()
 
   love.graphics.setColor(42,143,189,255)

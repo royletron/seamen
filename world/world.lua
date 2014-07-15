@@ -133,36 +133,27 @@ function World:__init(w,h)
   self.date = os.time{year=2014, month=math.random(1, 12), day=math.random(1, 31), hour=math.random(1, 23)}
   self.year = 1650
 
-  self.map = fn.map(function(cols, row)
+  self.collision_map = fn.map(function(cols, row)
     return fn.map(function(item, col)
       return (item.type == water or fn.try(self['towns'], row, col) ~= nil) and 1 or 0
     end, cols)
   end, self['base'])
 
-  self.map = fn.transpose(self.map)
+  self.collision_map = fn.transpose(self.collision_map)
 
-  local str = ''
+  setmetatable(self.collision_map, {__tostring = collision_map__tostring})
 
-  -- self.map = map
-  -- local str = fn.map(function(col)
-  --   return fn.map(function(row)
-  --     return row.type
-  --   end, col)
-  -- end, self['base'])
-  -- local str = ''
-  str = ''
-  for ix=1, #self.map do
-    str = str .. 'r'
-    for iy=1, #self.map[ix] do
-      str = str .. self.map[ix][iy]
-    end
-    str = str .. '\n'
-  end
-  print(str)
-  self.basegrid = Grid(self.map)
+  print(self.collision_map)
+  self.basegrid = Grid(self.collision_map)
   self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', 1)
 
   return World
+end
+
+function collision_map__tostring(this)
+  return table.concat(fn.map(function(row)
+    return 'r' .. table.concat(row, '') .. '\n'
+  end, this), '')
 end
 
 function World:getTowns(x,y,toX,toY)
