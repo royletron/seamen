@@ -104,7 +104,6 @@ img {
   max-width: 100%;
   vertical-align: middle;
   border: 0;
-  -ms-interpolation-mode: bicubic;
 }
 
 #map_canvas img,
@@ -643,14 +642,6 @@ a:focus {
 
 .container-fluid:after {
   clear: both;
-}
-
-img {
-  -webkit-filter: contrast(800%);
-     -moz-filter: contrast(1000%);
-      -ms-filter: contrast(800%);
-       -o-filter: contrast(800%);
-          filter: contrast(1000%);
 }
 
 p {

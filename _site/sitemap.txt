@@ -9,4 +9,5 @@ http://royletron.github.io/seamen/rss.xml
 http://royletron.github.io/seamen/sitemap.txt
 http://royletron.github.io/seamen/tags.html
 
+http://royletron.github.io/seamen/development/2014/07/19/the-map
 http://royletron.github.io/seamen/announcement/2014/07/08/men-of-the-sea

@@ -1,0 +1,10 @@
+Warning: Xing stream size off by more than 1%, fuzzy seeking may be even more fuzzy than by design!
+ #1323] DEBUG -- : Player: play 2506851
+D, [2014-07-15T12:45:01.910175 #1323] DEBUG -- : Player: play 2506850
+D, [2014-07-15T12:46:17.566185 #1323] DEBUG -- : Player: play 2506849
+D, [2014-07-15T12:54:02.806052 #1323] DEBUG -- : Player: play 2506848
+D, [2014-07-15T12:54:02.806472 #1323] DEBUG -- : DownloadThread start
+D, [2014-07-15T12:54:02.876345 #1323] DEBUG -- : DownloadThread response: 200
+D, [2014-07-15T12:54:17.919946 #1323] DEBUG -- : Player: play 2506847
+D, [2014-07-15T12:57:25.306917 #1323] DEBUG -- : Player: play 2506846
+D, [2014-07-15T13:02:59.788887 #1323] DEBUG -- : Player: play 2506844
