@@ -73,23 +73,22 @@ function Ship:shoot(crew, target)
 end
 
 function Ship:addExp(val)
-  if self.exp + val == self.expmax then
-    self.exp = self.expmax - (self.exp+val)
+  if self.exp + val > self:getMaxExp() then
+    self.exp = self:getMaxExp() - (self.exp+val)
     self.level = self.level + 1
   else
     self.exp = self.exp + val
   end
 end
 
-function Ship:__newindex(index, value)
-  local f = false
-  if index == "def" then self._def = value f = true end
-  if f == false then rawset(self, index, value) end
+function Ship:getMaxExp()
+  return (self.level*self.level)*10
 end
 
-function Ship:__index(index)
-  if index == "expmax" then return (self.level*self.level)*10 end
-  return rawget(self, index)
+function Ship:__newindex(index, value)
+  local f = false
+  --if index == "def" then self._def = value f = true end
+  if f == false then rawset(self, index, value) end
 end
 
 return Ship
