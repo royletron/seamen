@@ -1,11 +1,8 @@
-local AsciiSprite = require('ascii.ascii_sprite')
-local Renderer = require('display.renderer')
-local AvatarTalker = require('display.AvatarTalker')
-local Button = require('display.button')
+local PlayerShipDisplay = require('display.PlayerShipDisplay')
 
 FightEndState = {}
 
-local ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
+local ship_renderer = PlayerShipDisplay(300, 100)
 
 function FightEndState:init()
   self.exp = 0
