@@ -124,6 +124,10 @@ function Baddie:goto(x, y)
   for k,v in ipairs(baddies) do
     if v.x == x and v.y == y then collide = true break end
   end
+  if x == player.x and y == player.y then
+    FightState.baddie = self
+    Gamestate.switch(FightState)
+  end
   if collide == false and tile ~= nil and tile.type == water then self.x, self.y = x, y end
 end
 
