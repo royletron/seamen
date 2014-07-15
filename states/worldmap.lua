@@ -16,7 +16,7 @@ local hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 local character_renderer
 
-local ship_renderer = PlayerShipDisplay()
+local ship_renderer = PlayerShipDisplay(7, 70)
 
 local move_history = {}
 
