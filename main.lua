@@ -30,7 +30,7 @@ DAY_IN_SECONDS = 86400
 SECONDS_PER_DAY = 30
 DARKEST_NIGHT = 180
 
-world=World(50,50)
+world=World(200,200)
 player=Player()
 info = InfoPanel(400,10)
 
