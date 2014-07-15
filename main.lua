@@ -51,6 +51,7 @@ pirate_font_small = love.graphics.newFont( 'fonts/pixel_pirate.ttf', 15 )
 require 'states.worldmap'
 require 'states.townview'
 require 'states.fight'
+require 'states.fightend'
 
 testGraph = nil
 testGraph2 = nil
