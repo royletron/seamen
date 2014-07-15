@@ -133,34 +133,17 @@ function World:__init(w,h)
   self.date = os.time{year=2014, month=math.random(1, 12), day=math.random(1, 31), hour=math.random(1, 23)}
   self.year = 1650
 
-  -- local map = fn.map(function(col)
-  --   return fn.map(function(row)
-  --     return row.type
-  --   end, col)
-  -- end, self['base'])
+  self.map = fn.map(function(cols, row)
+    return fn.map(function(item, col)
+      return (item.type == water or fn.try(self['towns'], row, col) ~= nil) and 1 or 0
+    end, cols)
+  end, self['base'])
 
-  local map = {}
+  self.map = fn.transpose(self.map)
+
   local str = ''
-  local counter = 1
-  for ix=1, #self['base'][1] do
-    -- str = str .. 'r'
-    local row = {}
-    for iy= 1, #self['base'] do
-      if self['base'][iy][counter].type == water or fn.try(self['towns'], iy, counter) ~= nil then
-        table.insert(row, 0)
-      else
-        table.insert(row, 1)
-      end
-      -- str = str .. self['base'][iy][counter].type
-    end
-    counter = counter + 1
-    table.insert(map, row)
-    -- str = str .. '\n'
-  end
 
-  --print(str)
-
-  self.map = map
+  -- self.map = map
   -- local str = fn.map(function(col)
   --   return fn.map(function(row)
   --     return row.type
@@ -168,16 +151,16 @@ function World:__init(w,h)
   -- end, self['base'])
   -- local str = ''
   str = ''
-  for ix=1, #map do
+  for ix=1, #self.map do
     str = str .. 'r'
-    for iy=1, #map[ix] do
-      str = str .. map[ix][iy]
+    for iy=1, #self.map[ix] do
+      str = str .. self.map[ix][iy]
     end
     str = str .. '\n'
   end
   print(str)
-  self.basegrid = Grid(map)
-  self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', 0)
+  self.basegrid = Grid(self.map)
+  self.pathfinder = Pathfinder(self.basegrid, 'ASTAR', 1)
 
   return World
 end
