@@ -7,8 +7,8 @@ local AsciiRenderer = require('ascii.ascii_renderer')
 local AsciiShip = require('ascii.ascii_ship')
 local Renderer = require('display.renderer')
 local Baddie = require('entities.baddie')
+local PlayerShipDisplay = require('display.PlayerShipDisplay')
 
-local ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
 local landlubber_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
 
 local hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font)
@@ -16,6 +16,7 @@ local hud_renderer = Renderer(7, 70 + 20 * TILE_H, 40, 20, label_font, char_font
 local world_renderer = Renderer(267, 50, 58, 20,label_font,char_font)
 local character_renderer
 
+local ship_renderer = PlayerShipDisplay()
 
 local move_history = {}
 
@@ -39,15 +40,6 @@ function removeBaddie(baddie)
 end
 
 function WorldMapState:init()
-  local ship = AsciiRenderer()
-  ship:add(AsciiSprite(SHIP_BG))
-  local water_bg = AsciiSprite(WATER_ANIMATION, Colour(96,120,144,255))
-  water_bg.framerate = 20
-  water_bg.y = 10
-  ship:add(water_bg)
-  ship:add(AsciiShip(SHIP_FRIGGATTE))
-  ship:add(AsciiSprite(WATER_ANIMATION))
-  ship_renderer:setAscii(ship)
 
   local hud = AsciiRenderer()
   hud:add(AsciiSprite(HUD_BORDER))

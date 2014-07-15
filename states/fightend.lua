@@ -5,6 +5,8 @@ local Button = require('display.button')
 
 FightEndState = {}
 
+local ship_renderer = Renderer(7, 70, 27, 21, label_font, char_font)
+
 function FightEndState:init()
   self.exp = 0
 end
