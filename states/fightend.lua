@@ -19,7 +19,9 @@ function FightEndState:update(dt)
   if self.exprunning == true then
     local currentlevel = player.level
     player:addExp(1)
-    if currentlevel ~= player.level then self.exp_bar.max = player:getMaxExp() end
+    if currentlevel ~= player.level then
+      self.exp_bar.max = player:getMaxExp()
+    end
     self.exp_bar:setValue(player.exp)
     self.exp_bar:update(dt)
     self.counter = self.counter + 1
