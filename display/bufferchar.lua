@@ -20,7 +20,7 @@ function BufferChar:draw(dt)
 	love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b, self.colour.a)
   local y = self.y
   if self.char == '≋' then
-    y = y + math.sin(self.x + love.timer.getTime())
+    y = y + (math.sin(self.x + ((self.y % 2) * 0.25) + love.timer.getTime()) * world.wave_intensity)
   end
 	love.graphics.print( self.char, self.x, y )
   --love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b, self.colour.a)

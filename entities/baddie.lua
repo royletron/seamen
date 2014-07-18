@@ -102,10 +102,10 @@ function Baddie:move()
     -- if self.y < self.destination.y then y = 1 end
   else
     local direction = math.random(1,4)
-    if direction == 1 then x = 1 end
-    if direction == 2 then x = -1 end
-    if direction == 3 then y = 1 end
-    if direction == 4 then y = -1 end
+    if direction == 1 then x = x + 1 end
+    if direction == 2 then x = x -1 end
+    if direction == 3 then y = y + 1 end
+    if direction == 4 then y = y - 1 end
   end
 
   local tile = fn.try(world['base'], x, y)
@@ -121,14 +121,17 @@ end
 function Baddie:goto(x, y)
   local tile = fn.try(world['base'], x, y)
   local collide = false
-  for k,v in ipairs(baddies) do
-    if v.x == x and v.y == y then collide = true break end
-  end
+  -- for k,v in ipairs(baddies) do
+  --   if v.x == x and v.y == y then collide = true break end
+  -- end
   if x == player.x and y == player.y then
     FightState.baddie = self
     Gamestate.switch(FightState)
   end
-  if collide == false and tile ~= nil and tile.type == water then self.x, self.y = x, y end
+  if collide == false and tile ~= nil and tile.char == '≋' then
+    table.insert(world.waves, {x=self.x, y=self.y, ttl=0.5})
+    self.x, self.y = x, y
+  end
 end
 
 return Baddie
