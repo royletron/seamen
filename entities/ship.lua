@@ -74,7 +74,7 @@ end
 
 function Ship:addExp(val)
   if self.exp + val > self:getMaxExp() then
-    self.exp = self:getMaxExp() - (self.exp+val+1)
+    self.exp = (self.exp+val) - self:getMaxExp()
     self.level = self.level + 1
   else
     self.exp = self.exp + val
