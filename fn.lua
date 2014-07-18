@@ -3,8 +3,21 @@ local fn = {}
 function fn.map(f, list)
   local output = {}
   for i, v in ipairs(list) do
-    output[i] = f(v)
+    output[i] = f(v, i)
   end
+  return output
+end
+
+function fn.transpose(input)
+  local output = {}
+
+  for i = 1, #input[1] do
+    output[i] = {}
+    for j = 1, #input do
+      output[i][j] = input[j][i]
+    end
+  end
+
   return output
 end
 
