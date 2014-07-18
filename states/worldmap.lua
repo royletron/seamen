@@ -18,8 +18,6 @@ local character_renderer
 
 local ship_renderer = PlayerShipDisplay(7, 70)
 
-local move_history = {}
-
 local shadow_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
 local lighting_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
 local noise_canvas = love.graphics.newCanvas(world_renderer.width, world_renderer.height)
@@ -53,9 +51,9 @@ function WorldMapState:init()
 
   for bx=player.position.x-world_renderer.w, player.position.x+world_renderer.w, 1 do
     -- numwater = 0
-    if bx > 0 and bx < #world['base'] then
+    if bx > 1 and bx < #world['base'] then
       for by=player.position.y-world_renderer.h, player.position.y+world_renderer.h, 1 do
-        if by > 0 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
+        if by > 1 and by < #world['base'][bx] and world['base'][bx][by].type == water and math.random(1,100) > 99 then
           table.insert(baddies, Baddie(bx, by))
         end
       end
@@ -241,8 +239,39 @@ function WorldMapState:draw(dt)
     love.graphics.print('☠', 10 + TILE_W * 2 + 5, 70 + 20 * TILE_H + 30 + (24 * (i - 1)))
   end
 
+  if false then
+    love.graphics.push()
+    love.graphics.translate(world_renderer.x, world_renderer.y)
+    love.graphics.scale(TILE_W, TILE_H)
+    love.graphics.translate(-player.camera.x, -player.camera.y)
+    love.graphics.translate(29, 10)
+    love.graphics.setLineWidth(1.0 / 29.0, 1.0 / 10.0)
+    world_renderer:setScissor()
+
+    for i=1, #baddies do
+      local baddie = baddies[i]
+      love.graphics.setColor(255, 0, 0, 100)
+      if baddie.destination ~= nil then
+        love.graphics.line(baddie.x - 0.5, baddie.y - 0.5, baddie.destination.x - 0.5, baddie.destination.y - 0.5)
+      end
+
+      love.graphics.setColor(255, 255, 255, 100)
+      love.graphics.rectangle('line', baddie.x - 1, baddie.y - 1, 1, 1)
+      if baddie.path then
+        for i = 1, #baddie.path do
+          node = baddie.path[i]
+          love.graphics.rectangle('line', node.x - 1, node.y - 1, 1, 1)
+        end
+      end
+    end
+
+    love.graphics.setScissor()
+    love.graphics.pop()
+  end
+
   love.graphics.setColor(42,143,189,255)
   love.graphics.setFont(char_font)
+
 
   for i=1, #player.crew do
     crewmember = player.crew[i]
@@ -304,16 +333,16 @@ function WorldMapState:update(dt)
 
     local x, y, move
     -- print a wake and reduce the ttl of each move
-    for i = 1, #move_history do
-      move = move_history[i]
+    for i = 1, #world.waves do
+      move = world.waves[i]
       move.ttl = math.max(0, move.ttl - dt)
       x, y = move.x - center_x, move.y - center_y
       world_renderer:drawChar(x, y, Char:new(move.x, move.y, '≋', Colour(255,255,255,math.min(move.ttl * 255, 255)), Colour(50,169,167,255)))
     end
     -- remove dead moves
-    for i=#move_history,1,-1 do
-      if move_history[i].ttl == 0 then
-        table.remove(move_history, i)
+    for i=#world.waves,1,-1 do
+      if world.waves[i].ttl == 0 then
+        table.remove(world.waves, i)
       end
     end
 
@@ -399,13 +428,13 @@ function move(toposx, toposy)
     t = world:getTown(toposx, toposy)
     gotoTown(t)
   else
-    sailing = tochar.type == water and player:isSailing()
+    sailing = tochar.char == '≋' and player:isSailing()
 
     if sailing then
       -- keep a record of the last 5 moves for drawing the wake
       if toposx ~= player.position.x or toposy ~= player.position.y then
-        if #move_history > 5 then table.remove(move_history, 1) end
-        table.insert(move_history, {x=player.position.x, y=player.position.y, ttl=0.8})
+        -- if #move_history > 5 then table.remove(move_history, 1) end
+        table.insert(world.waves, {x=player.position.x, y=player.position.y, ttl=0.8})
       end
     end
 
