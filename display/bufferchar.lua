@@ -18,7 +18,11 @@ function BufferChar:draw(dt)
   love.graphics.setFont(self.font);
 
 	love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b, self.colour.a)
-	love.graphics.print( self.char, self.x, self.y )
+  local y = self.y
+  if self.char == '≋' then
+    y = y + math.sin(self.x + love.timer.getTime())
+  end
+	love.graphics.print( self.char, self.x, y )
   --love.graphics.setColor(self.colour.r, self.colour.g, self.colour.b, self.colour.a)
 --  love.graphics.rectangle("fill", self.x, self.y, self.size, self.size )
 --  Square.super.draw(dt)
