@@ -58,8 +58,12 @@ testGraph = nil
 testGraph2 = nil
 shaders = {}
 
+local music
+
 function love.load()
   love.keyboard.setKeyRepeat( true )
+
+  music = love.audio.newSource('music.mp3', 'static')
 
   local spawn = world:getSpawnPoint()
   player.position = {x= spawn.x, y=spawn.y}
@@ -159,6 +163,10 @@ end
 function love.update(dt)
   fpsGraph.updateFPS(testGraph, dt)
 	fpsGraph.updateMem(testGraph2, dt)
+
+  if love.audio.getSourceCount() == 0 then
+    love.audio.play(music)
+  end
 end
 
 function love.keypressed(key, u)
