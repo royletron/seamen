@@ -1,5 +1,5 @@
 class = require '30log'
-Colour = require 'colour'
+Colour = require 'Colour'
 Char = class ()
 Char.__name = 'Char'
 Char.x, Char.y = 0, 0

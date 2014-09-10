@@ -3,7 +3,7 @@ love.filesystem.setIdentity("royletron")
 
 -- require('strict')
 
-fpsGraph = require "hump.FPSGraph"
+fpsGraph = require "hump.fpsgraph"
 World = require 'world.world'
 Player = require 'entities.player'
 Gamestate = require "hump.gamestate"
