@@ -72,4 +72,23 @@ function Ship:shoot(crew, target)
   --print("eva ="..eva*randomFactor(target))
 end
 
+function Ship:addExp(val)
+  if self.exp + val > self:getMaxExp() then
+    self.exp = (self.exp+val) - self:getMaxExp()
+    self.level = self.level + 1
+  else
+    self.exp = self.exp + val
+  end
+end
+
+function Ship:getMaxExp()
+  return (self.level*self.level)*10
+end
+
+function Ship:__newindex(index, value)
+  local f = false
+  --if index == "def" then self._def = value f = true end
+  if f == false then rawset(self, index, value) end
+end
+
 return Ship

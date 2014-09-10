@@ -248,8 +248,12 @@ function FightState:update(dt)
   if self.deathanim ~= nil then
     if self.deathanim:update(dt) == true then
       --end
-      --local
-      --FightEndState.exp = 
+      local exp = self.baddie.maxhealth
+      if self.baddie.level > player.level then
+        exp = exp * (0.7 * (self.baddie.level - player.level + 1))
+      end
+      exp = math.floor(exp * 0.8)
+      FightEndState.exp = exp
       removeBaddie(self.baddie)
       Gamestate.switch(WorldMapState)
     end

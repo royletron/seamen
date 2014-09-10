@@ -1,0 +1,3 @@
+[submodule "deps/Jumper"]
+	path = deps/Jumper
+	url = https://github.com/Yonaba/Jumper.git
